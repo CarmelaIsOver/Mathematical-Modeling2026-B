@@ -38,7 +38,8 @@ def _poly_signature(poly):
 
 class WorldRolloutMixin:
     def _setup_rollout(self, rollout_radius=400., n_worlds=12, max_rounds=6, lam=.5,
-                       mode='service', opt_penalty=60., margin_s=0., margin_frac=0.):
+                       mode='service', opt_penalty=60., margin_s=0., margin_frac=0.,
+                       coord_search=False, search_rounds=6, search_max_points=24):
         self.rollout_radius = float(rollout_radius)
         self.rollout_worlds = int(n_worlds)
         self.rollout_rounds = int(max_rounds)
@@ -49,6 +50,11 @@ class WorldRolloutMixin:
         # exceeds the measured resolution of the rollout (same-state MAE ~3.5 s).
         self.rollout_margin_s = float(margin_s)
         self.rollout_margin_frac = float(margin_frac)
+        # N2: bounded continuous coordinate search around the best fixed candidate.
+        self.rollout_search = bool(coord_search)
+        self.search_rounds = int(search_rounds)
+        self.search_max_points = int(search_max_points)
+        self.diagnostics.update(n2_points=0, n2_improved=0, n2_rounds=0, n2_evals=0)
         self.diagnostics.update(rollout_calls=0, rollout_active=0, rollout_changed=0,
                                 rollout_worlds=0, rollout_incomplete=0,
                                 rollout_cache_hits=0, rollout_pred_adopted_s=0.,
@@ -253,6 +259,53 @@ class WorldRolloutMixin:
         except Exception:
             return np.asarray(center, float)
 
+    def _score_point(self, c, q, worlds):
+        """Full world-rollout score of one measurement point (None if unusable)."""
+        costs = []
+        for w in worlds:
+            cost, ok, _note = self._rollout(c, w, q)
+            if not ok:
+                self.diagnostics['rollout_incomplete'] += 1
+                continue
+            costs.append(cost)
+        if len(costs) < max(1, int(.6 * len(worlds))):
+            return None
+        self.diagnostics['n2_evals'] += 1
+        costs = np.asarray(costs, float)
+        return float(costs.mean()) + self.rollout_lam * float(costs.max() - costs.mean())
+
+    def _search_around(self, c, center, radius, worlds, best_score):
+        """Two orthogonal directions per round; accept an improvement, else halve."""
+        if not self.rollout_search or center is None or isinstance(center, str):
+            return center, best_score
+        center = np.asarray(center, float)
+        best = center.copy()
+        step = max(20., float(radius) / 2.)
+        spent = 0
+        for _ in range(self.search_rounds):
+            if spent >= self.search_max_points:
+                break
+            self.diagnostics['n2_rounds'] += 1
+            improved = False
+            for delta in ((step, 0.), (-step, 0.), (0., step), (0., -step)):
+                if spent >= self.search_max_points:
+                    break
+                q = best + np.asarray(delta, float)
+                spent += 1
+                self.diagnostics['n2_points'] += 1
+                if any(float(np.linalg.norm(q - p)) < .1 for p in self.measured[c]):
+                    continue
+                sc = self._score_point(c, q, worlds)
+                if sc is not None and sc < best_score - 1e-9:
+                    best, best_score = q, sc
+                    improved = True
+                    self.diagnostics['n2_improved'] += 1
+            if not improved:
+                step *= .5
+                if step < 1.0:
+                    break
+        return best, best_score
+
     # ---- decision -------------------------------------------------------
     def _rollout_candidates(self, c, poly, center, radius):
         base = self._base_pick(c, poly, center, radius)
@@ -312,6 +365,9 @@ class WorldRolloutMixin:
         base_score = next((s for s, q in scored
                            if isinstance(q, str) is False and base is not None
                            and float(np.linalg.norm(np.asarray(q, float) - np.asarray(base, float))) < .1), None)
+        best, scored0 = self._search_around(c, best, radius, worlds, scored[0][0])
+        if not isinstance(best, str):
+            scored = [(scored0, best)] + [(s, q) for s, q in scored[1:]]
         margin = self.rollout_margin_s
         if base_score is not None:
             margin = max(margin, self.rollout_margin_frac * abs(float(base_score)))

@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "n1_q3_m1",
+    "n2_q3"
+  ],
+  "start": 3496800,
+  "count": 24,
+  "workers": 8,
+  "round": "r91_n2_q3_24",
+  "hypothesis": "N2 bounded continuous coordinate search on top of the calibrated N1 rollout",
+  "mode": "normal",
+  "traces": false,
+  "control": "skip12_probe60"
+}

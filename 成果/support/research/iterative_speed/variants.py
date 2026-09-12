@@ -248,11 +248,12 @@ class OmniWorldRollout(OmniVariant, WorldRolloutMixin):
     """N1: complete hypothesised-world continuation on top of the strong Q3 baseline."""
 
     def __init__(self, *args, rollout_radius=400., n_worlds=12, max_rounds=6, lam=.5,
-                 mode='service', margin_s=0., margin_frac=0., **kwargs):
+                 mode='service', margin_s=0., margin_frac=0., coord_search=False, **kwargs):
         OmniVariant.__init__(self, *args, **kwargs)
         self._setup_rollout(rollout_radius=rollout_radius, n_worlds=n_worlds,
                             max_rounds=max_rounds, lam=lam, mode=mode,
-                            margin_s=margin_s, margin_frac=margin_frac)
+                            margin_s=margin_s, margin_frac=margin_frac,
+                            coord_search=coord_search)
 
     def next_measure(self, c, poly, center, radius):
         return WorldRolloutMixin.next_measure(self, c, poly, center, radius)
@@ -429,6 +430,7 @@ VARIANTS={
     'skip12_dedup25':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':25.}),
     'ins_q3':(OmniInsertion,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n1_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'n2_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01,'coord_search':True}),
     'n3_q3':(OmniEventRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n1_q3_m1':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01}),
     'la_q3_base':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'base'}),
