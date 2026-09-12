@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c1"
+  ],
+  "start": 3494052,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r80c_stress_worst",
+  "hypothesis": "stress_worst trajectory for r80c_stressC1_minus",
+  "mode": "minus",
+  "traces": true
+}

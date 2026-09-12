@@ -1,0 +1,5 @@
+{
+  "superseded_by": "r79_screenC2_q4_scope32",
+  "reason": "C2 screen whose prediction metric mixed scopes; r79 is same-scale",
+  "note": "kept for the record; conclusions must use the replacement round"
+}

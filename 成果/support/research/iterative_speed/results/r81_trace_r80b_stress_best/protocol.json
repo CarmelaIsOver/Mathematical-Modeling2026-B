@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3494031,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r80b_stress_best",
+  "hypothesis": "stress_best trajectory for r80b_stressA_q4_boundary",
+  "mode": "boundary",
+  "traces": true
+}

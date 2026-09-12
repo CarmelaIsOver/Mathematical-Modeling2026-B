@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c2"
+  ],
+  "start": 3493819,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r79_worst",
+  "hypothesis": "worst trajectory for r79_screenC2_q4_scope32",
+  "mode": "normal",
+  "traces": true
+}

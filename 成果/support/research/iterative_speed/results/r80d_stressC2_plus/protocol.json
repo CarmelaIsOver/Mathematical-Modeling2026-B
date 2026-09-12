@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c2"
+  ],
+  "start": 3494040,
+  "count": 3,
+  "workers": 3,
+  "round": "r80d_stressC2_plus",
+  "hypothesis": "C2 stress sample (plus)",
+  "mode": "plus",
+  "traces": false
+}

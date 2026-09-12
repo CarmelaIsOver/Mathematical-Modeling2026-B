@@ -1,0 +1,18 @@
+{
+  "round": "r77_screenC1_q4_margin32",
+  "control": "baseline",
+  "arms": {
+    "sp_c1": {
+      "counter": "pred_reorders",
+      "n_scenes": 32,
+      "total_triggers": 3,
+      "triggers_per_scene": 0.09,
+      "scenes_with_trigger": 3,
+      "trigger_rate": 0.094,
+      "mean_delta_pct_all": 1.182,
+      "mean_delta_pct_fired": 12.605,
+      "mean_delta_pct_not_fired": 0.0,
+      "worst_delta_pct_fired": 13.2
+    }
+  }
+}

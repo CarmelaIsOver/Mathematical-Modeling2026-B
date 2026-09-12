@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3494010,
+  "count": 3,
+  "workers": 3,
+  "round": "r80_stressA_q3_cluster",
+  "hypothesis": "A-Q3 stress sample (cluster)",
+  "mode": "cluster",
+  "traces": false
+}

@@ -1,0 +1,18 @@
+{
+  "round": "r74_screenA_q3_32",
+  "control": "skip12_probe60",
+  "arms": {
+    "la_q3_service": {
+      "counter": "lookahead_active",
+      "n_scenes": 32,
+      "total_triggers": 799,
+      "triggers_per_scene": 24.97,
+      "scenes_with_trigger": 32,
+      "trigger_rate": 1.0,
+      "mean_delta_pct_all": 0.573,
+      "mean_delta_pct_fired": 0.573,
+      "mean_delta_pct_not_fired": null,
+      "worst_delta_pct_fired": 3.175
+    }
+  }
+}

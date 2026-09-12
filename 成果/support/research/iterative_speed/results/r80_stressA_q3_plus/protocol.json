@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3494040,
+  "count": 3,
+  "workers": 3,
+  "round": "r80_stressA_q3_plus",
+  "hypothesis": "A-Q3 stress sample (plus)",
+  "mode": "plus",
+  "traces": false
+}

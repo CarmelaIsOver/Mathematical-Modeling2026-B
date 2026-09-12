@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3493220,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r74b_typical",
+  "hypothesis": "typical trajectory for r74b_screenA_q4_32",
+  "mode": "normal",
+  "traces": true
+}

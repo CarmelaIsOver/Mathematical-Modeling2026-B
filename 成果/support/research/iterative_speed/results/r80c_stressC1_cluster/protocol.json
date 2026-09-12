@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c1"
+  ],
+  "start": 3494010,
+  "count": 3,
+  "workers": 3,
+  "round": "r80c_stressC1_cluster",
+  "hypothesis": "C1 stress sample (cluster)",
+  "mode": "cluster",
+  "traces": false
+}

@@ -1,0 +1,5 @@
+{
+  "superseded_by": "r76_screenC1_q4_32",
+  "reason": "C early gated reorder on the old _expected_travel metric",
+  "note": "kept for the record; conclusions must use the replacement round"
+}

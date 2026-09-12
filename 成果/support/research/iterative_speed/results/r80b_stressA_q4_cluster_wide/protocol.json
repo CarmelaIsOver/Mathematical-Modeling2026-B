@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3494020,
+  "count": 3,
+  "workers": 3,
+  "round": "r80b_stressA_q4_cluster_wide",
+  "hypothesis": "A-Q4 stress sample (cluster_wide)",
+  "mode": "cluster_wide",
+  "traces": false
+}

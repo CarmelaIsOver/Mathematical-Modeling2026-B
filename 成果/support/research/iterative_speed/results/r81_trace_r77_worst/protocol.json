@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c1"
+  ],
+  "start": 3493615,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r77_worst",
+  "hypothesis": "worst trajectory for r77_screenC1_q4_margin32",
+  "mode": "normal",
+  "traces": true
+}

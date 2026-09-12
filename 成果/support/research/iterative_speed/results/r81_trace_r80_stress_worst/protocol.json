@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3494020,
+  "count": 1,
+  "workers": 3,
+  "round": "r81_trace_r80_stress_worst",
+  "hypothesis": "stress_worst trajectory for r80_stressA_q3_cluster_wide",
+  "mode": "cluster_wide",
+  "traces": true
+}

@@ -1,0 +1,18 @@
+{
+  "round": "r74b_screenA_q4_32",
+  "control": "baseline",
+  "arms": {
+    "la_q4_service": {
+      "counter": "lookahead_active",
+      "n_scenes": 32,
+      "total_triggers": 444,
+      "triggers_per_scene": 13.88,
+      "scenes_with_trigger": 32,
+      "trigger_rate": 1.0,
+      "mean_delta_pct_all": 0.106,
+      "mean_delta_pct_fired": 0.106,
+      "mean_delta_pct_not_fired": null,
+      "worst_delta_pct_fired": 4.205
+    }
+  }
+}
