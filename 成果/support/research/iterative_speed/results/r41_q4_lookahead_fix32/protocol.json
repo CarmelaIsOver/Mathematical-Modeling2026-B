@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_candpaper",
+    "la_q4_service"
+  ],
+  "start": 3490200,
+  "count": 32,
+  "workers": 8,
+  "round": "r41_q4_lookahead_fix32",
+  "hypothesis": "A fix v1: add near/no_signal branches for Q4 directional picks",
+  "mode": "normal",
+  "traces": false
+}

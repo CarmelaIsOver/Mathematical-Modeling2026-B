@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_candpaper",
+    "la_q3_service"
+  ],
+  "start": 3490000,
+  "count": 32,
+  "workers": 8,
+  "round": "r38_q3_lookahead32",
+  "hypothesis": "A: complete-service-cost lookahead vs candidate-set-only ablation on top of the strong Q3 baseline (aggressive+probe60)",
+  "mode": "normal",
+  "traces": false
+}

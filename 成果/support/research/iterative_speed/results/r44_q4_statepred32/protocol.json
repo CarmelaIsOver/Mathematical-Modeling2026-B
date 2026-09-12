@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_q4"
+  ],
+  "start": 3490800,
+  "count": 32,
+  "workers": 8,
+  "round": "r44_q4_statepred32",
+  "hypothesis": "C: joint positive/negative state prediction reordering fallback points and local options on Q4",
+  "mode": "normal",
+  "traces": false
+}

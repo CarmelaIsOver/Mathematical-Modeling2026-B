@@ -1,0 +1,27 @@
+......................................................usage: run.py [-h] [--mode {offline,official}] [--problem {3,4}]
+              [--strategy {standard,paper,integrated}]
+              [--layout {original,compact,radial,rings}] [--robot-id ROBOT_ID]
+              [--url URL] [--http-health-probe] [--runs RUNS] [--seed SEED]
+              [--spacing SPACING] [--refine REFINE]
+              [--error {fixed,plus,minus}] [--radius RADIUS]
+              [--all-directional] [--negative-observations]
+              [--q3-ring-guard {off,aggressive,conservative}]
+              [--q4-probe-radius Q4_PROBE_RADIUS]
+              [--q3-probe-radius Q3_PROBE_RADIUS] [--output OUTPUT]
+run.py: error: --q3-probe-radius requires --strategy integrated --problem 3
+....................usage: run.py [-h] [--mode {offline,official}] [--problem {3,4}]
+              [--strategy {standard,paper,integrated}]
+              [--layout {original,compact,radial,rings}] [--robot-id ROBOT_ID]
+              [--url URL] [--http-health-probe] [--runs RUNS] [--seed SEED]
+              [--spacing SPACING] [--refine REFINE]
+              [--error {fixed,plus,minus}] [--radius RADIUS]
+              [--all-directional] [--negative-observations]
+              [--q3-ring-guard {off,aggressive,conservative}]
+              [--q4-probe-radius Q4_PROBE_RADIUS]
+              [--q3-probe-radius Q3_PROBE_RADIUS] [--output OUTPUT]
+run.py: error: --q4-probe-radius requires --strategy integrated --problem 4
+............
+----------------------------------------------------------------------
+Ran 86 tests in 95.277s
+
+OK

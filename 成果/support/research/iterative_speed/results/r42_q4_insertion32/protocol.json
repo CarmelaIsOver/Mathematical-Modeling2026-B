@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "ins_q4"
+  ],
+  "start": 3490600,
+  "count": 32,
+  "workers": 8,
+  "round": "r42_q4_insertion32",
+  "hypothesis": "B: classical insertion saving with entry/exit accounted service plan on the Q4 backbone",
+  "mode": "normal",
+  "traces": false
+}

@@ -4,6 +4,9 @@ import time
 import itertools
 import numpy as np
 from omni_search import OmniSearchSolver
+from lookahead import JointLookahead, LookaheadMixin
+from insertion import InsertionMixin, joint_module, omni_module
+from state_prediction import JointStatePrediction
 from joint_search import JointSearchSolver,search_route
 from geometry import search_stations
 
@@ -215,6 +218,31 @@ class ChooseLayout(JointSearchSolver):
         return r
 
 
+class OmniLookahead(OmniVariant, LookaheadMixin):
+    def __init__(self, *args, lookahead_radius=400., lam=.5, mode='service', **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_lookahead(lookahead_radius=lookahead_radius, lam=lam, mode=mode)
+
+    def next_measure(self, c, poly, center, radius):
+        return LookaheadMixin.next_measure(self, c, poly, center, radius)
+
+
+class OmniInsertion(InsertionMixin, OmniVariant):
+    search_module = omni_module
+
+    def __init__(self, *args, insert=True, **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_insertion(insert=insert)
+
+
+class JointInsertion(InsertionMixin, JointSearchSolver):
+    search_module = joint_module
+
+    def __init__(self, *args, insert=True, **kwargs):
+        JointSearchSolver.__init__(self, *args, **kwargs)
+        self._setup_insertion(insert=insert)
+
+
 class OmniBearingDedup(OmniVariant):
     """Skip an opportunistic known-target measure whose bearing duplicates an existing one.
 
@@ -368,6 +396,10 @@ VARIANTS={
     'guard1123_close_skip14':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1400.}),
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'skip12_dedup25':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':25.}),
+    'ins_q3':(OmniInsertion,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'la_q3_base':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'base'}),
+    'la_q3_candpaper':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'cand_paper'}),
+    'la_q3_service':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'service'}),
     'skip12_probe40':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':40.}),
     'skip12_probe60':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'skip12_probe60obs2':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'probe_from_obs':2}),
@@ -401,6 +433,10 @@ VARIANTS={
     'ring1123_close_unguarded':(OmniVariant,{'ring_radius':1123.,'close_known':True}),
     'closure':(OmniVariant,{'close_known':True})},
  4:{'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
+    'ins_q4':(JointInsertion,{}),
+    'sp_q4':(JointStatePrediction,{}),
+    'la_q4_candpaper':(JointLookahead,{'mode':'cand_paper'}),
+    'la_q4_service':(JointLookahead,{'mode':'service'}),
     'q4_skip60':(JointSearchSolver,{'skip_tight_radius':60.}),
     'q4_skip80':(JointSearchSolver,{'skip_tight_radius':80.}),
     'q4_probe60':(JointSearchSolver,{'probe_radius':60.}),

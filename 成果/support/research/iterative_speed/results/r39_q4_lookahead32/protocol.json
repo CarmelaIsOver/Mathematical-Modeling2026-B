@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_candpaper",
+    "la_q4_service"
+  ],
+  "start": 3490000,
+  "count": 32,
+  "workers": 8,
+  "round": "r39_q4_lookahead32",
+  "hypothesis": "A: complete-service-cost lookahead for Q4 directional picks vs candidate-set-only ablation",
+  "mode": "normal",
+  "traces": false
+}

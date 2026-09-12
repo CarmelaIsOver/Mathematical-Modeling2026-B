@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_candpaper",
+    "la_q3_service"
+  ],
+  "start": 3490200,
+  "count": 32,
+  "workers": 8,
+  "round": "r40_q3_lookahead_fix32",
+  "hypothesis": "A fix v1: add near/no_signal branches to the service-cost lookahead",
+  "mode": "normal",
+  "traces": false
+}

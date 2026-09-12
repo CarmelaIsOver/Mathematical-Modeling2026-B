@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "ins_q3"
+  ],
+  "start": 3490600,
+  "count": 32,
+  "workers": 8,
+  "round": "r43_q3_insertion32",
+  "hypothesis": "B: classical insertion saving on the Q3 coverage backbone (strong control = aggressive+probe60)",
+  "mode": "normal",
+  "traces": false
+}
