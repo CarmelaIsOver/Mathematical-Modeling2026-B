@@ -1,0 +1,20 @@
+{
+  "round": "r74b_screenA_q4_32",
+  "control": "baseline",
+  "arm": "la_q4_service",
+  "family": "lookahead",
+  "units": {
+    "predicted": "s (decision-level accumulation over one scene)",
+    "realised": "s (scene total, virtual_time_s difference)"
+  },
+  "use": "development_only_not_independent_acceptance",
+  "n_scenes": 32,
+  "decisions_with_prediction": 206,
+  "buckets": {
+    "all_candidates_mean_predicted_cost_s": 189.681,
+    "adopted_predicted_saving_s": 20.725,
+    "rejected_best_predicted_saving_s": -2.421
+  },
+  "scene_realised_saving_s": -5.725,
+  "note": "decision-level predictions are NOT summed into the scene saving; rejected proposals are never used to explain realised results"
+}

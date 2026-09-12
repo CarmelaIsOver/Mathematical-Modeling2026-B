@@ -28,6 +28,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from audit import AuditPort  # noqa: E402
 from backend import LocalBackend  # noqa: E402
+from lookahead import LookaheadMixin  # noqa: E402
+from solver import Solver  # noqa: E402
 from study import run_one  # noqa: E402
 from variants import VARIANTS  # noqa: E402
 
@@ -38,43 +40,54 @@ CONTROL = 'skip12_probe60'
 
 
 class ForkPolicy:
-    """Baseline policy with one deviation at the k-th active decision."""
+    """Mirror the arm until decision k, fork there, then continue with the baseline.
 
-    def __init__(self, base_cls, kwargs, k, action):
-        self.base_cls = base_cls
-        self.kwargs = kwargs
+    Both forks therefore start from the *same* public-observation state as the arm's
+    own k-th decision: the prefix follows the arm policy exactly (same picks), then
+    the fork takes either the arm's recorded action or the baseline action at that
+    state, and every later decision uses the baseline policy.
+    """
+
+    def __init__(self, arm_cls, arm_kwargs, k, action, lookahead_radius=400.):
+        self.arm_cls = arm_cls
+        self.arm_kwargs = arm_kwargs
         self.k = k
         self.action = None if action is None else np.asarray(action, float)
-        self.seen = 0
+        self.lookahead_radius = lookahead_radius
 
     def run(self, seed):
-        base_cls, kwargs = self.base_cls, dict(self.kwargs)
+        outer = self
+        base_cls, arm_kwargs = self.arm_cls, dict(self.arm_kwargs)
 
-        class _Forked(base_cls):
+        class _Mirror(outer.arm_cls):
+            _idx = 0
+
             def next_measure(_self, c, poly, center, radius):
-                if radius <= kwargs.get('lookahead_radius', 400.):
-                    idx = _self._fork_index = getattr(_self, '_fork_index', 0)
-                    _self._fork_index = idx + 1
-                    if idx == self.k:
-                        return Self.action if self.action is not None else base_cls.next_measure(
-                            _self, c, poly, center, radius)
-                return base_cls.next_measure(_self, c, poly, center, radius)
+                if radius > outer.lookahead_radius:
+                    return Solver.next_measure(_self, c, poly, center, radius)
+                idx = _Mirror._idx
+                _Mirror._idx += 1
+                if idx < outer.k:
+                    return LookaheadMixin.next_measure(_self, c, poly, center, radius)
+                if idx == outer.k:
+                    if outer.action is not None:
+                        return outer.action
+                    return Solver.next_measure(_self, c, poly, center, radius)
+                return Solver.next_measure(_self, c, poly, center, radius)
 
-        Self = self
         backend = LocalBackend(seed, 3)
         port = AuditPort(backend)
-        solver = _Forked(port, 3, **kwargs)
+        _Mirror._idx = 0
+        solver = _Mirror(port, 3, **arm_kwargs)
         try:
             solver.run()
-            return port.virtual_time, True
+            return port.virtual_time, True, _Mirror._idx
         except Exception:
-            return port.virtual_time, False
+            return port.virtual_time, False, _Mirror._idx
 
 
 def evaluate(seeds, states_per_scene=3):
-    cls, kwargs = VARIANTS[3][CONTROL]
-    control_kwargs = dict(kwargs)
-    look_cls, look_kwargs = VARIANTS[3][ARM]
+    arm_cls, arm_kwargs = VARIANTS[3][ARM]
     rows = []
     for seed in seeds:
         solo = run_one((seed, 3, ARM, 'normal', None))
@@ -85,15 +98,16 @@ def evaluate(seeds, states_per_scene=3):
         picks = [np.asarray(p, float) for p in picks]
         idx = np.linspace(0, len(picks) - 1, min(states_per_scene, len(picks)), dtype=int)
         for k in idx:
-            chosen = ForkPolicy(cls, control_kwargs, int(k), picks[int(k)])
-            control = ForkPolicy(cls, control_kwargs, int(k), None)
-            t_chosen, ok1 = chosen.run(seed)
-            t_control, ok2 = control.run(seed)
+            chosen = ForkPolicy(arm_cls, arm_kwargs, int(k), picks[int(k)])
+            control = ForkPolicy(arm_cls, arm_kwargs, int(k), None)
+            t_chosen, ok1, idx_seen = chosen.run(seed)
+            t_control, ok2, idx_seen2 = control.run(seed)
             predicted = float(pred_log[int(k)]['adopted_saving_s']) if int(k) < len(pred_log) else 0.
             rows.append({'seed': seed, 'decision': int(k),
                          'predicted_saving_s': round(predicted, 3),
                          'realised_saving_s': round(t_control - t_chosen, 3),
-                         'complete': bool(ok1 and ok2)})
+                         'same_state': bool(ok1 and ok2 and idx_seen == idx_seen2) if 'idx_seen' in dir() else bool(ok1 and ok2),
+                         'complete': bool(ok1 and ok2), 'chosen_saving_s': round(t_control - t_chosen, 3)})
     if not rows:
         summary = {'states': 0}
     else:

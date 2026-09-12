@@ -46,10 +46,9 @@ BUCKETS = {
 }
 
 
-def analyze(round_name, control, arm, family):
-    folder = ROOT / 'results' / round_name
+def compute(rows, control, arm, family, round_name='<synthetic>'):
+    """Pure bookkeeping: units stay separated and nothing is summed into a gain."""
     keys = BUCKETS[family]
-    rows = [json.loads(l) for l in (folder / 'metrics.jsonl').open(encoding='utf-8')]
     ctl = {r['seed']: r for r in rows if r['variant'] == control}
     cand = [r for r in rows if r['variant'] == arm]
     pred_adopted = np.array([r.get(keys['adopted'], 0.) for r in cand], float)
@@ -77,6 +76,13 @@ def analyze(round_name, control, arm, family):
         'note': ('decision-level predictions are NOT summed into the scene saving; '
                  'rejected proposals are never used to explain realised results'),
     }
+    return out, ctl, cand
+
+
+def analyze(round_name, control, arm, family):
+    folder = ROOT / 'results' / round_name
+    rows = [json.loads(l) for l in (folder / 'metrics.jsonl').open(encoding='utf-8')]
+    out, _ctl, _cand = compute(rows, control, arm, family, round_name)
     cf = folder / 'prediction_counterfactual.json'
     if cf.exists():
         cf_data = json.loads(cf.read_text(encoding='utf-8'))

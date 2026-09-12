@@ -130,6 +130,41 @@ class AssumedStateTests(unittest.TestCase):
         self.assertGreater(far, near + 10., 'a 180 m longer walk must cost ~36 s more')
 
 
+class PredictionUnitTests(unittest.TestCase):
+    def _rows(self):
+        return [
+            {'seed': 1, 'variant': 'ctl', 'score_time_s': 10., 'virtual_time_s': 100.},
+            {'seed': 1, 'variant': 'arm', 'score_time_s': 5., 'virtual_time_s': 60.,
+             'lookahead_pred_adopted_s': 25., 'lookahead_pred_rejected_max_s': 5.,
+             'lookahead_pred_all_sum_s': 300., 'lookahead_pred_all_n': 10,
+             'lookahead_pred_calls': 3, 'lookahead_pred_rejected_calls': 2},
+        ]
+
+    def test_realised_effect_uses_scene_seconds_not_per_source(self):
+        import analyze_prediction as ap
+        out, _ctl, _cand = ap.compute(self._rows(), 'ctl', 'arm', 'lookahead')
+        # scene seconds: 100 - 60 = 40, NOT the per-source 10 - 5 = 5
+        self.assertAlmostEqual(out['scene_realised_saving_s'], 40.)
+
+    def test_buckets_are_reported_separately_and_never_summed(self):
+        import analyze_prediction as ap
+        out, _ctl, _cand = ap.compute(self._rows(), 'ctl', 'arm', 'lookahead')
+        b = out['buckets']
+        self.assertAlmostEqual(b['adopted_predicted_saving_s'], 25.)
+        self.assertAlmostEqual(b['rejected_best_predicted_saving_s'], 5.)
+        self.assertAlmostEqual(b['all_candidates_mean_predicted_cost_s'], 30.)   # 300/10
+        self.assertNotAlmostEqual(out['scene_realised_saving_s'],
+                                  b['adopted_predicted_saving_s'],
+                                  msg='decision-level prediction must not be equated with the scene gain')
+        self.assertIn('decision-level', out['note'])
+        self.assertEqual(out['units']['realised'], 's (scene total, virtual_time_s difference)')
+
+    def test_development_only_marker_is_present(self):
+        import analyze_prediction as ap
+        out, _ctl, _cand = ap.compute(self._rows(), 'ctl', 'arm', 'lookahead')
+        self.assertIn('development_only', out['use'])
+
+
 class PredictionBucketTests(unittest.TestCase):
     def test_threshold_style_prediction_is_not_accumulated_as_a_scene_gain(self):
         solver = make_solver()
