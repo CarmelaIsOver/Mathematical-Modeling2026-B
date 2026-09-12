@@ -5,7 +5,7 @@
 
 - 基线：`f27c88b`（队友原始默认）
 - 本批优化起点：克隆队友仓库后新建分支 `codex/q3-q4-upgrade`
-- 当前版本：`student-opt-v1`（提交 `7119afb`）
+- 当前版本：`student-opt-v1`（提交 `7119afb`）；本轮优化（`opt/v2` HEAD）无采用项，版本不变
 - 口径：`LOCAL_SYNTHETIC` 离线模拟，同种子配对；时间单位"秒/源 = `virtual_time_s / cleared`"
 - 全量回归：`python -m unittest discover -p "test_*.py"` → **69 项全部通过**
 
@@ -14,9 +14,9 @@
 ## 0. 当前推荐配置（比赛用）
 
 ```bash
-cd "E:/KiriTong/CUMCM2026/B题-team/成果/support"
+cd "<仓库根>/成果/support"
 
-# Q3：三次机会都用 aggressive（12.92% 加速，0 失败）
+# Q3：三次机会都用 aggressive（均值 −13.16%，0 失败）
 python run.py --mode official --problem 3 --robot-id <队号> --q3-ring-guard aggressive --output practice_logs
 
 # Q4：用默认，不加任何新开关
@@ -25,10 +25,34 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 
 不传开关时与队友原始基线**逐位一致**，可随时回退。
 
-- Q3 `aggressive` 的独立验证（200 个全新种子 3480000 起）：
-  277.02 → **240.57 秒/源（−12.92%）**，中位比 0.87634，P90 **0.9500**，P95 0.9647，
-  P99 1.0378，CVaR95 **1.0017**，最差比 1.0600，196/200 更快，**0 失败，仅 1 场 >5%**，测量 105.9 < 基线 115.7。
-- Q3 `conservative`（需中心先观测到 6 个不同源才缩环）：−9.69%，P95 1.0000，最差 1.0600，1 场 >5%。
+- **Q3 三档统一对照**（同一批 200 个种子 3480000–3480019，`LOCAL_SYNTHETIC`，绝对秒/源口径）
+  数据来源：`research/iterative_speed/results/r25_q3_fixed200/`（一次性跑齐三臂，**无需重跑**）；
+  比值分位点用 `numpy.percentile(..., method='higher')`，与既有台账口径一致。
+
+| 档位 | 开关 | 均值秒/源 | 增益(绝对均值) | 增益(均值比) | 中位比 | P90 | P95 | P99 | CVaR95 | 最差绝对 | 最差比 | >5% | 失败 | 测量 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| off | 不加开关 | 277.02 | — | — | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 363.32 | 1.0000 | 0 | 0 | 115.71 |
+| aggressive | `--q3-ring-guard aggressive` | **240.57** | **13.16%** | 12.92% | 0.8763 | **0.9500** | **0.9647** | 1.0378 | **1.0017** | **321.52** | 1.0600 | 1 | 0 | 105.86 |
+| conservative | `--q3-ring-guard conservative` | 250.22 | 9.67% | 9.69% | 0.8975 | 0.9966 | 1.0000 | 1.0378 | 1.0192 | 359.91 | 1.0600 | 1 | 0 | 105.84 |
+
+  复现表格：`python research/iterative_speed/table_q3_guard3.py`（只读 r25 汇总，无新增跑批）。
+  更快场次：aggressive 196/200，conservative 189/200（相对同种子 off）。
+
+- **独立复核（全新种子 3482000–3482199，生产入口 `run.py` offline，200 场）**：
+  off 281.87 → aggressive **244.33 秒/源（−13.32% 绝对 / −13.16% 比值）**，P95 303.67，CVaR95 316.61，
+  最差绝对 337.16（off 377.94），测量 107.12（off 116.34），**0 失败，198/200 更快，1/200 >5%**（最差比 1.0915）。
+  与 r25 相互独立且一致 → aggressive 的收益可复现。
+
+- **conservative 的本地尾部与 aggressive 相同，优势只是机制更保守**：两档最差比都是 1.0600，且
+  **同一场 seed 3480163**，各自都是 **1/200 场 >5%**；conservative 靠 `min_origin_seen=6`（中心站先观测到
+  6 个不同源才缩环）换取更小的策略风险，代价是均值少 3.49pp、最差绝对反而更高（359.91 vs 321.52）。
+  此前台账写的"conservative 0/220 场 >5%"来自另一批种子，**不能与本批 200 场混用**。
+- **生产入口移植校验**：`run.py --q3-ring-guard {off,aggressive,conservative}`（offline + `LocalBackend`）
+  在 3480000–3480019 上与研究臂 r25 逐指标对拍，**480 个行为字段 0 不一致**
+  （mean_time_s / measure / cleared / virtual_time_s / fallback / failed_clear /
+  skipped_known_measurements / stations_visited，20/20 种子）。唯一差异是移植期新增的诊断计数
+  `coverage_sites_cancelled`（研究子类不计数，恒为 0），不影响动作轨迹。
+  复现：`python research/iterative_speed/compare_parity_q3_guard20.py`（exit 0）。
 - Q4 默认（含 16 上限发现关闭）：500 场 497.04 秒/源，P95 660.2，CVaR95 675.9，最差 707.0，≤400 达标 15.4%（16 源场景 70/77）。
 
 ---
@@ -68,6 +92,9 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | R12 | 晚激活 guard | 允许在第一个环站再决定缩环 | 与原点激活逐位相同 | 无可捕获场景 | `results/r5_q3_screen/` |
 | R13 | 负观测 × 缩环组合 | 两者叠加 | +0.02pp | 无叠加收益，不合并 | `results/r2_q3/`、`results/r5_q3_screen/` |
 | R14 | K 门作为默认（k6） | 中心观测到 ≥6 个不同源才缩环 | 200 场 9.69% vs aggressive 12.92% | 保守规则，仅在愿意牺牲 3pp 均值时作为 `conservative` 档保留 | `results/r25_q3_fixed200/` |
+| R25 | `skip_known_radius` 阈值维度 | 已知目标与站点距离超过阈值就跳过机会测量 | 800/1000 更差；48 场 1200 = 10.74%、1400 = 10.67% | **维度穷尽**：四个阈值都试过，曲线在 1200–1400 平坦，无更优取值 | `results/r12_q3_skip/` |
+| R26 | 轴承角度去重（bearing dedup） | 与上一次同频道测量的方向夹角 <25°/45° 时跳过机会测量（避免短基线三角定位） | 48 场 −0.002%（均值 245.636 vs 245.640）；`measure` 均值与 control 完全相同（106.29） | **空效果**：跳过的机会测量被后续定位补偿，净值 ≈ 0 | `results/r27_q3_screen48/` |
+| R27 | 路由代表点改用区域近边（near-edge） | 联合路由时用区域圆盘近边代替圆心，反映真实进入成本 | 48 场：frac=1.0 为 −20.3%，frac=0.5 为 −4.7% | 路由低估远处大区域的进入成本，明显恶化；圆心代表点保留 | `results/r28_q3_edge48/` |
 
 ### 2.2 Q4
 
@@ -93,6 +120,15 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 3. **局部几何收益不等于整场收益**。A/B/C 与"未保护缩环"都证明了这一点：省下的局部移动会被后续路线变化吃掉。
 4. **中途替换覆盖布局必须区分"已访问"与"正在扫描"的站点**，否则会重复扫描当前站点（A1 的缺陷）。
 5. **默认关闭 + 逐位可回退**：所有新策略都是 opt-in，且默认路径与队友基线逐位一致，并有冻结轨迹测试守护。
+6. **移植校验不必重跑 200 场**：生产入口 vs 研究臂在 20 个相同种子上逐指标对拍（480 个行为字段），
+   只要行为字段全等即可判定移植正确；新增的诊断计数字段（如 `coverage_sites_cancelled`）不属于差异。
+   本轮据此省下一次 200 场三档重跑。
+7. **扫描次数已接近结构下界，不要再从"减少测量"找空间**：缺失频道 c 的证明要求在该频道上完成
+   全盘覆盖，而 1123m 七站布局去掉任意一站都会留下覆盖空洞 → 每缺一个频道就需要 7 次站点测量；
+   实测 105.9 次已接近 n 相关下界（n=10/13/16 时约 80/62/44）。剩余成本主体是 **移动**（≈2437s/3129s），
+   而移动侧候选（R3/R4/R5、R20/R21）已全部否决。
+8. **克隆生产 run() 做研究变体时先补 import**：本轮 near-edge 首轮 48 场全部以
+   `NameError: name 'time' is not defined` 失败，这种“全失败”是基础设施错误而非机制结论，必须先修后判。
 
 ---
 
@@ -116,5 +152,6 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | `81a460c` | 三层组件消融（120 全新种子） |
 | `884ef0a` | 520 相同种子绝对口径对比 |
 | `7119afb` | **受保护缩环接入 run.py + 修复重复中心站扫描** |
+| 本轮 HEAD（`opt/v2`） | 生产入口三档移植对拍（20 种子 / 480 行为字段 0 不一致）+ 三档统一对照 + 修正 conservative 尾部表述 + 优先2 两方向（bearing dedup、near-edge 路由）粗筛否决 + 生产口径 200 场复核 |
 
 研究目录：`research/iterative_speed/`（`variants.py` 策略定义、`study.py` 配对实验、`RESULTS.md`/`JOURNAL.md` 逐轮记录、`results/rN_*/` 逐局数据）。

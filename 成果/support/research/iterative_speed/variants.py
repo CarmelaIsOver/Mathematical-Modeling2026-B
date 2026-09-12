@@ -1,5 +1,6 @@
 """Experimental policies on commit 951df1b. No simulator state is inspected."""
 import math
+import time
 import itertools
 import numpy as np
 from omni_search import OmniSearchSolver
@@ -212,6 +213,120 @@ class ChooseLayout(JointSearchSolver):
         return r
 
 
+class OmniBearingDedup(OmniVariant):
+    """Skip an opportunistic known-target measure whose bearing duplicates an existing one.
+
+    Mechanism: a bearing taken from nearly the same direction (seen from the target's
+    region centre) as the previous measurement of the same channel barely constrains
+    the position (short triangulation baseline) but still costs 5 s + channel switch.
+    Only station-scan measures are affected; dedicated locate() planning is untouched.
+    """
+    def __init__(self,*args,dedup_deg=40.,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.dedup_deg=float(dedup_deg)
+        self.measure_pos={}
+        self.diagnostics['bearing_dedup_skips']=0
+
+    def action(self,path,p,c):
+        r=super().action(path,p,c)
+        if path=='/measure' and r['measure_result'] in ('direction','near'):
+            self.measure_pos[c]=np.asarray(p,float)
+        return r
+
+    def skip_station_measurement(self,c,p):
+        if c in self.deferred and self.dedup_deg>0 and c in self.measure_pos:
+            _,center,_=self.region(c)
+            center=np.asarray(center,float)
+            v1=np.asarray(p,float)-center;v2=self.measure_pos[c]-center
+            n1=float(np.linalg.norm(v1));n2=float(np.linalg.norm(v2))
+            if n1>1e-6 and n2>1e-6:
+                cosang=float(np.clip(float(v1@v2)/(n1*n2),-1.,1.))
+                if math.degrees(math.acos(cosang))<self.dedup_deg:
+                    self.diagnostics['bearing_dedup_skips']+=1
+                    return True
+        return super().skip_station_measurement(c,p)
+
+
+class OmniNearEdgeRoute(OmniVariant):
+    """Joint router uses the near edge of a known target's region, not its centre.
+
+    Mechanism: the enclosing-circle centre overstates the travel needed to reach a
+    large region; the point of the region disc nearest to the current position is a
+    better proxy for the entry cost. Only the router's representative point changes;
+    locate(), certificates and the forced-target rule keep the centre. Research-only
+    clone of the production run loop to isolate this single change.
+    """
+    def __init__(self,*args,repr_frac=1.,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.repr_frac=float(repr_frac)
+        self.diagnostics['near_edge_routes']=0
+
+    def route_repr(self,c):
+        _,center,radius=self.region(c)
+        center=np.asarray(center,float)
+        if self.repr_frac<=0 or radius<=1e-9:return center
+        d=np.asarray(self.pos,float)-center;n=float(np.linalg.norm(d))
+        if n<1e-9:return center
+        self.diagnostics['near_edge_routes']+=1
+        return center+self.repr_frac*radius*(d/n)
+
+    def run(self):
+        started=time.perf_counter();entered=self.api.enter()
+        self.deadline=time.monotonic()+entered['remaining_real_duration_s']
+        self.pending_stations=list(range(len(self.stations)))
+        while self.pending_stations or self.deferred:
+            self.deferred={c:age for c,age in self.deferred.items() if c not in self.cleared}
+            if len(self.cleared)==16:break
+            if self.deferred:
+                keys=list(self.deferred)
+                if not self.pending_stations:
+                    c=min(keys,key=lambda c:np.linalg.norm(self.region(c)[1]-self.pos))
+                    self.diagnostics['forced_targets']+=1
+                    self.locate(c);self.deferred.pop(c,None)
+                    continue
+                nodes=[('target',c) for c in keys]+[('station',j) for j in self.pending_stations]
+                points=np.array([self.route_repr(c) for c in keys]
+                                +[self.stations[j] for j in self.pending_stations])
+                self.diagnostics['route_replans']+=1
+                kind,which=nodes[search_route(points,self.pos)[0]]
+                if kind=='target':
+                    self.locate(which);self.deferred.pop(which,None)
+                    continue
+                i=which
+            elif self.pending_stations:
+                i=self.next_station()
+            else:break
+            self.pending_stations.remove(i);p=self.stations[i];found=[]
+            channels=[c for c in range(1,21) if c not in self.cleared]
+            if self.channel in channels:
+                channels.remove(self.channel);channels.insert(0,self.channel)
+            for c in channels:
+                if self.skip_station_measurement(c,p):
+                    self.diagnostics['skipped_known_measurements']+=1
+                    continue
+                result=self.action('/measure',p,c)['measure_result']
+                if result=='near':
+                    if not self.clear(p,c):raise RuntimeError('Near clear failed')
+                elif result=='direction':found.append(c)
+                if c in self.deferred:self.diagnostics['opportunistic_measures']+=1
+            self.visited.append(i)
+            for c in found:
+                if c not in self.deferred:
+                    self.deferred[c]=len(self.visited)
+                    self.diagnostics['deferred_targets']+=1
+            if len(self.cleared)==16:break
+        if len(self.cleared)<16 and (self.pending_stations or any(c not in self.cleared for c in self.deferred)):
+            raise RuntimeError('Cannot finish with unresolved coverage or targets')
+        exited=self.api.exit()
+        if exited.get('accepted') is not True or exited.get('exit_reason')!='user_exit':
+            raise RuntimeError('Normal exit not acknowledged')
+        total=self.api.virtual_time
+        return dict(problem=self.problem,complete=True,cleared=len(self.cleared),virtual_time_s=total,
+            mean_time_s=total/len(self.cleared) if self.cleared else None,
+            program_time_s=time.perf_counter()-started,stations_visited=len(self.visited),
+            scheduling_policy='joint_route_near_edge',**self.counts,**self.parts,**self.diagnostics)
+
+
 VARIANTS={
  3:{'baseline':(OmniSearchSolver,{}), 'negative':(OmniSearchSolver,{'negative_observations':True}),
     'ring1300':(OmniVariant,{'ring_radius':1300.}), 'ring1123':(OmniVariant,{'ring_radius':1123.}),
@@ -227,6 +342,10 @@ VARIANTS={
     'guard1123_close':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True}),
     'guard1123_close_skip14':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1400.}),
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'skip12_dedup25':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':25.}),
+    'skip12_dedup45':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':45.}),
+    'skip12_edge':(OmniNearEdgeRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'repr_frac':1.}),
+    'skip12_edge50':(OmniNearEdgeRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'repr_frac':.5}),
     'guard1150_close_skip12':(OmniVariant,{'ring_radius':1150.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'guard1180_close_skip12':(OmniVariant,{'ring_radius':1180.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'guard1250_close_skip12':(OmniVariant,{'ring_radius':1250.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),

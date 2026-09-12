@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "skip12_edge",
+    "skip12_edge50"
+  ],
+  "start": 3481000,
+  "count": 48,
+  "workers": 8,
+  "round": "r28_q3_edge48",
+  "hypothesis": "near-edge region representative for joint routing (fixed NameError)",
+  "mode": "normal",
+  "traces": false
+}
