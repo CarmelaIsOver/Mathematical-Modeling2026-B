@@ -1,0 +1,63 @@
+{
+  "parameters": {
+    "disk_r": 1800.0,
+    "range": 1000.0
+  },
+  "named": {
+    "all25": {
+      "k": 25,
+      "cover_radius_m": 548.48,
+      "covers": true
+    },
+    "center+6x1900(60deg)": {
+      "k": 7,
+      "cover_radius_m": 1096.97,
+      "covers": false
+    },
+    "center+6x1645": {
+      "k": 7,
+      "cover_radius_m": 950.0,
+      "covers": true
+    },
+    "center+6x950": {
+      "k": 7,
+      "cover_radius_m": 1086.6,
+      "covers": false
+    },
+    "center+12x1900": {
+      "k": 13,
+      "cover_radius_m": 983.51,
+      "covers": true
+    },
+    "6x1900(60deg)": {
+      "k": 6,
+      "cover_radius_m": 1900.0,
+      "covers": false
+    },
+    "6x950": {
+      "k": 6,
+      "cover_radius_m": 1086.6,
+      "covers": false
+    }
+  },
+  "search": {
+    "grid_points": 25445,
+    "grid_step_m": 20.0,
+    "subsets_tested": 480700,
+    "seven_subsets_passing_grid": 0,
+    "greedy_k": 9,
+    "greedy_sites": [
+      9,
+      6,
+      12,
+      2,
+      16,
+      1,
+      17,
+      8,
+      10
+    ],
+    "greedy_grid_points_covered": 25445,
+    "greedy_cover_radius_m": 950.0
+  }
+}

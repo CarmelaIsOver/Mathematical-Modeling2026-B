@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_skip60",
+    "q4_skip80"
+  ],
+  "start": 3487000,
+  "count": 48,
+  "workers": 8,
+  "round": "r36_q4_skiptight48",
+  "hypothesis": "autonomous: widen the tight-known-target station-skip radius 40 -> 60/80 on Q4",
+  "mode": "normal",
+  "traces": false
+}

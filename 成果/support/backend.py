@@ -7,11 +7,30 @@ import http.client
 import json
 import math
 import time
+import http.client
+import socket
+import time
 import uuid
+import urllib.parse
 import urllib.request
 import urllib.error
 from pathlib import Path
 import numpy as np
+
+def health_check(url,attempts=3,timeout=3.):
+    """Opt-in pre-flight TCP reachability check (sends no protocol request)."""
+    parsed=urllib.parse.urlparse(url)
+    host=parsed.hostname;port=parsed.port or (443 if parsed.scheme=='https' else 80)
+    last=None
+    for attempt in range(attempts):
+        try:
+            with socket.create_connection((host,port),timeout=timeout):
+                return True
+        except OSError as exc:
+            last=exc
+            if attempt<attempts-1:time.sleep(min(.25*2**attempt,2.))
+    raise ConnectionError(f'simulator unreachable at {host}:{port}: {last}')
+
 
 class HTTPBackend:
     def __init__(self,robot_id,url,log_path):
@@ -61,6 +80,9 @@ class HTTPBackend:
         r=self.post('/enter',{})
         self.deadline=time.monotonic()+r['remaining_real_duration_s']
         return r
+
+    def health(self,attempts=3,timeout=3.):
+        return health_check(self.url,attempts=attempts,timeout=timeout)
 
     def action(self,path,p,c):
         return self.post(path,{'position':{'x':float(p[0]),'y':float(p[1])},'channel':int(c)})

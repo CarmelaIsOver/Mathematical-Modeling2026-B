@@ -16,8 +16,9 @@
 ```bash
 cd "<仓库根>/成果/support"
 
-# Q3：三次机会都用 aggressive（均值 −13.16%，0 失败）
-python run.py --mode official --problem 3 --robot-id <队号> --q3-ring-guard aggressive --output practice_logs
+# Q3：三次机会都用 aggressive（均值 −13.16%，0 失败），再加 60m 小区域试探（再降 0.74%）
+python run.py --mode official --problem 3 --robot-id <队号> \
+              --q3-ring-guard aggressive --q3-probe-radius 60 --output practice_logs
 
 # Q4：用默认，不加任何新开关
 python run.py --mode official --problem 4 --robot-id <队号> --output practice_logs
@@ -37,6 +38,21 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 
   复现表格：`python research/iterative_speed/table_q3_guard3.py`（只读 r25 汇总，无新增跑批）。
   更快场次：aggressive 196/200，conservative 189/200（相对同种子 off）。
+
+- **Q3 小区域试探（本轮新增）**：在 aggressive 基础上加 `--q3-probe-radius 60`，200 个全新种子
+  （3484000–3484199）配对对照：均值 241.65 → **239.92 秒/源（−0.74%）**，中位比 0.9933，
+  P95 比 1.0001，CVaR95 比 1.0018，最差比 1.0050，最差绝对 324.15（对照 324.70），
+  测量 101.8（对照 105.4），试探成功率 87.8%，**0 失败，0 场 >5%**。
+  `probe_radius=40` 同时在测：−0.67%（尾部略好：CVaR95 1.0003、最差比 1.0025），两档差异在噪声内，
+  均暴露为 opt-in（不传开关时与队友基线逐位一致）。
+  完备性论据：失败试探不签发任何证书、不缩小可行域，仅花 3s，之后仍走原证书路径。
+
+- **Q4 网络健壮性（本轮验证）**：`HTTPBackend.post` 的 6 次重试已覆盖 WinError 10053 族
+  （ConnectionAbortedError / ConnectionResetError / URLError / IncompleteRead），
+  且重试保持 request_id 与请求体逐字节一致；业务拒绝（HTTPError）不重试。
+  新增 /enter 前 TCP 可达性预检（`--http-health-probe`，默认关闭）。
+  Q4 默认命令可加该开关，不加时完全不变：
+  `python run.py --mode official --problem 4 --robot-id <队号> --http-health-probe --output practice_logs`
 
 - **独立复核（全新种子 3482000–3482199，生产入口 `run.py` offline，200 场）**：
   off 281.87 → aggressive **244.33 秒/源（−13.32% 绝对 / −13.16% 比值）**，P95 303.67，CVaR95 316.61，
@@ -67,6 +83,9 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | A4 | Q3 负观测半平面（measure-only） | 同一源在 p 收到、q 未收到 ⇒ 中垂线半平面；**只用于选下一测点**，证书/兜底仍用正观测外包 | 单独 −1.48%，最差 +0.17%，0/500 场 >5% | opt-in `--negative-observations` | `results/q3_negative_new/` | `6aa393d` |
 | A5 | Q4 16 上限发现关闭推广到 radial | 原仅 rings 生效的"发现+清除=16 即取消剩余站"推广到默认径向布局 | 16 源种子 −6.7%，零退化 | **默认开启** | `results/q4_closure/` | `365d71b` |
 | A6 | 大批量配对评估框架 | 可断点续跑的多臂评估（分布/配对/达标率） | 工具 | — | `results/batch/` | `951df1b` |
+| A7 | **Q3 小区域光学试探 60m（配合受保护缩环）** | 区域半径在 (19.99, 60] 时先就地试一次光学清除；失败不改变可行域、不签发证书，失败后仍走原证书路径 | **−0.74%（均值）**，P95 1.0001、CVaR95 1.0018、最差绝对 324.15、0 失败、0 场 >5%；测量 101.8 | opt-in `--q3-probe-radius 60` | `results/r32_q3_probe200/` | 本轮 |
+| A8 | **Q4 网络健壮性（验证 + 健康探测）** | 既有 6 次重试已验证覆盖 WinError 10053 族；新增 /enter 前 TCP 可达性预检 | 不改变算法行为；模拟中断单测 6 项 | opt-in `--http-health-probe`（official 模式） | `test_http_retry.py` | 本轮 |
+| A9 | Q4 小区域试探窗参数化 | `probe_radius` 由硬编码 40 变为参数（默认仍 40，逐位不变） | 工具化；默认保持 40 | 默认 40，opt-in `--q4-probe-radius` | `results/r34_q4_probe48/` | 本轮 |
 
 **A1 的缺陷修复（重要）**：受保护换布局在中心站扫描期间触发，`_install_ring` 曾按 `visited` 重建待访列表，把正在扫描的中心站重新入队（`visited=[0,0,...]`），每场多约 20 次测量（≈100 秒）。修复后同一 120 种子上均值 256.94 → 247.38，测量 127.9 → 107.9。**此前"缩环导致站点扫描次数上升"的解释是错的，主因就是这次重复扫描。**
 
@@ -95,6 +114,8 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | R25 | `skip_known_radius` 阈值维度 | 已知目标与站点距离超过阈值就跳过机会测量 | 800/1000 更差；48 场 1200 = 10.74%、1400 = 10.67% | **维度穷尽**：四个阈值都试过，曲线在 1200–1400 平坦，无更优取值 | `results/r12_q3_skip/` |
 | R26 | 轴承角度去重（bearing dedup） | 与上一次同频道测量的方向夹角 <25°/45° 时跳过机会测量（避免短基线三角定位） | 48 场 −0.002%（均值 245.636 vs 245.640）；`measure` 均值与 control 完全相同（106.29） | **空效果**：跳过的机会测量被后续定位补偿，净值 ≈ 0 | `results/r27_q3_screen48/` |
 | R27 | 路由代表点改用区域近边（near-edge） | 联合路由时用区域圆盘近边代替圆心，反映真实进入成本 | 48 场：frac=1.0 为 −20.3%，frac=0.5 为 −4.7% | 路由低估远处大区域的进入成本，明显恶化；圆心代表点保留 | `results/r28_q3_edge48/` |
+| R30 | 方向 F：试探加“≥2 次观测”门 | 只在已有 ≥2 个方位时才做小区域试探 | 200 场：与无门的 probe60 **逐位相同** | 试探生效时区域半径已处于 (19.99,60]，观测数已 ≥2，门从不生效 | `results/r27_q3_screen48/`、`results/r32_q3_probe200/` |
+| R31 | 方向 F2：区域尺度相关的动态 skip 阈值 | thresh = min(1200, 900+radius)，区域越小越容易跳过远处机会测量 | 48 场：与 control **逐位相同**（两边均值 243.917 完全一致） | 站点扫描时刻已知目标的区域半径基本 >300m，阈值退化为 1200，与静态规则等价 | `results/r31_q3_afF2_screen48/` |
 
 ### 2.2 Q4
 
@@ -110,6 +131,10 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | R22 | 短步 `step55/65/80narrow` | 缩小定位步长与侧向偏移 | +0.5%~+1.2% | 组合 22 点后坏尾部加剧 | `results/r1_q4/` |
 | R23 | 每频道缺失证书 | 用真实 no_signal 位置证明某频道在某网格单元无源 | 证书正确（10 源场景可证明 10 个无源频道整盘缺失） | **结构性零收益**：两布局每个站对至少一个网格单元必不可缺（radial 25/25、rings 22/22），每站必须测每个未决频道 | `results/q4_absence/` |
 | R24 | `stepskip`（禁止站点扫描已知目标） | 减少站点冗余扫描 | 最差比 1.4670，9 场 >5% | 机会测量是目标收敛的信息来源，去掉后触发更多昂贵后备 | `results/q4_reschedule_new/` |
+| R28 | Q4 证书站点集（7 站只做缺失证明） | 从 radial 25 站选 7 站扫描每个未决频道，其余 18 站只做机会发现 | 几何验证：`all25` 未覆盖 0 点；**去掉任一站都有 ≥992 个网格点（≈97,200 m²）未覆盖**；自然 7 站集（中心+6×1645 / 中心+6×1900 / 中心+6×950）未覆盖 78%–100% 盘面 | **结构性不可行**：Q4 源有方向性（`visible=(p−源)·dir≥0`），空缺失证明要求每个盘面点落在其 1000m 内站点的凸包内部（角度间隙<180°），该判据下 25 站全部必需，最小证书集 = 25 | `results/r30_q4_cert_geometry/` |
+| R29 | 方向 E：覆盖证明提前关闭 | 未发现频道一旦已扫描站点覆盖盘面即判 absent | 与 R28 同一判据：单站移除即产生未覆盖区 | 重复方向（与 R23 同结论）：不存在可提前关闭的频道，每站必须扫描每个未决频道 | `results/r30_q4_cert_geometry/`、`results/q4_absence/` |
+| R32 | 方向 D：Q4 小区域试探窗 40→60/80 | 把小区域光学试探的触发半径从 40m 放宽到 60/80m | 48 场（全新种子 3485000）：40m（默认）491.44 → 60m 492.03（−0.12%）、80m 492.58（−0.23%）；关掉试探 495.96（−0.92%） | 放宽 <0.5% 且为负收益 → 规则 3 否决，不调参重试；同时反向确认**现有 40m 试探本身有价值**（关掉变差 0.92%） | `results/r34_q4_probe48/` |
+| R33 | 自主迭代：Q4 “紧凑已知目标”站点跳过阈值 40→60/80 | 半径 ≤ 阈值且已有 ≥2 方位时，不再在站点扫描中做机会测量 | 48 场（全新种子 3487000）：baseline 476.35 → 60m 476.42（−0.013%）、80m 476.49（−0.028%） | 规则 3 否决：均值零效果（P95 仅小幅改善，均值不变）；与 R32 一致，Q4 站点级跳过无可挖增量 | `results/r36_q4_skiptight48/` |
 
 ---
 
@@ -129,6 +154,13 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
    而移动侧候选（R3/R4/R5、R20/R21）已全部否决。
 8. **克隆生产 run() 做研究变体时先补 import**：本轮 near-edge 首轮 48 场全部以
    `NameError: name 'time' is not defined` 失败，这种“全失败”是基础设施错误而非机制结论，必须先修后判。
+9. **Q4 的缺失证书判据与 Q3 不同，不要混用**：Q3 源是全向的，证明一个频道缺失只需要“已扫站点的
+   1000m 盘覆盖 1800m 盘”（即纯圆盘覆盖，中心+6×1645.4 即可，覆盖半径 950m）；Q4 源有方向性
+   （`visible=(p−源)·dir≥0`），源可以躲进任一开半平面，所以要求“每个盘面点都在其 1000m 内站点的
+   凸包内部”（等价于角度间隙<180°）。在该判据下 radial 25 站每一站都必需（0/25 可删除），
+   最小证书集就是全集 → “用少数站点换测量”在 Q4 结构性不可行。用覆盖半径算 Q4 会得出错误结论。
+10. **几何验证脚本要验 sanity**：本轮用 10m 网格 + 角度间隙判据，先对全集 25 站验证“未覆盖 0 点”，
+   再对单站移除与候选 7 站集对比；若不做 sanity，很容易把“证书工作上限”误读为“不覆盖”。
 
 ---
 

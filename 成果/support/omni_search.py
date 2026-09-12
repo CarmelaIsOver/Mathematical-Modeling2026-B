@@ -23,7 +23,7 @@ RING_GUARDS=('off','aggressive','conservative')
 class OmniSearchSolver(Solver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original',
                  negative_observations=False,certify_on_tight=False,negative_route=False,
-                 ring_guard='off'):
+                 ring_guard='off',probe_radius=0.):
         if problem!=3 or coverage_layout!='original':
             raise ValueError('Omni joint scheduling requires Q3 and original seven-site coverage')
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
@@ -49,6 +49,11 @@ class OmniSearchSolver(Solver):
         if ring_guard not in RING_GUARDS:
             raise ValueError('Unknown ring guard mode')
         self.ring_guard=ring_guard
+        self.probe_radius=float(probe_radius)
+        if self.probe_radius<0.:
+            raise ValueError('probe_radius must be non-negative')
+        self.diagnostics['extra_probe_attempts']=0
+        self.diagnostics['extra_probe_successes']=0
         self.observed_channels=set()
         self.ring_activated=False
         self.min_origin_seen=1 if ring_guard=='aggressive' else 6
@@ -137,6 +142,16 @@ class OmniSearchSolver(Solver):
         return self.outer_region(c)
 
     def locate(self,c):
+        if self.probe_radius>0:
+            # Optional small-region optical probe (opt-in, default off). A probe
+            # never certifies anything: a failed clear costs 3 s and leaves the
+            # feasible region untouched, so the certified path below still runs.
+            _,probe_center,probe_radius_=self.region(c)
+            if 19.99<probe_radius_<=self.probe_radius:
+                self.diagnostics['extra_probe_attempts']+=1
+                if self.clear(probe_center,c):
+                    self.diagnostics['extra_probe_successes']+=1
+                    return
         if not self.use_negatives:
             return super().locate(c)
         dark=0

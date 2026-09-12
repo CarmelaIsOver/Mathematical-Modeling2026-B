@@ -1,7 +1,7 @@
 """One entry point for the maintained controller and local experiments."""
 import argparse,csv,json,time
 from pathlib import Path
-from backend import HTTPBackend,LocalBackend
+from backend import HTTPBackend,LocalBackend,health_check
 from solver import Solver
 from audit import AuditPort
 
@@ -17,6 +17,8 @@ def main():
     ap.add_argument('--layout',choices=['original','compact','radial','rings'],default=None,
                     help='default: radial for integrated Q4, original otherwise')
     ap.add_argument('--robot-id');ap.add_argument('--url',default='http://127.0.0.1:2026')
+    ap.add_argument('--http-health-probe',action='store_true',
+                    help='opt-in: TCP reachability check before the session starts (official mode only)')
     ap.add_argument('--runs',type=int,default=1);ap.add_argument('--seed',type=int,default=20260910)
     ap.add_argument('--spacing',type=float,default=950.);ap.add_argument('--refine',type=int,default=8)
     ap.add_argument('--error',choices=['fixed','plus','minus'],default='fixed')
@@ -25,6 +27,12 @@ def main():
                     help='Q3 integrated only: received/not-received bisector constraints (opt-in, default off)')
     ap.add_argument('--q3-ring-guard',choices=['off','aggressive','conservative'],default='off',
                     help='Q3 integrated only: guarded 1123m seven-site ring shrink (opt-in, default off)')
+    ap.add_argument('--q4-probe-radius',type=float,default=40.,
+                    help='Q4 integrated only: optical probe window upper bound in metres '
+                         '(default 40; <=19.99 disables the probe; opt-in)')
+    ap.add_argument('--q3-probe-radius',type=float,default=0.,
+                    help='Q3 integrated only: optical probe when the feasible region radius is at '
+                         'most this value (metres; 0 or negative disables it; opt-in, default off)')
     ap.add_argument('--output',default=None)
     a=ap.parse_args()
     if a.strategy is None:a.strategy='integrated'
@@ -33,6 +41,12 @@ def main():
         ap.error('--negative-observations requires --strategy integrated --problem 3')
     if a.q3_ring_guard!='off' and not (a.strategy=='integrated' and a.problem==3):
         ap.error('--q3-ring-guard requires --strategy integrated --problem 3')
+    if a.q3_probe_radius>0 and not (a.strategy=='integrated' and a.problem==3):
+        ap.error('--q3-probe-radius requires --strategy integrated --problem 3')
+    if 0<a.q3_probe_radius<=19.99:
+        ap.error('--q3-probe-radius must exceed the certified radius 19.99')
+    if a.q4_probe_radius!=40. and not (a.strategy=='integrated' and a.problem==4):
+        ap.error('--q4-probe-radius requires --strategy integrated --problem 4')
     if a.strategy=='integrated':
         required_layouts=('radial','rings') if a.problem==4 else ('original',)
         if a.layout not in required_layouts or a.spacing!=950.:
@@ -48,6 +62,7 @@ def main():
         controller=ActiveLocalizationSolver
     else:controller=Solver
     if a.mode=='official' and not a.robot_id:ap.error('--robot-id is required')
+    if a.http_health_probe and a.mode!='official':ap.error('--http-health-probe requires --mode official')
     if a.runs<1:ap.error('--runs must be positive')
     if a.layout in ('compact','radial','rings') and (a.problem!=4 or a.spacing!=950.):
         ap.error('Optimized layouts require --problem 4 and the default 950m spacing')
@@ -60,6 +75,8 @@ def main():
     print(f'Starting Q{a.problem}: strategy={a.strategy}, mode={a.mode}, layout={a.layout}',flush=True)
     for i in range(1 if a.mode=='official' else a.runs):
         stem=out/f'client_q{a.problem}_{stamp}_{i+1}'
+        if a.mode=='official' and a.http_health_probe:
+            health_check(a.url)
         backend=(HTTPBackend(a.robot_id,a.url,stem.with_suffix('.jsonl')) if a.mode=='official'
                  else LocalBackend(a.seed+i,a.problem,a.error,a.radius,all_directional=a.all_directional))
         port=AuditPort(backend)
@@ -67,11 +84,15 @@ def main():
             kwargs={'coverage_layout':a.layout}
             if a.negative_observations:kwargs['negative_observations']=True
             if a.q3_ring_guard!='off':kwargs['ring_guard']=a.q3_ring_guard
+            if a.q3_probe_radius>0:kwargs['probe_radius']=a.q3_probe_radius
+            if a.problem==4 and a.q4_probe_radius!=40.:kwargs['probe_radius']=a.q4_probe_radius
             r=controller(port,a.problem,a.spacing,a.refine,**kwargs).run()
             r['strategy']=a.strategy
             r['coverage_layout']=a.layout
             r['negative_observations']=bool(a.negative_observations)
             r['q3_ring_guard']=a.q3_ring_guard
+            r['q3_probe_radius']=a.q3_probe_radius
+            r['q4_probe_radius']=a.q4_probe_radius
             r.update(normal_exit=port.exited,max_step_time_error_s=port.max_step_error_s,**port.parts)
             r['provenance']='Official HTTP interface; case code and module come from simulator UI'
             if a.mode=='offline':

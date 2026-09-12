@@ -41,7 +41,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
                  reschedule_after_step=False,target_measure_budget=None,step_skip_known=False,
                  close_discovery_on_upper_bound=True,certify_channel_absence=False,
-                 reschedule_switches=None):
+                 reschedule_switches=None,probe_radius=40.,skip_tight_radius=40.):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
@@ -58,6 +58,13 @@ class JointSearchSolver(ActiveLocalizationSolver):
         self.target_measure_budget=max_refine if target_measure_budget is None else int(target_measure_budget)
         self.target_measures={}
         self.small_probe_state={}
+        # Opt-in window for the small-region optical probe. The certified path is
+        # unchanged: only the radius bound that decides when a probe is attempted
+        # moves. Values <=19.99 disable the probe entirely (research isolation).
+        self.probe_radius=float(probe_radius)
+        # Radius below which a known target with >=2 bearings is no longer worth
+        # an opportunistic station measurement (default 40 keeps the baseline).
+        self.skip_tight_radius=float(skip_tight_radius)
         # Optional bound on how often a target returns to the scheduler. Once the
         # allowed returns are used, the target is finished without interruption,
         # which keeps the first re-decision but stops repeated interleaving.
@@ -125,7 +132,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
 
     def _locate_full(self,c):
         _,center,radius=self.region(c)
-        if 19.99<radius<=40.:
+        if 19.99<radius<=self.probe_radius:
             # A cheap attempt along the planned visit. Failure never certifies
             # clearance or shrinks the feasible set; refinement still follows.
             self.diagnostics['small_region_probes']+=1
@@ -142,7 +149,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
         cannot re-run the same trial.
         """
         _,center,radius=self.region(c)
-        if not 19.99<radius<=40.:
+        if not 19.99<radius<=self.probe_radius:
             return False
         state=len(self.obs[c])
         if self.small_probe_state.get(c)==state:
@@ -180,7 +187,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
             return True
         _,center,radius=self.region(c)
         return (radius<=19.99 or np.linalg.norm(p-center)-radius>1500.
-                or (len(self.obs[c])>=2 and radius<=40.))
+                or (len(self.obs[c])>=2 and radius<=self.skip_tight_radius))
 
     def run(self):
         started=time.perf_counter();entered=self.api.enter()

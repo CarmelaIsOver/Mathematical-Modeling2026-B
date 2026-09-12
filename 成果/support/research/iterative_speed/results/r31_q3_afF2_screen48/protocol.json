@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "skip12_probe60",
+    "skip12_probe60obs2",
+    "skip12_dynskip"
+  ],
+  "start": 3483000,
+  "count": 48,
+  "workers": 8,
+  "round": "r31_q3_afF2_screen48",
+  "hypothesis": "A/F/F2: probe radius 60 (plain and >=2-bearing gated) and region-size-dependent opportunistic skip",
+  "mode": "normal",
+  "traces": false
+}

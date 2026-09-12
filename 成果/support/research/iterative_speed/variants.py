@@ -11,9 +11,11 @@ from geometry import search_stations
 class OmniVariant(OmniSearchSolver):
     def __init__(self, *args, ring_radius=None, ring_count=6, probe_radius=0., guard_initial=False,
                  close_known=False, guard_visits=0, skip_known_radius=None,
-                 align_ring=False, two_stage_radius=None, min_origin_seen=1, **kwargs):
+                 align_ring=False, two_stage_radius=None, min_origin_seen=1,
+                 probe_from_obs=0, **kwargs):
         super().__init__(*args, **kwargs)
         self.probe_radius=probe_radius
+        self.probe_from_obs=int(probe_from_obs)
         self.skip_known_radius=skip_known_radius
         self.ring_points=None;self.guard_initial=guard_initial;self.close_known=close_known
         self.guard_visits=guard_visits
@@ -91,7 +93,7 @@ class OmniVariant(OmniSearchSolver):
 
     def locate(self,c):
         _,center,radius=self.region(c)
-        if 19.99<radius<=self.probe_radius:
+        if 19.99<radius<=self.probe_radius and len(self.obs[c])>=self.probe_from_obs:
             self.diagnostics['extra_probe_attempts']+=1
             if self.clear(center,c):
                 self.diagnostics['extra_probe_successes']+=1
@@ -327,6 +329,29 @@ class OmniNearEdgeRoute(OmniVariant):
             scheduling_policy='joint_route_near_edge',**self.counts,**self.parts,**self.diagnostics)
 
 
+class OmniDynamicSkip(OmniVariant):
+    """Region-size-dependent opportunistic-skip distance (direction F2).
+
+    Mechanism: a tight region is cheap to settle with one dedicated visit, so a
+    bearing from a distant station is worth less; the skip threshold therefore
+    shrinks with the region radius: thresh = min(skip_known_radius, 900 + radius).
+    Falling through keeps the unmodified base rules (including the certified-radius
+    skip), so only the distance gate differs from the control arm.
+    """
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.diagnostics['dyn_skip_skips']=0
+
+    def skip_station_measurement(self,c,p):
+        if self.ring_guard!='off' and c in self.deferred:
+            _,center,radius=self.region(c)
+            thresh=min(self.skip_known_radius,900.+radius)
+            if np.linalg.norm(np.asarray(center)-np.asarray(p))>thresh:
+                self.diagnostics['dyn_skip_skips']+=1
+                return True
+        return super().skip_station_measurement(c,p)
+
+
 VARIANTS={
  3:{'baseline':(OmniSearchSolver,{}), 'negative':(OmniSearchSolver,{'negative_observations':True}),
     'ring1300':(OmniVariant,{'ring_radius':1300.}), 'ring1123':(OmniVariant,{'ring_radius':1123.}),
@@ -343,6 +368,10 @@ VARIANTS={
     'guard1123_close_skip14':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1400.}),
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'skip12_dedup25':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':25.}),
+    'skip12_probe40':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':40.}),
+    'skip12_probe60':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'skip12_probe60obs2':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'probe_from_obs':2}),
+    'skip12_dynskip':(OmniDynamicSkip,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'skip12_dedup45':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':45.}),
     'skip12_edge':(OmniNearEdgeRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'repr_frac':1.}),
     'skip12_edge50':(OmniNearEdgeRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'repr_frac':.5}),
@@ -372,6 +401,11 @@ VARIANTS={
     'ring1123_close_unguarded':(OmniVariant,{'ring_radius':1123.,'close_known':True}),
     'closure':(OmniVariant,{'close_known':True})},
  4:{'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
+    'q4_skip60':(JointSearchSolver,{'skip_tight_radius':60.}),
+    'q4_skip80':(JointSearchSolver,{'skip_tight_radius':80.}),
+    'q4_probe60':(JointSearchSolver,{'probe_radius':60.}),
+    'q4_probe80':(JointSearchSolver,{'probe_radius':80.}),
+    'q4_probe_off':(JointSearchSolver,{'probe_radius':0.}),
     'step55':(DirectionalVariant,{'alpha':.55,'lateral_cap':40.}),
     'step65':(DirectionalVariant,{'alpha':.65,'lateral_cap':60.}),
     'step80narrow':(DirectionalVariant,{'alpha':.8,'lateral_cap':40.}),

@@ -1,0 +1,71 @@
+{
+  "grid_step_m": 10.0,
+  "grid_points": 101765,
+  "criterion": "largest angular gap of eligible (<=1000m) sites < 180deg",
+  "named": {
+    "all25": {
+      "k": 25,
+      "uncovered_points": 0,
+      "uncovered_area_m2": 0.0,
+      "covers": true
+    },
+    "center+6x1645 (best disc-cover 7-set)": {
+      "k": 7,
+      "uncovered_points": 101023,
+      "uncovered_area_m2": 10102300.0,
+      "covers": false
+    },
+    "center+6x1900(60deg)": {
+      "k": 7,
+      "uncovered_points": 101765,
+      "uncovered_area_m2": 10176500.0,
+      "covers": false
+    },
+    "center+6x950": {
+      "k": 7,
+      "uncovered_points": 78275,
+      "uncovered_area_m2": 7827500.0,
+      "covers": false
+    },
+    "center+6x1900+6x950 (13)": {
+      "k": 13,
+      "uncovered_points": 61666,
+      "uncovered_area_m2": 6166600.0,
+      "covers": false
+    },
+    "center+12x1900 (13)": {
+      "k": 13,
+      "uncovered_points": 99830,
+      "uncovered_area_m2": 9983000.0,
+      "covers": false
+    }
+  },
+  "single_removal_uncovered": {
+    "0": 6328,
+    "1": 996,
+    "2": 996,
+    "3": 6314,
+    "4": 14702,
+    "5": 6324,
+    "6": 14743,
+    "7": 14743,
+    "8": 972,
+    "9": 14746,
+    "10": 972,
+    "11": 14743,
+    "12": 14743,
+    "13": 6324,
+    "14": 14702,
+    "15": 6314,
+    "16": 996,
+    "17": 996,
+    "18": 6328,
+    "19": 1519,
+    "20": 1516,
+    "21": 1519,
+    "22": 1519,
+    "23": 1516,
+    "24": 1519
+  },
+  "single_removal_zero_count": 0
+}

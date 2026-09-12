@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_probe_off",
+    "q4_probe60",
+    "q4_probe80"
+  ],
+  "start": 3485000,
+  "count": 48,
+  "workers": 8,
+  "round": "r34_q4_probe48",
+  "hypothesis": "D: widen the Q4 small-region optical probe window 40 -> 60/80 (and isolate it off)",
+  "mode": "normal",
+  "traces": false
+}
