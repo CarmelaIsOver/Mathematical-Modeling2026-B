@@ -32,7 +32,11 @@ class LookaheadMixin:
         self.lookahead_max_branches = int(max_branches)
         self.lookahead_mode = mode
         self.diagnostics.update(lookahead_calls=0, lookahead_active=0, lookahead_changed=0,
-                                lookahead_branches=0)
+                                lookahead_branches=0, lookahead_budget_aborts=0,
+                                lookahead_numeric_aborts=0)
+        # Hard per-call compute budget: exceeding it falls back to the baseline
+        # action instead of stalling the schedule.
+        self.lookahead_budget = int(max(1, self.lookahead_max_candidates * self.lookahead_max_branches * 2))
 
     def _next_task_point(self, c):
         pts = [self.stations[i] for i in self.pending_stations]
@@ -184,9 +188,14 @@ class LookaheadMixin:
     def _score_candidates(self, c, poly, radius, cands, fine_top=3):
         next_task = self._next_task_point(c)
         scored = []
+        spent = 0
         for q in cands:
+            if spent >= self.lookahead_budget:
+                self.diagnostics['lookahead_budget_aborts'] += 1
+                break
             sc = self._coarse_score(c, q, poly, next_task)
-            if sc is not None:
+            spent += self.lookahead_max_branches
+            if sc is not None and np.isfinite(sc):
                 scored.append((sc, q))
         if not scored:
             return None
@@ -194,7 +203,7 @@ class LookaheadMixin:
         best_q = scored[0][1]
         for _, q in scored[:fine_top]:
             sc = self._fine_score(c, q, poly, next_task)
-            if sc is not None and sc < scored[0][0]:
+            if sc is not None and np.isfinite(sc) and sc < scored[0][0]:
                 scored[0] = (sc, q)
         best_q = min(scored, key=lambda t: t[0])[1]
         return best_q
@@ -205,8 +214,14 @@ class LookaheadMixin:
             return self._base_pick(c, poly, center, radius)
         self.diagnostics['lookahead_active'] += 1
         base = self._base_pick(c, poly, center, radius)
-        best = self._score_candidates(c, poly, radius, self._lookahead_candidates(c, poly, center, radius))
-        if best is None:
+        try:
+            best = self._score_candidates(c, poly, radius,
+                                          self._lookahead_candidates(c, poly, center, radius))
+        except (ValueError, ArithmeticError, FloatingPointError, IndexError):
+            # Numeric or geometric anomaly: never stall, never guess - use baseline.
+            self.diagnostics['lookahead_numeric_aborts'] += 1
+            return base
+        if best is None or not np.all(np.isfinite(best)):
             return base
         if base is not None and float(np.linalg.norm(best - base)) > .1:
             self.diagnostics['lookahead_changed'] += 1

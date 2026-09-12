@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "ins_q4"
+  ],
+  "start": 3490606,
+  "count": 1,
+  "workers": 4,
+  "round": "r52_trace_b_q4_worst",
+  "hypothesis": "worst-seed trajectory for round analysis",
+  "mode": "normal",
+  "traces": true
+}

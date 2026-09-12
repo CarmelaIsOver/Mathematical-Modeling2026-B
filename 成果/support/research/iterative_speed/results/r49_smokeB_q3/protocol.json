@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "ins_q3"
+  ],
+  "start": 3490900,
+  "count": 4,
+  "workers": 4,
+  "round": "r49_smokeB_q3",
+  "hypothesis": "B smoke Q3",
+  "mode": "normal",
+  "traces": true
+}

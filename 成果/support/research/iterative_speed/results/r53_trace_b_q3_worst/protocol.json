@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "ins_q3"
+  ],
+  "start": 3490611,
+  "count": 1,
+  "workers": 4,
+  "round": "r53_trace_b_q3_worst",
+  "hypothesis": "worst-seed trajectory for round analysis",
+  "mode": "normal",
+  "traces": true
+}
