@@ -40,7 +40,8 @@ def search_route(points,start):
 class JointSearchSolver(ActiveLocalizationSolver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
                  reschedule_after_step=False,target_measure_budget=None,step_skip_known=False,
-                 close_discovery_on_upper_bound=True,certify_channel_absence=False):
+                 close_discovery_on_upper_bound=True,certify_channel_absence=False,
+                 reschedule_switches=None):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
@@ -50,13 +51,18 @@ class JointSearchSolver(ActiveLocalizationSolver):
                                 coverage_sites_cancelled=0,rescheduled_targets=0,
                                 reschedule_steps=0,reschedule_fallbacks=0,discovery_closed=0,
                                 channels_certified_absent=0,absence_skipped_measurements=0,
-                                discovery_closed_by_absence=0)
+                                discovery_closed_by_absence=0,reschedule_bursts=0)
         # Opt-in: end a scheduling turn after one region-updating measurement.
         # Measurement budget is per channel and never reset by re-planning.
         self.reschedule_after_step=bool(reschedule_after_step)
         self.target_measure_budget=max_refine if target_measure_budget is None else int(target_measure_budget)
         self.target_measures={}
         self.small_probe_state={}
+        # Optional bound on how often a target returns to the scheduler. Once the
+        # allowed returns are used, the target is finished without interruption,
+        # which keeps the first re-decision but stops repeated interleaving.
+        self.reschedule_switches=None if reschedule_switches is None else int(reschedule_switches)
+        self.target_switches={}
         # When stepping, a station pass must not duplicate a target's dedicated
         # measurements; open targets are resolved by their own turns instead.
         self.step_skip_known=bool(step_skip_known)
@@ -87,6 +93,10 @@ class JointSearchSolver(ActiveLocalizationSolver):
             # Budget spent: finish the target as one uninterrupted fallback.
             self.diagnostics['reschedule_fallbacks']+=1
             return self.directional_fallback(c)
+        if (self.reschedule_switches is not None
+                and self.target_switches.get(c,0)>=self.reschedule_switches):
+            self.diagnostics['reschedule_bursts']+=1
+            return self._locate_burst(c)
         status=self.directional_step(c)
         self.target_measures[c]=self.target_measures.get(c,0)+1
         self.diagnostics['reschedule_steps']+=1
@@ -97,7 +107,21 @@ class JointSearchSolver(ActiveLocalizationSolver):
             return self.directional_fallback(c)
         # 'open': return to the scheduler so the next turn sees the new region.
         self.diagnostics['rescheduled_targets']+=1
+        self.target_switches[c]=self.target_switches.get(c,0)+1
         return None
+
+    def _locate_burst(self,c):
+        """Finish a target without returning to the scheduler."""
+        while self.target_measures.get(c,0)<self.target_measure_budget:
+            status=self.directional_step(c)
+            self.target_measures[c]=self.target_measures.get(c,0)+1
+            self.diagnostics['reschedule_steps']+=1
+            if status=='cleared':
+                return
+            if status=='no_progress':
+                break
+        self.diagnostics['reschedule_fallbacks']+=1
+        return self.directional_fallback(c)
 
     def _locate_full(self,c):
         _,center,radius=self.region(c)

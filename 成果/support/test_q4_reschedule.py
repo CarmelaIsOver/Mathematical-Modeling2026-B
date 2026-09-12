@@ -52,6 +52,20 @@ class RescheduleBudgetTests(unittest.TestCase):
             fallback.assert_not_called()
             self.assertEqual(solver.target_measures[7], 1)
 
+    def test_bounded_switches_finish_without_returning(self):
+        solver = self._solver(8)
+        solver.reschedule_switches = 1
+        with patch.object(solver, '_small_region_probe', return_value=False), \
+             patch.object(solver, 'directional_step', return_value='open'), \
+             patch.object(solver, 'directional_fallback') as fallback:
+            solver.locate(7)          # allowed single re-plan
+            self.assertEqual(solver.target_switches[7], 1)
+            fallback.assert_not_called()
+            solver.locate(7)          # budget spent without further interruption
+            fallback.assert_called_once_with(7)
+        self.assertEqual(solver.diagnostics['reschedule_bursts'], 1)
+        self.assertEqual(solver.target_measures[7], 8)
+
 
 class SmallProbeTests(unittest.TestCase):
     def test_failed_probe_is_not_repeated_for_the_same_region_state(self):

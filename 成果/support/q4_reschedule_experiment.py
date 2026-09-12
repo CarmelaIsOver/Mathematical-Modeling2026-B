@@ -11,6 +11,8 @@ baseline : reschedule_after_step=False
 step     : reschedule_after_step=True, target_measure_budget=8
 stepskip : step plus ``step_skip_known=True`` (a station pass does not duplicate
            an open target's dedicated measurements)
+step1    : step with ``reschedule_switches=1`` (one re-plan, then finish)
+step2    : step with ``reschedule_switches=2``
 
 For a given seed every arm sees the same ``LocalBackend``, so times are paired.
 The two previously-known Q4 regressions are seeds 1900011 and 1900112.
@@ -27,17 +29,18 @@ from audit import AuditPort
 from joint_search import JointSearchSolver
 
 ROOT = Path(__file__).resolve().parent
-ARMS = ('baseline', 'step', 'stepskip')
+ARMS = ('baseline', 'step', 'stepskip', 'step1', 'step2')
 BAD_CASES = (1900011, 1900112)
 
 
 def make_solver(port, arm, problem=4, budget=8):
     if arm == 'baseline':
         return JointSearchSolver(port, problem)
-    if arm in ('step', 'stepskip'):
+    if arm in ('step', 'stepskip', 'step1', 'step2'):
         return JointSearchSolver(port, problem, reschedule_after_step=True,
                                  target_measure_budget=budget,
-                                 step_skip_known=(arm == 'stepskip'))
+                                 step_skip_known=(arm == 'stepskip'),
+                                 reschedule_switches={'step1': 1, 'step2': 2}.get(arm))
     raise ValueError(f'Unknown arm {arm!r}')
 
 
