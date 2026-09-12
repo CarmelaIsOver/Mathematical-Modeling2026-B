@@ -15,3 +15,7 @@
 *.zip
 *.rar
 
+
+# Python bytecode: keep the working tree clean (tests rewrite .pyc constantly)
+__pycache__/
+*.pyc

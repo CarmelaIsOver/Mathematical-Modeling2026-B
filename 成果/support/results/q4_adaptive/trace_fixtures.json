@@ -1,14 +1,14 @@
 {
   "2500000": {
-    "trace_sha256": "27af4ce52520d4d96b62e74ac79b56bec16b9759e39420bf594256e579e7a950",
-    "mean_time_s": 405.1854887948912
+    "mean_time_s": 405.2306078593035,
+    "trace_sha256": "44804c3d607a30af0ad8e3a459df43ff1586054425729c1b6b67f7d98bb9c142"
   },
   "2500010": {
-    "trace_sha256": "226e580044183b24c2a2f7820669325bcab88d54aacc3aa1eac114ee7ce89e1e",
-    "mean_time_s": 530.6477276937884
+    "mean_time_s": 547.9767231103629,
+    "trace_sha256": "de114dda582823ee68d21c6b4226e2450734c71e1f323a5e603e8c8ddb2ae100"
   },
   "2500031": {
-    "trace_sha256": "926e69ffa2b5a502892945e3a9db4aae9f5ed72983a78c8016c7ccb3c1be1749",
-    "mean_time_s": 549.0068630750642
+    "mean_time_s": 548.706072836292,
+    "trace_sha256": "82322fb22b9d67d1ec4394f7b3bfeb27f8e2548b6f6f68b8141ca3edd7cc3c56"
   }
 }

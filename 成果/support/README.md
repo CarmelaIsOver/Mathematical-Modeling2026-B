@@ -18,6 +18,17 @@
 
 60场额外压力测试全部完成，最坏压力场景约879.85秒/源，单独报告，不混入200场均值。详见[本轮验证记录](results/target400/README.md)。
 
+## 本轮优化候选（opt-in，默认不改变上面两条基线）
+
+三个方向都先做成默认关闭的可选项，只有经过同种子配对验证的改动才改变默认：
+
+- **问题四默认已启用** `close_discovery_on_upper_bound`：一旦由真实观测确认“已发现+已清除=16”（题目上限），就取消剩余站点的发现义务。62场配对中11个16源种子全部改善（均值比0.99213，最差1.0000，10改善/52持平/0退化）；非16源场景逐位不变。构造参数 `close_discovery_on_upper_bound=False` 可复现旧行为。
+- **问题三 `--negative-observations`（默认关闭）**：把“同一目标在 p 收到、在 q 未收到”推出的中垂线半平面**只用于下一测点选择**；路由中心、站点跳过、清除证书与后备始终使用仅正观测外包区域。60个新种子均值比0.98621（t=−6.57），最差+0.17%。该半平面在现存场景下不会改变清除判定；用于排路会引入尾部退化（最差+8.64%），因此默认关闭。
+- **问题四 `reschedule_after_step`（默认关闭）**：定位一次有效测量后返回任务池重新调度。62场均值比0.98275，但**不建议与 `close_discovery_on_upper_bound` 同时启用**：相对当前默认均值−1.4%但最差+15.2%，且交错会延迟第16个目标发现、使 closure 取消更少站点。有界切换（`reschedule_switches`）已验证不能消解该尾部。
+- **问题四 `certify_channel_absence`（默认关闭）**：用真实 no_signal 位置证明某频道在某网格单元不可能存在源。证书本身正确（10源场景可证明10个无源频道整盘缺失），但两个布局的每个站都对至少一个单元必不可缺，故**不可能跳过任何测量**；保留为布局工具。
+
+研究脚本：`negative_observations.py`（纯几何半平面）、`q3_negative_experiment.py`、`q4_reschedule_experiment.py`；对应单测 `test_negative_observations.py`、`test_q4_reschedule.py`、`test_q4_discovery_closure.py`、`test_q4_channel_absence.py`。证据在 `results/q3_negative*/`、`results/q4_reschedule*/`、`results/q4_closure/`、`results/q4_step_closure/`、`results/q4_step_switch/`、`results/q4_absence/`。
+
 ## 官方演练
 
 在PowerShell输入：
@@ -41,7 +52,7 @@ python run.py --mode official --problem 4 --robot-id $teamId --output practice_l
 python run.py --mode official --problem 3 --robot-id $teamId --output practice_logs
 ```
 
-问题三启动行应显示 `strategy=integrated, layout=original`，结果还包含 `scheduling_policy=joint_route`。`forced_targets`现在只统计全部搜索站点结束后处理剩余目标的次数，不再表示等待三站后强制处理。
+问题三启动行应显示 `strategy=integrated, layout=original`，结果还包含 `scheduling_policy=joint_route`。`forced_targets`现在只统计全部搜索站点结束后处理剩余目标的次数，不再表示等待三站后强制处理。问题三可用 `--negative-observations` 显式启用本轮的负观测测点优化（默认关闭，见上节）。
 
 此前策略可显式指定 `--strategy standard` 或 `--strategy paper` 用于对照；它们**不会启用本轮联合路线优化**。测试新优化请直接使用上面的默认命令。
 
@@ -75,7 +86,10 @@ python verify_q4_coverage.py --runs 200
 |---|---|
 | run.py | 统一入口、日志与参数检查 |
 | joint_search.py | 问题四联合路线、选择性测量、小区域光学尝试 |
-| omni_search.py | 问题三联合路线、选择性测量与覆盖后收尾 |
+| joint_search.py | 问题四联合路线、选择性测量、小区域光学尝试；默认16上限发现关闭与每频道证书开关 |
+| omni_search.py | 问题三联合路线、选择性测量与覆盖后收尾；可选负观测半平面测点 |
+| negative_observations.py | 问题三正/负观测中垂线半平面的纯几何实现 |
+| q3_negative_experiment.py / q4_reschedule_experiment.py | 本轮opt-in策略的同种子配对试验入口 |
 | active_localization.py | 论文启发的有界误差主动定位 |
 | solver.py | 通用动作、定位后备及对照策略 |
 | geometry.py | 有界误差几何与连续覆盖构造 |
@@ -84,4 +98,4 @@ python verify_q4_coverage.py --runs 200
 | verify_target_experiments.py | 冻结源码的独立对照复现 |
 | verify_q3_scheduling.py | 问题三冻结源码的独立对照复现 |
 | verify_q4_coverage.py | 最新问题四覆盖候选的冻结复现 |
-| test_*.py | 几何、协议、覆盖及入口检查 |
+| test_*.py | 几何、协议、覆盖及入口检查（含本轮opt-in组件的专项单测） |
