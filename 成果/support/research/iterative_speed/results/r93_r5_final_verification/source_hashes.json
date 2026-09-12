@@ -1,7 +1,7 @@
 {
-  "git_head": "00daa8d33484994cbc23aee18552ae421c331365",
+  "head_at_generation": "1aec1f5bb9bd2f13cfc6fa47c5492764ac4e70fe",
+  "semantics": "head_at_generation is the commit whose sources were hashed and against which final_tests.log was produced; the artifact file itself is added by the following commit",
   "sources": {
-    "_finish_r5.py": "994344af428dca5033fc8bdebeae30bef644ff464d21c59062edcf4db8a458b8",
     "active_localization.py": "9d0bf8ff0b162b8cbdd0dc54d426dbb659605b70eae63d989299b12038758e4e",
     "audit.py": "d30ade0f5868997aeda6cb146c26c445a71bfb0be96ff66fd5405400720d2f7e",
     "backend.py": "13be1b213ca5a7a9f124592c91610d5394f06f76c8c82b145f6d823e1e181d3e",
@@ -61,6 +61,7 @@
     "research\\iterative_speed\\n4_samestate.py": "5d1b438dc87064dfbc9498f757667f4620d27cf100851fead27d7b9389530078",
     "research\\iterative_speed\\n5_opportunity.py": "e5fdbaa13511c4a9173ad010a994c6aa46331210d3d204f0a44edfddda64050b",
     "research\\iterative_speed\\n6_analytic.py": "b0934c73aa6ee0217aa9a8bb81707ed7f581a875770b8f39eca7351fc1561deb",
+    "research\\iterative_speed\\r5_reporting.py": "75be1bd160d283e4186df0bc5b0899a02732e965fcda47198a851c8b05af8ec8",
     "research\\iterative_speed\\report.py": "1a1b88bfcdc1ca4859cb782331be084e6ca04a3273abd991d301fcaeaa96f22d",
     "research\\iterative_speed\\state_prediction.py": "75f705c93e9a3840b42cd6c8655f31a5857c57f4d800255a77c63a6717f05bd5",
     "research\\iterative_speed\\study.py": "84c2f54c3ad8f22c7944c82355219208e20900028c10f936777a22fcbd46acef",
@@ -69,6 +70,5 @@
     "research\\iterative_speed\\variants.py": "48c2e00ae11ed7e58315c9c51a985c32b378abb90fa69b7bf4099dd21b18e687",
     "research\\iterative_speed\\verify_round3_artifacts.py": "bf64eb4933ed1b5c55b9342ea6b11000af58c5b86fbc2cd05ce9276562f88265",
     "research\\iterative_speed\\world_rollout.py": "7592d1382f4bab6ae2a5290d3f7e279428c0ab62c37c933b2e45f0f9014b5ec4"
-  },
-  "note": "hashes of the exact sources the r5 verification run was executed against"
+  }
 }
