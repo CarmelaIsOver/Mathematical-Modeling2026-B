@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "guard1123_close_skip12_align"
+  ],
+  "start": 3440000,
+  "count": 100,
+  "workers": 8,
+  "round": "r16_q3_align100",
+  "hypothesis": "align ring on 100 fresh seeds",
+  "mode": "normal",
+  "traces": false
+}

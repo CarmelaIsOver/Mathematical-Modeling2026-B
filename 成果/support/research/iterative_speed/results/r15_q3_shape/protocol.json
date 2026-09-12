@@ -1,0 +1,19 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "guard1150_close_skip12",
+    "guard1180_close_skip12",
+    "guard1123_close_skip12_align",
+    "guard1123_close_skip12_2stage",
+    "guard1123_close_skip12_2stage_align"
+  ],
+  "start": 3210050,
+  "count": 24,
+  "workers": 8,
+  "round": "r15_q3_shape",
+  "hypothesis": "radius, alignment, two-stage shrink",
+  "mode": "normal",
+  "traces": false
+}

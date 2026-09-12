@@ -9,38 +9,62 @@ from geometry import search_stations
 
 class OmniVariant(OmniSearchSolver):
     def __init__(self, *args, ring_radius=None, ring_count=6, probe_radius=0., guard_initial=False,
-                 close_known=False, guard_visits=0, skip_known_radius=None, **kwargs):
+                 close_known=False, guard_visits=0, skip_known_radius=None,
+                 align_ring=False, two_stage_radius=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.probe_radius=probe_radius
         self.skip_known_radius=skip_known_radius
         self.ring_points=None;self.guard_initial=guard_initial;self.close_known=close_known
         self.guard_visits=guard_visits
         self.observed_channels=set();self.ring_activated=False
+        self.ring_radius=ring_radius;self.ring_count=ring_count
+        self.align_ring=align_ring;self.two_stage_radius=two_stage_radius
+        self.first_bearing=None;self.positive_count=0
         if ring_radius is not None:
-            c=math.cos(math.pi/ring_count)
-            lo=1800*c-math.sqrt(max(0.,(1800*c)**2-(1800**2-1000**2)))
-            hi=min(2000*c,1800*c+math.sqrt(max(0.,(1800*c)**2-(1800**2-1000**2))))
-            if not lo+1e-4<=ring_radius<=hi-1e-4:
-                raise ValueError('Outside complete ring covering interval')
+            self._validate_radius(ring_radius,ring_count)
             angles=np.arange(ring_count)*2*math.pi/ring_count
             self.ring_points=np.vstack([np.zeros((1,2)),ring_radius*np.c_[np.cos(angles),np.sin(angles)]])
             if not guard_initial:self.stations=self.ring_points.copy();self.ring_activated=True
+        if two_stage_radius is not None:
+            self._validate_radius(two_stage_radius,ring_count)
         self.diagnostics['extra_probe_attempts']=0
         self.diagnostics['extra_probe_successes']=0
         self.diagnostics['ring_activated']=0
+
+    @staticmethod
+    def _validate_radius(radius,ring_count):
+        c=math.cos(math.pi/ring_count)
+        disc=max(0.,(1800*c)**2-(1800**2-1000**2))
+        lo=1800*c-math.sqrt(disc);hi=min(2000*c,1800*c+math.sqrt(disc))
+        if not lo+1e-4<=radius<=hi-1e-4:
+            raise ValueError('Outside complete ring covering interval')
+
+    def _install_ring(self,radius):
+        angles=np.arange(self.ring_count)*2*math.pi/self.ring_count
+        if self.align_ring and self.first_bearing is not None:
+            angles=angles+math.radians(self.first_bearing)
+        self.stations=np.vstack([np.zeros((1,2)),radius*np.c_[np.cos(angles),np.sin(angles)]])
+        # Rebuild pending indices: a layout with a different station count must
+        # keep every unvisited site, preserving visited indices.
+        self.pending_stations=[i for i in range(len(self.stations)) if i not in self.visited]
+        self.ring_activated=True
+        self.diagnostics['ring_activated']=1
+        self.diagnostics['ring_radius_used']=radius
 
     def action(self,path,p,c):
         r=super().action(path,p,c)
         if path=='/measure' and r['measure_result'] in ('direction','near'):
             self.observed_channels.add(c)
-            if (self.guard_initial and not self.ring_activated and self.ring_points is not None
-                    and len(self.visited)<=self.guard_visits):
-                self.stations=self.ring_points.copy()
-                # Rebuild pending indices: a layout with a different station count
-                # must keep every unvisited site, preserving visited indices.
-                self.pending_stations=[i for i in range(len(self.stations)) if i not in self.visited]
-                self.ring_activated=True
-                self.diagnostics['ring_activated']=1
+            if self.guard_initial and len(self.visited)<=self.guard_visits:
+                self.positive_count+=1
+                if r['measure_result']=='direction' and self.first_bearing is None:
+                    self.first_bearing=float(r.get('svd_deg',0.))
+                if not self.ring_activated:
+                    self._install_ring(self.two_stage_radius if self.two_stage_radius is not None
+                                       else self.ring_radius)
+                elif (self.two_stage_radius is not None and self.positive_count>=2
+                      and self.diagnostics.get('ring_radius_used')==self.two_stage_radius):
+                    self._install_ring(self.ring_radius)
             if self.close_known and len(self.observed_channels)==16:
                 self.diagnostics['coverage_cancelled']=self.diagnostics.get('coverage_cancelled',0)+len(self.pending_stations)
                 self.pending_stations=[]
@@ -194,6 +218,11 @@ VARIANTS={
     'guard1123_close':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True}),
     'guard1123_close_skip14':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1400.}),
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1150_close_skip12':(OmniVariant,{'ring_radius':1150.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1180_close_skip12':(OmniVariant,{'ring_radius':1180.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1123_close_skip12_align':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'align_ring':True}),
+    'guard1123_close_skip12_2stage':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'two_stage_radius':1300.}),
+    'guard1123_close_skip12_2stage_align':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'two_stage_radius':1300.,'align_ring':True}),
     'guard1123_close_skip10':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1000.}),
     'guard1123_close_skip8':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':800.}),
     'guard1140_close':(OmniVariant,{'ring_radius':1140.,'guard_initial':True,'close_known':True}),
