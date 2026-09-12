@@ -82,9 +82,11 @@ class C2TupleTests(unittest.TestCase):
             self.assertTrue(np.isfinite(theta))
 
     def test_every_record_explains_all_observations(self):
-        """Positives and negatives must both hold, with the +/-1 deg bounded error."""
-        from state_prediction import BEARING_TOL_DEG
-        tol = math.sin(math.radians(BEARING_TOL_DEG))
+        """Positives and negatives must both hold; half-planes stay strict.
+
+        The +/-1 deg bound constrains only the observed bearing against the source
+        position - it never widens the emission half-plane.
+        """
         records = self.solver._state_records(7)
         positives = [(np.asarray(p, float), float(a)) for p, a in self.solver.obs[7]]
         negatives = [np.asarray(p, float) for p in self.solver.negatives[7]]
@@ -94,15 +96,15 @@ class C2TupleTests(unittest.TestCase):
                 self.assertLessEqual(float(np.linalg.norm(p - g)), R + 1e-9)
                 if kind == 'direction':
                     u = (p - g) / max(float(np.linalg.norm(p - g)), 1e-9)
-                    self.assertGreaterEqual(float(u @ v), -tol - 1e-9)
+                    self.assertGreaterEqual(float(u @ v), -1e-9)
             for p in negatives:
                 if kind == 'omni':
                     self.assertGreater(float(np.linalg.norm(p - g)), R)
                 else:
                     u = (p - g) / max(float(np.linalg.norm(p - g)), 1e-9)
-                    hidden = (float(np.linalg.norm(p - g)) > R) or (float(u @ v) < tol + 1e-9)
+                    hidden = (float(np.linalg.norm(p - g)) > R) or (float(u @ v) < -1e-9)
                     self.assertTrue(hidden, 'a directional record must explain the no_signal '
-                                            'inside the bounded angular error')
+                                            'with a strictly back-facing source')
 
     def test_omni_records_respect_the_in_range_no_signal(self):
         """An omni source inside R of a no_signal position is impossible."""

@@ -56,8 +56,16 @@ def run_one(job):
     return result
 
 
-def summarize(rows):
-    baseline={(r['seed'],r['mode']):r for r in rows if r['variant']=='baseline'};out={}
+def summarize(rows, control='baseline'):
+    """Paired summary against an EXPLICIT control arm.
+
+    The control must be named: for Q3 the strong arm is ``skip12_probe60``, not the
+    legacy ``baseline`` (old off). Derived fields (gain/promising/tail_gate) are
+    recomputed against this control and must not be consumed blindly.
+    """
+    baseline={(r['seed'],r['mode']):r for r in rows if r['variant']==control}
+    assert baseline, f'control arm {control!r} not present in the round'
+    out={}
     for name in sorted(set(r['variant'] for r in rows)):
         group=[r for r in rows if r['variant']==name];v=np.array([r['score_time_s'] for r in group])
         ratios=np.array([r['score_time_s']/baseline[r['seed'],r['mode']]['score_time_s'] for r in group])
@@ -68,10 +76,11 @@ def summarize(rows):
             slower5=int((ratios>1.05).sum()),wins=int((ratios<1-1e-10).sum()),
             phases={p:float(np.mean([r['phase_moves'][p] for r in group])) for p in ['coverage','localization','clear']})
         out[name]=d
+    ref=out[control]
     for n,d in out.items():
-        d['gain']=1-d['mean']/out['baseline']['mean']
+        d['gain']=1-d['mean']/ref['mean']
         d['promising']=d['failures']==0 and d['gain']>.02
-        d['tail_gate']=d['failures']==0 and d['worst_ratio']<=1.05 and d['p95']<=out['baseline']['p95']
+        d['tail_gate']=d['failures']==0 and d['worst_ratio']<=1.05 and d['p95']<=ref['p95']
     return out
 
 
@@ -80,8 +89,14 @@ def main():
     ap.add_argument('--variants',nargs='+',required=True);ap.add_argument('--start',type=int,required=True)
     ap.add_argument('--count',type=int,default=24);ap.add_argument('--workers',type=int,default=4)
     ap.add_argument('--round',required=True);ap.add_argument('--hypothesis',required=True)
-    ap.add_argument('--mode',default='normal');ap.add_argument('--traces',action='store_true');a=ap.parse_args()
-    assert 'baseline' in a.variants and all(n in VARIANTS[a.problem] for n in a.variants)
+    ap.add_argument('--mode',default='normal');ap.add_argument('--traces',action='store_true')
+    ap.add_argument('--control',default=None,
+                    help='explicit control arm id; required when baseline is not the strong arm')
+    a=ap.parse_args()
+    if a.control is None:
+        a.control='baseline' if 'baseline' in a.variants else a.variants[0]
+    assert a.control in a.variants, f'--control {a.control!r} must be one of --variants'
+    assert all(n in VARIANTS[a.problem] for n in a.variants)
     folder=ROOT/'results'/a.round;folder.mkdir(parents=True,exist_ok=False)
     snapshot={str(p.relative_to(SUPPORT)):{'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'source':p.read_text(encoding='utf-8-sig')}
               for p in [*SUPPORT.glob('*.py'),*ROOT.glob('*.py')]}
@@ -95,7 +110,7 @@ def main():
         for i,future in enumerate(as_completed([pool.submit(run_one,j) for j in jobs]),1):
             r=future.result();rows.append(r);f.write(json.dumps(r)+'\n');f.flush()
             if i%24==0 or not r['full_clear']:print(i,len(jobs),round(time.perf_counter()-started,1),r['variant'],r['full_clear'],flush=True)
-    summary=summarize(rows);(folder/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
+    summary=summarize(rows,a.control);(folder/'summary.json').write_text(json.dumps(summary,indent=2),encoding='utf-8')
     print(json.dumps({n:{k:v[k] for k in ['mean','gain','p95','worst_ratio','failures']} for n,v in summary.items()}))
 
 

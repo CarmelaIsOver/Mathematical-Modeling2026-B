@@ -65,22 +65,25 @@ class BranchTests(unittest.TestCase):
         self.poly = np.array([[0., 0.], [60., 0.], [60., 60.], [0., 60.]])
 
     def test_compression_keeps_no_signal_and_near(self):
-        q = np.array([30., 30.])
-        branches = self.solver._branches(1, q, self.poly)
-        kinds = {k for _, _, k in branches}
+        # A posterior with a vertex farther than 1000 m is required for no_signal to
+        # be physically possible; near still needs q within 5 m of the feasible set.
+        long_poly = np.array([[0., 0.], [2500., 0.], [2500., 20.], [0., 20.]])
+        q = np.array([1250., -3.])
+        branches = self.solver._branches(1, q, long_poly)
+        kinds = {k for _, _, k, _a in branches}
         self.assertIn('no_signal', kinds)
         self.assertIn('near', kinds)
         self.solver.lookahead_max_branches = 3
         compressed = self.solver._compress(branches)
-        kept = {k for _, _, k in compressed}
+        kept = {k for _, _, k, _a in compressed}
         self.assertIn('no_signal', kept, 'compression must not drop no_signal')
         self.assertIn('near', kept, 'compression must not drop near')
         self.assertIn('direction', kept)
-        self.assertLessEqual(len(compressed), 3 + 0)
+        self.assertLessEqual(len(compressed), 3)
 
     def test_near_is_not_invented_for_an_infeasible_point(self):
         far = np.array([500., 500.])
-        kinds = {k for _, _, k in self.solver._branches(1, far, self.poly)}
+        kinds = {k for _, _, k, _a in self.solver._branches(1, far, self.poly)}
         self.assertNotIn('near', kinds, 'near cannot occur when q is far from the posterior')
 
     def test_point_in_convex(self):

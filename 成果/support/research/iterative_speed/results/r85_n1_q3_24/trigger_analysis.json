@@ -1,0 +1,18 @@
+{
+  "round": "r85_n1_q3_24",
+  "control": "skip12_probe60",
+  "arms": {
+    "n1_q3": {
+      "counter": "rollout_active",
+      "n_scenes": 24,
+      "total_triggers": 279,
+      "triggers_per_scene": 11.62,
+      "scenes_with_trigger": 24,
+      "trigger_rate": 1.0,
+      "mean_delta_pct_all": -0.832,
+      "mean_delta_pct_fired": -0.832,
+      "mean_delta_pct_not_fired": null,
+      "worst_delta_pct_fired": 0.325
+    }
+  }
+}

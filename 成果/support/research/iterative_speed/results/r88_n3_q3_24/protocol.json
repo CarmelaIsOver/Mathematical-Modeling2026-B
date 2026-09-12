@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "n3_q3"
+  ],
+  "start": 3496500,
+  "count": 24,
+  "workers": 8,
+  "round": "r88_n3_q3_24",
+  "hypothesis": "N3 event-triggered route keeping vs strong baseline (expect equivalence)",
+  "mode": "normal",
+  "traces": false,
+  "control": "skip12_probe60"
+}

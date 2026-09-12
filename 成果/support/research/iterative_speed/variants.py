@@ -7,6 +7,9 @@ from omni_search import OmniSearchSolver
 from lookahead import JointLookahead, LookaheadMixin
 from insertion import InsertionMixin, joint_module, omni_module
 from state_prediction import JointStatePrediction
+from world_rollout import WorldRolloutMixin
+from event_route import EventRouteMixin
+from n6_analytic import JointAnalyticState
 from joint_search import JointSearchSolver,search_route
 from geometry import search_stations
 
@@ -227,6 +230,34 @@ class OmniLookahead(OmniVariant, LookaheadMixin):
         return LookaheadMixin.next_measure(self, c, poly, center, radius)
 
 
+class OmniEventRoute(EventRouteMixin, OmniVariant):
+    """N3: keep the open route; re-plan only on task-set events."""
+
+    def __init__(self, *args, keep_plan=True, **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_event_route(keep_plan=keep_plan)
+
+    def run(self):
+        return EventRouteMixin.run(self)
+
+    def certified_clear(self, c, poly, center, radius):
+        EventRouteMixin.certified_clear(self, c, poly, center, radius)
+
+
+class OmniWorldRollout(OmniVariant, WorldRolloutMixin):
+    """N1: complete hypothesised-world continuation on top of the strong Q3 baseline."""
+
+    def __init__(self, *args, rollout_radius=400., n_worlds=12, max_rounds=6, lam=.5,
+                 mode='service', margin_s=0., margin_frac=0., **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_rollout(rollout_radius=rollout_radius, n_worlds=n_worlds,
+                            max_rounds=max_rounds, lam=lam, mode=mode,
+                            margin_s=margin_s, margin_frac=margin_frac)
+
+    def next_measure(self, c, poly, center, radius):
+        return WorldRolloutMixin.next_measure(self, c, poly, center, radius)
+
+
 class OmniInsertion(InsertionMixin, OmniVariant):
     search_module = omni_module
 
@@ -397,6 +428,9 @@ VARIANTS={
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'skip12_dedup25':(OmniBearingDedup,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'dedup_deg':25.}),
     'ins_q3':(OmniInsertion,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'n1_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'n3_q3':(OmniEventRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
+    'n1_q3_m1':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01}),
     'la_q3_base':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'base'}),
     'la_q3_candpaper':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'cand_paper'}),
     'la_q3_service':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'service'}),
@@ -437,6 +471,7 @@ VARIANTS={
     'sp_c1':(JointStatePrediction,{'mode':'c1'}),
     'sp_c2':(JointStatePrediction,{'mode':'c2'}),
     'sp_q4':(JointStatePrediction,{'mode':'both'}),
+    'n6_q4':(JointAnalyticState,{'mode':'c2'}),
     'la_q4_candpaper':(JointLookahead,{'mode':'cand_paper'}),
     'la_q4_service':(JointLookahead,{'mode':'service'}),
     'q4_skip60':(JointSearchSolver,{'skip_tight_radius':60.}),

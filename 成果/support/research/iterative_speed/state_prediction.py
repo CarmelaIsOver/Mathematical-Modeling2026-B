@@ -77,12 +77,17 @@ class JointStatePrediction(JointSearchSolver):
 
     # ---- hypothesis sampling -------------------------------------------
     def _hypothesis_samples(self, c):
-        """Hypothesis positions consistent with the bounded bearing error by construction.
+        """Hypothesis positions by explicit stratification (design distribution).
 
-        When positive receptions exist, samples are drawn along the observed bearing
-        directions within the +/-1 degree cone (uniform in distance), because a uniform
-        area draw inside a 2 degree wedge of a large posterior is essentially impossible.
-        Without positives the sampler falls back to a uniform area draw in the posterior.
+        * No positive reception: area-proportional stratified sampling. The convex
+          posterior is triangulated as a fan; each triangle gets samples proportional
+          to its area and each sample is drawn sqrt-uniformly inside its triangle.
+          The polygon vertices are added as a separate extreme stratum.
+        * With positive receptions: the +/-1 deg cone is kept, stratified along the
+          distance interval so enumeration order cannot decide the weights.
+
+        This is a declared design distribution for planning only - never an official
+        posterior and never a certificate.
         """
         poly, center, radius = self.region(c)
         if radius <= 1e-9 or len(poly) < 3:
@@ -92,26 +97,37 @@ class JointStatePrediction(JointSearchSolver):
                                    + 17 * len(self.negatives.get(c, [])))
         tol = math.radians(BEARING_TOL_DEG)
         pts = []
-        tries = 0
-        while len(pts) < self.n_samples and tries < 40 * self.n_samples:
-            tries += 1
-            if positives:
+        if positives:
+            n = self.n_samples
+            for i in range(n):
                 p0, ang = positives[int(rng.integers(len(positives)))]
+                d_lo, d_hi = 1500. * i / n, 1500. * (i + 1) / n
+                dist = float(rng.uniform(d_lo, d_hi))
                 delta = rng.uniform(-tol, tol)
-                dist = float(rng.uniform(0., 1500.))
                 q = p0 + dist * np.array([math.cos(math.radians(ang) + delta),
                                           math.sin(math.radians(ang) + delta)])
-            else:
-                r = radius * math.sqrt(rng.random())
-                th = rng.uniform(0, 2 * math.pi)
-                q = np.asarray(center, float) + r * np.array([math.cos(th), math.sin(th)])
-            if _inside_convex(poly, q):
-                pts.append(q)
-        if not pts and positives:
-            # Last resort: the posterior centroid is not guaranteed to satisfy the cone,
-            # so return nothing rather than an inconsistent hypothesis set.
+                if _inside_convex(poly, q):
+                    pts.append(q)
+            return np.asarray(pts, float) if pts else np.zeros((0, 2))
+        # area-proportional stratified fan triangulation
+        v0 = poly[0]
+        tris = [(v0, poly[i], poly[i + 1]) for i in range(1, len(poly) - 1)]
+        areas = np.asarray([abs((b[0] - a[0]) * (cpt[1] - a[1]) - (b[1] - a[1]) * (cpt[0] - a[0])) / 2.
+                            for a, b, cpt in tris], float)
+        total = float(areas.sum())
+        if total <= 1e-12:
             return np.zeros((0, 2))
-        return np.asarray(pts, float)
+        budget = max(0, self.n_samples - min(len(poly), 4))     # reserve the extreme stratum
+        alloc = np.floor(areas / total * budget).astype(int)
+        for i in range(budget - int(alloc.sum())):
+            alloc[int(np.argmax(areas - alloc))] += 1
+        for (a, b, cpt), k in zip(tris, alloc):
+            for _ in range(int(k)):
+                r1, r2 = math.sqrt(rng.random()), rng.random()
+                pts.append(a + r1 * (1 - r2) * (b - a) + r1 * r2 * (cpt - a))
+        for v in poly[:4]:
+            pts.append(np.asarray(v, float))
+        return np.asarray(pts, float) if pts else np.zeros((0, 2))
 
 
     def _state_records(self, c):
@@ -132,7 +148,9 @@ class JointStatePrediction(JointSearchSolver):
         thetas = np.linspace(0, 2 * math.pi, THETA_BINS, endpoint=False)
         cos, sin = np.cos(thetas), np.sin(thetas)
         records = []
+        per_pos = max(1, MAX_RECORDS // max(1, len(samples)))
         for g in samples:
+            before = len(records)
             dist_p = np.asarray([float(np.linalg.norm(q - g)) for q, _ in positives], float)
             dist_n = np.asarray([float(np.linalg.norm(q - g)) for q in negatives], float)
             for R in R_GRID:
@@ -142,7 +160,9 @@ class JointStatePrediction(JointSearchSolver):
                     records.append((g, R, 'omni', 0))
                     self.diagnostics['pred_omni_records'] += 1
                 if self.c2_enabled:
-                    sin_tol = math.sin(math.radians(BEARING_TOL_DEG))
+                    # Strict physics: the +/-1 deg bound constrains only the observed
+                    # bearing versus the source position. The emission half-plane is
+                    # NOT widened; float tolerance only.
                     front_ok = np.ones(THETA_BINS, bool)
                     for p, ang_obs in positives:
                         d = np.asarray(p, float) - g
@@ -156,9 +176,9 @@ class JointStatePrediction(JointSearchSolver):
                         if diff > BEARING_TOL_DEG:
                             front_ok[:] = False
                             break
-                        # (b) visibility half-plane widened by the same bounded error
+                        # (b) strict visibility half-plane
                         u = d / max(dist_pg, 1e-9)
-                        front_ok &= (u[0] * cos + u[1] * sin) >= -sin_tol
+                        front_ok &= (u[0] * cos + u[1] * sin) >= -1e-9
                     back_ok = np.ones(THETA_BINS, bool)
                     for p in negatives:
                         d = g - np.asarray(p, float)
@@ -166,19 +186,20 @@ class JointStatePrediction(JointSearchSolver):
                         if dist_n_p > R:
                             continue          # out of range hides the source for any theta
                         u = d / max(dist_n_p, 1e-9)
-                        # not visible <=> (p-g).v < 0, widened by the bounded error
-                        back_ok &= (u[0] * cos + u[1] * sin) >= -sin_tol
+                        # not visible <=> (p-g).v < 0, strictly (float tolerance only)
+                        back_ok &= (u[0] * cos + u[1] * sin) > 1e-9
                     ok = front_ok & back_ok
                     for idx in np.where(ok)[0]:
+                        if len(records) - before >= per_pos:
+                            break
                         records.append((g, R, 'direction', float(thetas[idx])))
                         self.diagnostics['pred_dir_records'] += 1
+                if len(records) - before >= per_pos:
+                    break
             if len(records) >= MAX_RECORDS:
                 break
         self.diagnostics['pred_samples_kept'] += len({id(r[0]) for r in records} or [])
         self.diagnostics['pred_records'] += len(records)
-        if len(records) > MAX_RECORDS:
-            step = max(1, len(records) // MAX_RECORDS)
-            records = records[::step][:MAX_RECORDS]
         return records
 
     # ---- C1: mean first-hit time ---------------------------------------

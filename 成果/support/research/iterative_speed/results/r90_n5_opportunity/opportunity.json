@@ -1,0 +1,132 @@
+{
+  "arm": "skip12_probe60",
+  "scenes": 12,
+  "decisions_total": 197,
+  "decisions_with_2plus": 174,
+  "pairs_checked": 174,
+  "pairs_with_shared_stop": 83,
+  "shared_stop_rate": 0.477,
+  "mean_known_targets": 4.91,
+  "per_scene": [
+    {
+      "seed": 3497000,
+      "decisions": 18,
+      "mean_known": 7.166666666666667,
+      "max_known": 11,
+      "decisions_with_2plus": 18,
+      "pairs_checked": 18,
+      "pairs_with_shared_stop": 5,
+      "cleared": 14
+    },
+    {
+      "seed": 3497001,
+      "decisions": 18,
+      "mean_known": 4.888888888888889,
+      "max_known": 8,
+      "decisions_with_2plus": 16,
+      "pairs_checked": 16,
+      "pairs_with_shared_stop": 16,
+      "cleared": 15
+    },
+    {
+      "seed": 3497002,
+      "decisions": 15,
+      "mean_known": 4.933333333333334,
+      "max_known": 9,
+      "decisions_with_2plus": 14,
+      "pairs_checked": 14,
+      "pairs_with_shared_stop": 2,
+      "cleared": 10
+    },
+    {
+      "seed": 3497003,
+      "decisions": 17,
+      "mean_known": 2.3529411764705883,
+      "max_known": 6,
+      "decisions_with_2plus": 11,
+      "pairs_checked": 11,
+      "pairs_with_shared_stop": 9,
+      "cleared": 14
+    },
+    {
+      "seed": 3497004,
+      "decisions": 15,
+      "mean_known": 7.333333333333333,
+      "max_known": 10,
+      "decisions_with_2plus": 15,
+      "pairs_checked": 15,
+      "pairs_with_shared_stop": 13,
+      "cleared": 15
+    },
+    {
+      "seed": 3497005,
+      "decisions": 17,
+      "mean_known": 5.235294117647059,
+      "max_known": 9,
+      "decisions_with_2plus": 16,
+      "pairs_checked": 16,
+      "pairs_with_shared_stop": 7,
+      "cleared": 12
+    },
+    {
+      "seed": 3497006,
+      "decisions": 16,
+      "mean_known": 5.0625,
+      "max_known": 9,
+      "decisions_with_2plus": 14,
+      "pairs_checked": 14,
+      "pairs_with_shared_stop": 1,
+      "cleared": 11
+    },
+    {
+      "seed": 3497007,
+      "decisions": 19,
+      "mean_known": 5.2105263157894735,
+      "max_known": 10,
+      "decisions_with_2plus": 18,
+      "pairs_checked": 18,
+      "pairs_with_shared_stop": 4,
+      "cleared": 15
+    },
+    {
+      "seed": 3497008,
+      "decisions": 14,
+      "mean_known": 1.9285714285714286,
+      "max_known": 3,
+      "decisions_with_2plus": 9,
+      "pairs_checked": 9,
+      "pairs_with_shared_stop": 2,
+      "cleared": 10
+    },
+    {
+      "seed": 3497009,
+      "decisions": 15,
+      "mean_known": 7.266666666666667,
+      "max_known": 10,
+      "decisions_with_2plus": 15,
+      "pairs_checked": 15,
+      "pairs_with_shared_stop": 5,
+      "cleared": 16
+    },
+    {
+      "seed": 3497010,
+      "decisions": 14,
+      "mean_known": 2.2857142857142856,
+      "max_known": 4,
+      "decisions_with_2plus": 10,
+      "pairs_checked": 10,
+      "pairs_with_shared_stop": 10,
+      "cleared": 13
+    },
+    {
+      "seed": 3497011,
+      "decisions": 19,
+      "mean_known": 5.2105263157894735,
+      "max_known": 8,
+      "decisions_with_2plus": 18,
+      "pairs_checked": 18,
+      "pairs_with_shared_stop": 9,
+      "cleared": 15
+    }
+  ]
+}

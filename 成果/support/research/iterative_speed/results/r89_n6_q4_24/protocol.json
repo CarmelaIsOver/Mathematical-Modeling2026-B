@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "n6_q4"
+  ],
+  "start": 3496700,
+  "count": 24,
+  "workers": 8,
+  "round": "r89_n6_q4_24",
+  "hypothesis": "N6 analytic R/theta state construction vs strong Q4 baseline",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "n1_q3"
+  ],
+  "start": 3496200,
+  "count": 24,
+  "workers": 8,
+  "round": "r85_n1_q3_24",
+  "hypothesis": "N1 complete-world rollout vs strong Q3 baseline",
+  "mode": "normal",
+  "traces": false,
+  "control": "skip12_probe60"
+}

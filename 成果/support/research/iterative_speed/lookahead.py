@@ -28,9 +28,56 @@ import math
 import numpy as np
 
 from active_localization import ActiveLocalizationSolver, outcomes, radius_bound
+from geometry import bearing_clip
 from joint_search import JointSearchSolver
 from omni_search import OmniSearchSolver
 from solver import Solver, safe_clear_point
+
+
+def _outcomes_with_angles(poly, q, bins=12):
+    """Bearing bins with their raw representative angle (mirror of outcomes()).
+
+    The representative angle is the centre of the bin's wedge, i.e. the actual
+    feedback the branch stands for; it is stored in the assumed history instead of
+    an angle re-derived from the posterior centroid.
+    """
+    poly = np.asarray(poly, float)
+    q = np.asarray(q, float)
+    delta = poly - q
+    edges = np.roll(poly, -1, axis=0) - poly
+    rel = q - poly
+    crosses = edges[:, 0] * rel[:, 1] - edges[:, 1] * rel[:, 0]
+    if np.all(crosses >= -1e-8) or np.all(crosses <= 1e-8):
+        return []
+    middle = math.atan2(*(poly.mean(axis=0) - q)[::-1])
+    angles = np.angle(np.exp(1j * (np.arctan2(delta[:, 1], delta[:, 0]) - middle)))
+    lo = float(angles.min()) - math.radians(0.05)
+    hi = float(angles.max()) + math.radians(0.05)
+    step = (hi - lo) / bins
+    out = []
+    for i in range(bins):
+        rel_angle = lo + (i + .5) * step
+        post = bearing_clip(poly, q, math.degrees(middle + rel_angle), 0.05 + math.degrees(step) / 2)
+        if len(post):
+            out.append((post, step, (math.degrees(middle + rel_angle)) % 360.))
+    return out
+
+
+def _point_poly_distance(poly, q):
+    """Distance from q to the closed feasible set (0 inside, else nearest edge)."""
+    poly = np.asarray(poly, float)
+    q = np.asarray(q, float)
+    if _inside_convex(poly, q):
+        return 0.
+    best = float('inf')
+    n = len(poly)
+    for i in range(n):
+        a, b = poly[i], poly[(i + 1) % n]
+        ab = b - a
+        denom = float(ab @ ab)
+        t = 0. if denom <= 1e-12 else float(np.clip(((q - a) @ ab) / denom, 0., 1.))
+        best = min(best, float(np.linalg.norm(q - (a + t * ab))))
+    return best
 
 
 class _HypState:
@@ -120,20 +167,26 @@ class LookaheadMixin:
         return Solver.next_measure(self, c, poly, center, radius)
 
     def _branches(self, c, q, poly, bins=12):
-        """Feasible observation branches; compression keeps no_signal and near."""
+        """Feasible observation branches with their raw feedback representative.
+
+        Physics constraints (P0):
+          * no_signal needs a feasible position farther than 1000 m from q; for a
+            convex posterior the maximum distance is attained at a vertex, so
+            ``max_vertex_distance <= 1000`` makes no_signal impossible (the smallest
+            possible receivable radius is 1000 m and no orientation can hide it).
+          * near needs the source within the 5 m clear radius of q, measured to the
+            whole feasible set (point-to-edge included), not only to its vertices.
+        """
         q = np.asarray(q, float)
-        out = [(post, 1., 'direction') for post, _ in outcomes(poly, q, bins=bins)]
-        # no_signal (out of range or back-facing) cannot be excluded from public
-        # observations: R in [1000,1500] and theta are unknown, so it stays feasible
-        # while the posterior is non-empty. No weight is invented for it beyond the
-        # declared equal-weight planning assumption.
-        if len(poly):
-            out.append((poly, 1., 'no_signal'))
-        # near needs the source within the 5 m clear radius of q.
-        if len(poly):
-            dmin = float(np.min(np.linalg.norm(poly - q, axis=1)))
-            if _inside_convex(poly, q) or dmin <= 5. + 1e-9:
-                out.append((np.asarray([q], float), 1., 'near'))
+        out = [(post, 1., 'direction', ang) for post, _w, ang in _outcomes_with_angles(poly, q, bins)]
+        verts = np.asarray(poly, float)
+        if len(verts):
+            far = float(np.max(np.linalg.norm(verts - q, axis=1)))
+            if far > 1000. + 1e-9:
+                out.append((verts, 1., 'no_signal', None))
+        near_ok = len(verts) >= 3 and _point_poly_distance(verts, q) <= 5. + 1e-9
+        if near_ok:
+            out.append((np.asarray([q], float), 1., 'near', None))
         return out
 
     def _compress(self, branches):
@@ -150,11 +203,12 @@ class LookaheadMixin:
     def _assumed_state(self, c, q):
         return _HypState(c, q, c, self.problem, self.obs[c], self.measured[c], self.diagnostics)
 
-    def _advance(self, state, c, q, post, kind):
+    def _advance(self, state, c, q, post, kind, angle=None):
         """Advance a copy of the assumed state for one branch outcome.
 
-        Returns ``(state_or_None, poly)``: ``None`` means the branch cleared the
-        channel at q, so no continuation is needed.
+        The raw feedback representative stored by ``_branches`` is reused, so the
+        assumed history keeps the feedback the branch actually stands for and the
+        same world/position/channel always yields the same reading.
         """
         if kind == 'near':
             return None, None
@@ -162,9 +216,10 @@ class LookaheadMixin:
         if kind == 'no_signal':
             nxt.advance(c, q, None)
             return nxt, post
-        centroid = np.asarray(post, float).mean(axis=0)
-        ang = math.degrees(math.atan2(centroid[1] - q[1], centroid[0] - q[0])) % 360.
-        nxt.advance(c, q, ang)
+        if angle is None:
+            centroid = np.asarray(post, float).mean(axis=0)
+            angle = math.degrees(math.atan2(centroid[1] - q[1], centroid[0] - q[0])) % 360.
+        nxt.advance(c, q, float(angle))
         return nxt, post
 
     def _exit_cost(self, end, next_task):
@@ -199,11 +254,11 @@ class LookaheadMixin:
         action = float(np.linalg.norm(state.pos - q2)) / 5 + 5. + int(c != state.channel)
         branches = self._compress(self._branches(c, q2, poly))
         costs = []
-        for post, _w, kind in branches:
+        for post, _w, kind, ang in branches:
             if kind == 'near':
                 costs.append(5. + self._exit_cost(q2, next_task))
                 continue
-            nxt, npoly = self._advance(state, c, q2, post, kind)
+            nxt, npoly = self._advance(state, c, q2, post, kind, ang)
             nrb, nmb = radius_bound(npoly)
             costs.append(self._continue_cost(nxt, c, npoly, nmb, nrb, next_task, depth - 1))
         costs = np.asarray(costs, float)
@@ -218,7 +273,7 @@ class LookaheadMixin:
         self.diagnostics['lookahead_branches'] += len(branches)
         action = float(np.linalg.norm(np.asarray(q, float) - self.pos)) / 5 + 5. + int(c != self.channel)
         costs = []
-        for post, _w, kind in branches:
+        for post, _w, kind, ang in branches:
             if kind == 'near':
                 costs.append(5. + self._exit_cost(q, next_task))
                 continue
@@ -247,7 +302,7 @@ class LookaheadMixin:
             return None
         action = float(np.linalg.norm(np.asarray(q, float) - self.pos)) / 5 + 5. + int(c != self.channel)
         costs = []
-        for post, _w, kind in branches:
+        for post, _w, kind, ang in branches:
             if kind == 'near':
                 costs.append(5. + self._exit_cost(q, next_task))
                 continue
