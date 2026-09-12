@@ -62,3 +62,39 @@ def certify(points,max_depth=15,return_cells=False,max_cells=50000):
         shifts=half*np.array([[-1,-1],[-1,1],[1,-1],[1,1]])
         centers=(centers[:,None,:]+shifts[None,:,:]).reshape(-1,2)
 
+
+
+_LAYOUT_CACHE = {}
+
+
+def layout_cells(points, max_depth=14):
+    """Cached static decomposition plus per-cell geometry.
+
+    Reuses ``certify`` so runtime absence checks and the static certificate can
+    never disagree about which cells a set of stations covers.
+    """
+    points = np.asarray(points)
+    key = points.tobytes()
+    if key not in _LAYOUT_CACHE:
+        result = certify(points, max_depth=max_depth, return_cells=True)
+        if not result['covered']:
+            raise ValueError('Coverage layout is not certified')
+        cells = result['cells']
+        masks = [c['mask'] for c in cells]
+        sizes = [bin(m).count('1') for m in masks]
+        index = {i: [j for j, m in enumerate(masks) if m & (1 << i)]
+                 for i in range(len(points))}
+        centers = np.array([c['center'] for c in cells])
+        halves = np.array([c['half'] for c in cells])
+        _LAYOUT_CACHE[key] = (masks, sizes, index, centers, halves)
+    return _LAYOUT_CACHE[key]
+
+
+def cell_is_covered(center, half, sensors):
+    """Half-plane containment test used by ``certify`` for one box."""
+    constraints = hull_normals(np.asarray(sensors))
+    if constraints is None:
+        return False
+    normals, bounds = constraints
+    values = np.asarray(center) @ normals.T + half * np.abs(normals).sum(axis=1)
+    return bool(np.all(values <= bounds - 1e-7))

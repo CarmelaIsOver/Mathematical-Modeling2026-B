@@ -7,6 +7,7 @@ heuristics, not promises of optimality or of a 400-second per-source score.
 import time
 import numpy as np
 from active_localization import ActiveLocalizationSolver
+from coverage_geometry import layout_cells, cell_is_covered
 
 
 def search_route(points,start):
@@ -39,7 +40,7 @@ def search_route(points,start):
 class JointSearchSolver(ActiveLocalizationSolver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
                  reschedule_after_step=False,target_measure_budget=None,step_skip_known=False,
-                 close_discovery_on_upper_bound=True):
+                 close_discovery_on_upper_bound=True,certify_channel_absence=False):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
@@ -47,7 +48,9 @@ class JointSearchSolver(ActiveLocalizationSolver):
         self.diagnostics.update(route_replans=0,skipped_known_measurements=0,
                                 small_region_probes=0,small_region_successes=0,
                                 coverage_sites_cancelled=0,rescheduled_targets=0,
-                                reschedule_steps=0,reschedule_fallbacks=0,discovery_closed=0)
+                                reschedule_steps=0,reschedule_fallbacks=0,discovery_closed=0,
+                                channels_certified_absent=0,absence_skipped_measurements=0,
+                                discovery_closed_by_absence=0)
         # Opt-in: end a scheduling turn after one region-updating measurement.
         # Measurement budget is per channel and never reset by re-planning.
         self.reschedule_after_step=bool(reschedule_after_step)
@@ -62,6 +65,18 @@ class JointSearchSolver(ActiveLocalizationSolver):
         # no unknown channel can still hold a source. Discovery obligations end;
         # unvisited stations stay available only as optional localization points.
         self.discovery_closed=False
+        # Opt-in per-channel coverage certificate: a channel that was measured
+        # with no signal at every station of a certified mesh cell cannot hold a
+        # source in that cell. Only genuine measurement positions count.
+        self.certify_channel_absence=bool(certify_channel_absence)
+        self.absent_channels=set()
+        if self.certify_channel_absence:
+            (self.cell_masks,self.cell_sizes,self.station_cells,
+             self.cell_centers,self.cell_halves)=layout_cells(self.stations)
+            n=len(self.cell_masks)
+            self.cell_ok={c:np.zeros(n,dtype=bool) for c in range(1,21)}
+            self.station_scanned={c:np.zeros(len(self.stations),dtype=bool)
+                                  for c in range(1,21)}
 
     def locate(self,c):
         if not self.reschedule_after_step:
@@ -115,6 +130,26 @@ class JointSearchSolver(ActiveLocalizationSolver):
             return True
         return False
 
+    def _note_silent(self,c,station_index):
+        """Record a genuine no-signal position in the per-channel certificate."""
+        self.station_scanned[c][station_index]=True
+        ok=self.cell_ok[c]
+        total=len(self.stations)
+        for j in self.station_cells[station_index]:
+            if ok[j]:continue
+            mask=self.cell_masks[j]
+            sensors=[self.stations[k] for k in range(total)
+                     if (mask>>k)&1 and self.station_scanned[c][k]]
+            if cell_is_covered(self.cell_centers[j],self.cell_halves[j],sensors):
+                ok[j]=True
+        if c not in self.deferred and c not in self.cleared and bool(np.all(ok)):
+            self.absent_channels.add(c)
+            self.diagnostics['channels_certified_absent']+=1
+
+    def _station_channel_unneeded(self,station_index,c):
+        """True when measuring c at this station covers no uncertified cell."""
+        return all(self.cell_ok[c][j] for j in self.station_cells[station_index])
+
     def skip_known_measurement(self,c,p):
         if c not in self.deferred:return False
         if self.reschedule_after_step and self.step_skip_known:
@@ -131,8 +166,9 @@ class JointSearchSolver(ActiveLocalizationSolver):
             self.deferred={c:age for c,age in self.deferred.items() if c not in self.cleared}
             if len(self.cleared)==16:break
             known=list(self.deferred)
+            discovered=len(known)+len(self.cleared)
             if (self.close_discovery_on_upper_bound and not self.discovery_closed
-                    and len(known)+len(self.cleared)==16):
+                    and (discovered==16 or discovered+len(self.absent_channels)==20)):
                 # The stated upper bound has been reached using observations.
                 # Unknown-channel discovery is finished, clearance is not; the
                 # remaining station obligations are cancelled. Re-using a station
@@ -141,6 +177,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 self.discovery_closed=True
                 self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
                 self.diagnostics['discovery_closed']+=1
+                if discovered<16:self.diagnostics['discovery_closed_by_absence']+=1
                 self.pending_stations=[]
             if self.discovery_closed and not self.deferred:
                 break
@@ -172,12 +209,17 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 if self.skip_known_measurement(c,p):
                     self.diagnostics['skipped_known_measurements']+=1
                     continue
+                if self.certify_channel_absence and self._station_channel_unneeded(index,c):
+                    self.diagnostics['absence_skipped_measurements']+=1
+                    continue
                 result=self.action('/measure',p,c)['measure_result']
                 if result=='near':
                     if not self.clear(p,c):raise RuntimeError('Near clear failed')
                 elif result=='direction' and c not in self.deferred:
                     self.deferred[c]=len(self.visited)+1
                     self.diagnostics['deferred_targets']+=1
+                elif result=='no_signal' and self.certify_channel_absence:
+                    self._note_silent(c,index)
             self.visited.append(index)
         if len(self.cleared)<16 and (self.pending_stations or any(c not in self.cleared for c in self.deferred)):
             raise RuntimeError('Unresolved coverage or targets')

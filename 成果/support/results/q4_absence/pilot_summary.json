@@ -1,0 +1,35 @@
+{
+  "seeds": [
+    1910000,
+    1910003,
+    1910008,
+    1910013,
+    1910016,
+    1910022,
+    1910024,
+    1910032,
+    1910035,
+    1910036,
+    1910045,
+    1900011,
+    1900112
+  ],
+  "aggregate": {
+    "n": 13,
+    "mean_ratio": 1.0,
+    "worst_ratio": 1.0,
+    "total_absence_skips": 0,
+    "channels_certified_absent": 110
+  },
+  "essential_stations": {
+    "radial": {
+      "stations": 25,
+      "essential": 25
+    },
+    "rings": {
+      "stations": 22,
+      "essential": 22
+    }
+  },
+  "conclusion": "per-channel certificate is sound but adds no skips: every station is essential to some mesh cell"
+}
