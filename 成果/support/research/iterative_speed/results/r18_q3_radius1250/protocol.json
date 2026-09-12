@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "guard1250_close_skip12"
+  ],
+  "start": 3450000,
+  "count": 100,
+  "workers": 8,
+  "round": "r18_q3_radius1250",
+  "hypothesis": "radius 1250 vs 1123 tail trade on fresh seeds",
+  "mode": "normal",
+  "traces": false
+}

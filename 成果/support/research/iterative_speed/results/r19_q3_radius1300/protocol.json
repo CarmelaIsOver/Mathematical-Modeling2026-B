@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1300_close_skip12",
+    "guard1400_close_skip12"
+  ],
+  "start": 3450000,
+  "count": 100,
+  "workers": 8,
+  "round": "r19_q3_radius1300",
+  "hypothesis": "radius 1300/1400 gate check",
+  "mode": "normal",
+  "traces": false
+}

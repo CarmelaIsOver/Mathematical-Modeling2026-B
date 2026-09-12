@@ -10,7 +10,7 @@ from geometry import search_stations
 class OmniVariant(OmniSearchSolver):
     def __init__(self, *args, ring_radius=None, ring_count=6, probe_radius=0., guard_initial=False,
                  close_known=False, guard_visits=0, skip_known_radius=None,
-                 align_ring=False, two_stage_radius=None, **kwargs):
+                 align_ring=False, two_stage_radius=None, min_origin_seen=1, **kwargs):
         super().__init__(*args, **kwargs)
         self.probe_radius=probe_radius
         self.skip_known_radius=skip_known_radius
@@ -19,6 +19,7 @@ class OmniVariant(OmniSearchSolver):
         self.observed_channels=set();self.ring_activated=False
         self.ring_radius=ring_radius;self.ring_count=ring_count
         self.align_ring=align_ring;self.two_stage_radius=two_stage_radius
+        self.min_origin_seen=min_origin_seen
         self.first_bearing=None;self.positive_count=0
         if ring_radius is not None:
             self._validate_radius(ring_radius,ring_count)
@@ -55,11 +56,16 @@ class OmniVariant(OmniSearchSolver):
         r=super().action(path,p,c)
         if path=='/measure' and r['measure_result'] in ('direction','near'):
             self.observed_channels.add(c)
+            if len(self.visited)==0:
+                self.diagnostics['seen_origin']=len(self.observed_channels)
+            elif len(self.visited)==1:
+                self.diagnostics['seen_first_ring']=len(self.observed_channels)
             if self.guard_initial and len(self.visited)<=self.guard_visits:
                 self.positive_count+=1
+                self.diagnostics['origin_positive']=self.positive_count
                 if r['measure_result']=='direction' and self.first_bearing is None:
                     self.first_bearing=float(r.get('svd_deg',0.))
-                if not self.ring_activated:
+                if not self.ring_activated and len(self.observed_channels)>=self.min_origin_seen:
                     self._install_ring(self.two_stage_radius if self.two_stage_radius is not None
                                        else self.ring_radius)
                 elif (self.two_stage_radius is not None and self.positive_count>=2
@@ -220,7 +226,12 @@ VARIANTS={
     'guard1123_close_skip12':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'guard1150_close_skip12':(OmniVariant,{'ring_radius':1150.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
     'guard1180_close_skip12':(OmniVariant,{'ring_radius':1180.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
-    'guard1123_close_skip12_align':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'align_ring':True}),
+    'guard1250_close_skip12':(OmniVariant,{'ring_radius':1250.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1300_close_skip12':(OmniVariant,{'ring_radius':1300.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1400_close_skip12':(OmniVariant,{'ring_radius':1400.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.}),
+    'guard1123_close_skip12_k6':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'min_origin_seen':6}),
+    'guard1123_close_skip12_k7':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'min_origin_seen':7}),
+    'guard1250_close_skip12_k6':(OmniVariant,{'ring_radius':1250.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'min_origin_seen':6}),
     'guard1123_close_skip12_2stage':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'two_stage_radius':1300.}),
     'guard1123_close_skip12_2stage_align':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'two_stage_radius':1300.,'align_ring':True}),
     'guard1123_close_skip10':(OmniVariant,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1000.}),

@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "guard1123_close_skip12_k6",
+    "guard1123_close_skip12_k7",
+    "guard1250_close_skip12_k6"
+  ],
+  "start": 3460000,
+  "count": 120,
+  "workers": 8,
+  "round": "r20_q3_k6",
+  "hypothesis": "origin-detection gate K on fresh seeds",
+  "mode": "normal",
+  "traces": false
+}
