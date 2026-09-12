@@ -90,21 +90,22 @@ def grid_masks(S, grid):
     return np.linalg.norm(grid[:, None, :] - S[None, :, :], axis=2) <= RANGE
 
 
-def any_7_subset_covers(S, grid, chunk=2000):
-    """Necessary-condition sweep over all C(25,7) subsets using the 20 m grid."""
+def any_k_subset_covers(S, grid, k, chunk=2000):
+    """Exhaustive necessary-condition sweep over all C(n,k) subsets (union logic)."""
     n = len(S)
     cover = grid_masks(S, grid)
-    combos = np.fromiter(itertools.chain.from_iterable(itertools.combinations(range(n), 7)),
+    combos = np.fromiter(itertools.chain.from_iterable(itertools.combinations(range(n), k)),
                          dtype=np.int64)
-    combos = combos.reshape(-1, 7)
-    survivors = []
+    combos = combos.reshape(-1, k)
+    passing = []
     for start in range(0, len(combos), chunk):
         block = combos[start:start + chunk]
-        ok = np.zeros(len(block), bool)
-        for slot in range(7):
-            ok |= cover[:, block[:, slot]].all(axis=0)
-        survivors.extend(np.where(ok)[0] + start)
-    return combos, survivors
+        acc = np.zeros((len(grid), len(block)), bool)
+        for slot in range(k):
+            acc |= cover[:, block[:, slot]]
+        ok = acc.all(axis=0)
+        passing.extend(np.where(ok)[0] + start)
+    return combos, passing
 
 
 def greedy_min_cover(S, grid, size=None):
@@ -155,27 +156,36 @@ def main():
         }
 
     grid = disk_grid(20.)
-    combos, survivors = any_7_subset_covers(S, grid)
     chosen, covered_pts = greedy_min_cover(S, grid)
     res['search'] = {
         'grid_points': int(len(grid)),
         'grid_step_m': 20.,
-        'subsets_tested': int(len(combos)),
-        'seven_subsets_passing_grid': int(len(survivors)),
+        'criterion': 'union of 1000 m discs covers the 1800 m disk (Q3-style)',
         'greedy_k': len(chosen),
         'greedy_sites': [int(i) for i in chosen],
         'greedy_grid_points_covered': covered_pts,
         'greedy_cover_radius_m': round(cover_radius(S[chosen]), 2),
+        'exhaustive': {},
     }
-    if survivors:
-        best = None
-        for s0 in survivors[:200]:
-            rad = cover_radius(S[combos[s0]])
-            if best is None or rad < best[0]:
-                best = (rad, [int(i) for i in combos[s0]])
-        res['search']['best_7_cover_radius_m'] = round(best[0], 2)
-        res['search']['best_7_sites'] = best[1]
-        res['search']['seven_subsets_exact_cover'] = int(best[0] <= RANGE)
+    for k in (5, 6, 7):
+        combos, passing = any_k_subset_covers(S, grid, k)
+        exact = None
+        if passing:
+            rads = [(cover_radius(S[combos[i]]), [int(j) for j in combos[i]]) for i in passing[:400]]
+            exact = min(rads, key=lambda t: t[0])
+        res['search']['exhaustive'][f'k={k}'] = {
+            'subsets_tested': int(len(combos)),
+            'subsets_passing_grid': int(len(passing)),
+            'best_exact_cover_radius_m': None if exact is None else round(exact[0], 2),
+            'best_sites': None if exact is None else exact[1],
+            'exactly_covers': None if exact is None else bool(exact[0] <= RANGE),
+        }
+    min_k = None
+    for k in (5, 6, 7):
+        if res['search']['exhaustive'][f'k={k}']['exactly_covers']:
+            min_k = k
+            break
+    res['search']['minimum_covering_subset_size_le'] = min_k
     (OUT / 'summary.json').write_text(json.dumps(res, indent=2), encoding='utf-8')
     print(json.dumps(res, indent=2, ensure_ascii=False))
 
