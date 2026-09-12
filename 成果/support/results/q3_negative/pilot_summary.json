@@ -1,0 +1,87 @@
+{
+  "problem": 3,
+  "seeds": [
+    990025,
+    990000,
+    990001,
+    990002,
+    990003,
+    990004,
+    990005
+  ],
+  "arms": [
+    "baseline",
+    "guard",
+    "tight",
+    "measure"
+  ],
+  "failures": [],
+  "aggregate": {
+    "baseline": {
+      "n": 7,
+      "mean_of_mean_time_s": 271.0521537508326,
+      "mean_total_time_s": 3552.5769483961694,
+      "worst_mean_time_s": 329.4186906413558,
+      "fallbacks": 0,
+      "measurements": 820,
+      "negative_observations": 0,
+      "negative_constraints": 0,
+      "negative_region_fallbacks": 0
+    },
+    "guard": {
+      "n": 7,
+      "mean_of_mean_time_s": 270.8896468197467,
+      "mean_total_time_s": 3552.9760224395945,
+      "worst_mean_time_s": 329.4186906413558,
+      "fallbacks": 0,
+      "measurements": 827,
+      "negative_observations": 558,
+      "negative_constraints": 749,
+      "negative_region_fallbacks": 0,
+      "paired_mean_ratio": 1.0007867532182735,
+      "paired_worst_ratio": 1.0778044130606392,
+      "paired_worst_seed": 990025,
+      "paired_worse_over_5pct": [
+        {
+          "seed": 990025,
+          "ratio": 1.0778044130606392
+        }
+      ]
+    },
+    "tight": {
+      "n": 7,
+      "mean_of_mean_time_s": 270.8896468197467,
+      "mean_total_time_s": 3552.9760224395945,
+      "worst_mean_time_s": 329.4186906413558,
+      "fallbacks": 0,
+      "measurements": 827,
+      "negative_observations": 558,
+      "negative_constraints": 1356,
+      "negative_region_fallbacks": 0,
+      "paired_mean_ratio": 1.0007867532182735,
+      "paired_worst_ratio": 1.0778044130606392,
+      "paired_worst_seed": 990025,
+      "paired_worse_over_5pct": [
+        {
+          "seed": 990025,
+          "ratio": 1.0778044130606392
+        }
+      ]
+    },
+    "measure": {
+      "n": 7,
+      "mean_of_mean_time_s": 268.47459015892827,
+      "mean_total_time_s": 3518.72722839297,
+      "worst_mean_time_s": 329.4186906413558,
+      "fallbacks": 0,
+      "measurements": 819,
+      "negative_observations": 553,
+      "negative_constraints": 518,
+      "negative_region_fallbacks": 0,
+      "paired_mean_ratio": 0.9904857367790136,
+      "paired_worst_ratio": 1.0038804652526807,
+      "paired_worst_seed": 990003,
+      "paired_worse_over_5pct": []
+    }
+  }
+}
