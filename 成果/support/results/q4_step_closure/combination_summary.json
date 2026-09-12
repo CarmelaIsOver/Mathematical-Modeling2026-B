@@ -1,0 +1,152 @@
+{
+  "baseline": "committed results/q4_reschedule_new baseline (no closure, no step)",
+  "seeds": [
+    1900011,
+    1900112,
+    1910000,
+    1910001,
+    1910002,
+    1910003,
+    1910004,
+    1910005,
+    1910006,
+    1910007,
+    1910008,
+    1910009,
+    1910010,
+    1910011,
+    1910012,
+    1910013,
+    1910014,
+    1910015,
+    1910016,
+    1910017,
+    1910018,
+    1910019,
+    1910020,
+    1910021,
+    1910022,
+    1910023,
+    1910024,
+    1910025,
+    1910026,
+    1910027,
+    1910028,
+    1910029,
+    1910030,
+    1910031,
+    1910032,
+    1910033,
+    1910034,
+    1910035,
+    1910036,
+    1910037,
+    1910038,
+    1910039,
+    1910040,
+    1910041,
+    1910042,
+    1910043,
+    1910044,
+    1910045,
+    1910046,
+    1910047,
+    1910048,
+    1910049,
+    1910050,
+    1910051,
+    1910052,
+    1910053,
+    1910054,
+    1910055,
+    1910056,
+    1910057,
+    1910058,
+    1910059
+  ],
+  "files": {
+    "closure": "results/q4_closure",
+    "step": "results/q4_reschedule_step",
+    "step_closure": "results/q4_step_closure"
+  },
+  "aggregate": {
+    "closure": {
+      "n": 62,
+      "mean_ratio": 0.9921275699465041,
+      "median_ratio": 1.0,
+      "p90_ratio": 1.0,
+      "worst_ratio": 1.0,
+      "better": 10,
+      "equal": 52,
+      "worse": 0,
+      "over_5pct": 0
+    },
+    "step": {
+      "n": 62,
+      "mean_ratio": 0.982753146924136,
+      "median_ratio": 0.9934247693216337,
+      "p90_ratio": 1.0048155650261208,
+      "worst_ratio": 1.0571036889033296,
+      "better": 51,
+      "equal": 1,
+      "worse": 10,
+      "over_5pct": 2
+    },
+    "step_closure": {
+      "n": 62,
+      "mean_ratio": 0.9779423401882119,
+      "median_ratio": 0.9894279906355092,
+      "p90_ratio": 1.0048155650261208,
+      "worst_ratio": 1.0571036889033296,
+      "better": 52,
+      "equal": 1,
+      "worse": 9,
+      "over_5pct": 2
+    }
+  },
+  "tail_seeds": [
+    {
+      "seed": 1910032,
+      "sources": null,
+      "step_ratio": 1.0571036889033296,
+      "step_closure_ratio": 1.0571036889033296,
+      "closure_ratio": 1.0
+    },
+    {
+      "seed": 1910005,
+      "sources": null,
+      "step_ratio": 1.0541325614935328,
+      "step_closure_ratio": 1.0541325614935328,
+      "closure_ratio": 1.0
+    },
+    {
+      "seed": 1910031,
+      "sources": null,
+      "step_ratio": 1.044492712574842,
+      "step_closure_ratio": 1.044492712574842,
+      "closure_ratio": 1.0
+    },
+    {
+      "seed": 1900011,
+      "sources": null,
+      "step_ratio": 1.0450040707894637,
+      "step_closure_ratio": 1.0334700978597569,
+      "closure_ratio": 0.9614887378555297
+    },
+    {
+      "seed": 1910013,
+      "sources": null,
+      "step_ratio": 1.0207569984836624,
+      "step_closure_ratio": 1.0207569984836624,
+      "closure_ratio": 1.0
+    },
+    {
+      "seed": 1910053,
+      "sources": null,
+      "step_ratio": 1.0052154894237115,
+      "step_closure_ratio": 1.0052154894237115,
+      "closure_ratio": 1.0
+    }
+  ],
+  "conclusion": "closure and step combine additively on the mean (-2.21%); the step tail is unchanged because the remaining >5% seeds have fewer than 16 sources, so closure never triggers there"
+}
