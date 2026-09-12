@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "n1_q3_m1",
+    "n2_q3"
+  ],
+  "start": 3497200,
+  "count": 3,
+  "workers": 4,
+  "round": "r94b_smoke_n2",
+  "hypothesis": "N2 smoke",
+  "mode": "normal",
+  "traces": true,
+  "control": "skip12_probe60"
+}

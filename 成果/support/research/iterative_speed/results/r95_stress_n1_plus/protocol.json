@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "n1_q3",
+    "n1_q3_m1"
+  ],
+  "start": 3497340,
+  "count": 3,
+  "workers": 4,
+  "round": "r95_stress_n1_plus",
+  "hypothesis": "N1 stress plus",
+  "mode": "plus",
+  "traces": false,
+  "control": "skip12_probe60"
+}

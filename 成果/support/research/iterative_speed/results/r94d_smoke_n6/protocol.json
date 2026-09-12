@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "n6_q4"
+  ],
+  "start": 3497200,
+  "count": 3,
+  "workers": 4,
+  "round": "r94d_smoke_n6",
+  "hypothesis": "N6 smoke",
+  "mode": "normal",
+  "traces": true,
+  "control": "baseline"
+}

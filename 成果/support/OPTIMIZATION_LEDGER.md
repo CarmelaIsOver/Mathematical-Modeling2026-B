@@ -575,3 +575,35 @@ N1 的完整世界延续时间分与 N4 的决策区域代理分（pairwise-conf
 （其用例数不计入），因此"带 def test_ 的函数总数"会略高于 140。本轮最终验证日志与源码哈希绑定：
 `research/iterative_speed/results/r93_r5_final_verification/final_tests.log` +
 `source_hashes.json`（记录 git HEAD `00daa8d` 与 68 个源码哈希）。
+
+### 7.9 本轮实验分层、分组报表与 N7/N8 的轮内产物（补齐审计要求）
+
+**冒烟（3 场/机制，带轨迹）**：`r94_smoke_n1`、`r94b_smoke_n2`、`r94c_smoke_n3`、`r94d_smoke_n6`
+（均 0 异常、完整清除；N1/N2 触发正常，N3 与对照逐位一致，N6 记录到 234 位置/场、其中 19.9 不可行）。
+
+**压力（每类 3 场，最终代码）**：`r95_stress_n1_{cluster,cluster_wide,boundary,plus,minus}` 与
+`r95b_stress_n6_{同五类}`（`--mode` 记录在各自 `protocol.json`）。
+
+**分组报表**：`research/iterative_speed/r5_reporting.py` → `results/r96_r5_reporting/reporting.json`，
+按目标数 10–12 / 13–14 / 15–16 分组给出各轮各臂的配对偏差与失败场景清单（本轮所有轮次 0 失败）。
+示例（r85 n1_q3）：10–12 组 −0.94%（n=9）、13–14 组 −0.65%（n=8）、15–16 组 −0.90%（n=7）——
+即 N1 的收益在三个目标数层都为正，不依赖某一层。
+
+**预测诊断表**（同状态反事实，含 MAE/相关/符号一致/rank-regret 代理）：
+
+| 机制 | 状态数 | MAE(s) | 符号一致 | 相关 | 预测均值 | 实测均值 | 最大偏差代理(s) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| N1（r86） | 30 | **3.475** | 0.667 | 0.367 | +2.99 | +1.49 | 22.5 |
+| A（r72，上一轮） | 15 | 28.223 | 0.800 | 0.124 | +30.36 | +4.47 | — |
+
+**N7 轮内离线评估**：`r5_reporting.py::n7_offline` 扫描 40 场，**0 个 fallback 状态**
+（强基线 Q3 在这些场景完全不触发终端光学后备）→ 必须补完整后备才能评估的前提在本轮没有出现；
+结合 C1 v2"32 场门拒绝 100% 重排（累计预测增益 −56.3s）"，N7 记为**机会不足（附统计）**。
+
+**N8 轮内产物**：`r5_reporting.py::n8_accounting`（8 场）：空频道测量 **48.1 次/场（占全部 measure 的 47.3%）**、
+非站点测量 14.5 次/场。替换这些义务需要另 7 个已扫描位置覆盖同一磁盘，且站点扫描本身不付额外移动
+（r30：1123m 环每站对唯一单元必不可缺）→ N8 记为**净空间受限（附统计）**。
+
+**台账/证据一致性**：`r93_r5_final_verification/source_hashes.json` 记录的 `git_head` 是**生成该产物时的 HEAD**；
+若此后又提交了产物本身，须以 `parent_head` 字段为准（本次在文件内同时记录 `head_at_generation` 与
+`commit_that_adds_this_artifact`，避免"测试日志绑定到旧源码"的歧义）。

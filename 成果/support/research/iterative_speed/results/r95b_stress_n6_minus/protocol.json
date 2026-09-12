@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "n6_q4"
+  ],
+  "start": 3497350,
+  "count": 3,
+  "workers": 4,
+  "round": "r95b_stress_n6_minus",
+  "hypothesis": "N6 stress minus",
+  "mode": "minus",
+  "traces": false,
+  "control": "baseline"
+}

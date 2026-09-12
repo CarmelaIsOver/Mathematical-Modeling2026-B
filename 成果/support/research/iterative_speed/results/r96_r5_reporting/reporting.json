@@ -1,0 +1,378 @@
+{
+  "grouping": {
+    "r85_n1_q3_24::n1_q3": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 9,
+          "mean_delta_pct": -0.94
+        },
+        "13-14": {
+          "n": 8,
+          "mean_delta_pct": -0.65
+        },
+        "15-16": {
+          "n": 7,
+          "mean_delta_pct": -0.9
+        }
+      },
+      "failures": []
+    },
+    "r87_n1_q3_rev24::n1_q3": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 14,
+          "mean_delta_pct": -0.66
+        },
+        "13-14": {
+          "n": 4,
+          "mean_delta_pct": -1.7
+        },
+        "15-16": {
+          "n": 6,
+          "mean_delta_pct": -1.32
+        }
+      },
+      "failures": []
+    },
+    "r87_n1_q3_rev24::n1_q3_m1": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 14,
+          "mean_delta_pct": -0.76
+        },
+        "13-14": {
+          "n": 4,
+          "mean_delta_pct": -1.55
+        },
+        "15-16": {
+          "n": 6,
+          "mean_delta_pct": -0.9
+        }
+      },
+      "failures": []
+    },
+    "r88_n3_q3_24::n3_q3": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 8,
+          "mean_delta_pct": 0.0
+        },
+        "13-14": {
+          "n": 8,
+          "mean_delta_pct": 0.0
+        },
+        "15-16": {
+          "n": 8,
+          "mean_delta_pct": 0.0
+        }
+      },
+      "failures": []
+    },
+    "r89_n6_q4_24::n6_q4": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 11,
+          "mean_delta_pct": 0.35
+        },
+        "13-14": {
+          "n": 6,
+          "mean_delta_pct": 0.58
+        },
+        "15-16": {
+          "n": 7,
+          "mean_delta_pct": 0.37
+        }
+      },
+      "failures": []
+    },
+    "r91_n2_q3_24::n1_q3_m1": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 12,
+          "mean_delta_pct": -0.78
+        },
+        "13-14": {
+          "n": 3,
+          "mean_delta_pct": -0.94
+        },
+        "15-16": {
+          "n": 9,
+          "mean_delta_pct": -0.7
+        }
+      },
+      "failures": []
+    },
+    "r91_n2_q3_24::n2_q3": {
+      "n": 24,
+      "by_target_count": {
+        "10-12": {
+          "n": 12,
+          "mean_delta_pct": -1.19
+        },
+        "13-14": {
+          "n": 3,
+          "mean_delta_pct": 0.95
+        },
+        "15-16": {
+          "n": 9,
+          "mean_delta_pct": -1.58
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_cluster::n1_q3": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 0.0
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_cluster::n1_q3_m1": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 0.0
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_cluster_wide::n1_q3": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -1.63
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_cluster_wide::n1_q3_m1": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -2.26
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_boundary::n1_q3": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -1.21
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_boundary::n1_q3_m1": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -1.01
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_plus::n1_q3": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -0.82
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_plus::n1_q3_m1": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -0.24
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_minus::n1_q3": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -1.61
+        }
+      },
+      "failures": []
+    },
+    "r95_stress_n1_minus::n1_q3_m1": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -6.87
+        }
+      },
+      "failures": []
+    },
+    "r95b_stress_n6_cluster::n6_q4": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 0.38
+        }
+      },
+      "failures": []
+    },
+    "r95b_stress_n6_cluster_wide::n6_q4": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 2.64
+        }
+      },
+      "failures": []
+    },
+    "r95b_stress_n6_boundary::n6_q4": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 0.64
+        }
+      },
+      "failures": []
+    },
+    "r95b_stress_n6_plus::n6_q4": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": -0.13
+        }
+      },
+      "failures": []
+    },
+    "r95b_stress_n6_minus::n6_q4": {
+      "n": 3,
+      "by_target_count": {
+        "15-16": {
+          "n": 3,
+          "mean_delta_pct": 1.76
+        }
+      },
+      "failures": []
+    }
+  },
+  "predictions": {
+    "r86_n1_counterfactual": {
+      "states": 30,
+      "mae_s": 3.475,
+      "sign_agreement": 0.667,
+      "correlation": 0.367,
+      "mean_predicted_s": 2.989,
+      "mean_realised_s": 1.486,
+      "rank_regret_proxy_s": 22.525
+    },
+    "r72_lookahead_counterfactual": {
+      "states": 15,
+      "mae_s": 28.223,
+      "sign_agreement": 0.8,
+      "correlation": 0.124,
+      "mean_predicted_s": 30.356,
+      "mean_realised_s": 4.47,
+      "rank_regret_proxy_s": 142.482
+    }
+  },
+  "n7": {
+    "events": 0,
+    "scenes_scanned": 40,
+    "scenes_with_fallback": 0,
+    "note": "the strong Q3 baseline issues no fallback in these scenes, so the incumbent-vs-neighbour evaluation has no state to act on"
+  },
+  "n8": {
+    "scenes": 8,
+    "mean_absent_measures": 48.1,
+    "mean_absent_share": 0.473,
+    "mean_non_station_measures": 14.5,
+    "per_scene": [
+      {
+        "seed": 3497500,
+        "targets": 10,
+        "measures": 111,
+        "absent_channel_measures": 70,
+        "absent_share": 0.631,
+        "non_station_measures": 10
+      },
+      {
+        "seed": 3497501,
+        "targets": 13,
+        "measures": 114,
+        "absent_channel_measures": 49,
+        "absent_share": 0.43,
+        "non_station_measures": 16
+      },
+      {
+        "seed": 3497502,
+        "targets": 15,
+        "measures": 82,
+        "absent_channel_measures": 35,
+        "absent_share": 0.427,
+        "non_station_measures": 11
+      },
+      {
+        "seed": 3497503,
+        "targets": 13,
+        "measures": 92,
+        "absent_channel_measures": 49,
+        "absent_share": 0.533,
+        "non_station_measures": 12
+      },
+      {
+        "seed": 3497504,
+        "targets": 11,
+        "measures": 102,
+        "absent_channel_measures": 63,
+        "absent_share": 0.618,
+        "non_station_measures": 13
+      },
+      {
+        "seed": 3497505,
+        "targets": 16,
+        "measures": 97,
+        "absent_channel_measures": 28,
+        "absent_share": 0.289,
+        "non_station_measures": 18
+      },
+      {
+        "seed": 3497506,
+        "targets": 12,
+        "measures": 103,
+        "absent_channel_measures": 56,
+        "absent_share": 0.544,
+        "non_station_measures": 13
+      },
+      {
+        "seed": 3497507,
+        "targets": 15,
+        "measures": 112,
+        "absent_channel_measures": 35,
+        "absent_share": 0.312,
+        "non_station_measures": 23
+      }
+    ]
+  }
+}
