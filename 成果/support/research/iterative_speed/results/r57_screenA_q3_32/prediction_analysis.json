@@ -1,0 +1,16 @@
+{
+  "round": "r57_screenA_q3_32",
+  "control": "skip12_probe60",
+  "arm": "la_q3_service",
+  "diagnostic_key": "lookahead_pred_saving_s",
+  "n": 32,
+  "scenes_with_prediction": 32,
+  "mean_predicted_saving_s": 75.94,
+  "mean_realised_saving_s": -0.81,
+  "sum_predicted_saving_s": 2430.1,
+  "sum_realised_saving_s": -26.0,
+  "mean_absolute_error_s": 76.75,
+  "sign_agreement": 0.406,
+  "sign_agreement_when_predicted": 0.406,
+  "correlation": 0.164
+}

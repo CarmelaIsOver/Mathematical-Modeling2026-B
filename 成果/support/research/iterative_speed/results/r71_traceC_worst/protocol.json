@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_q4"
+  ],
+  "start": 3491529,
+  "count": 1,
+  "workers": 2,
+  "round": "r71_traceC_worst",
+  "hypothesis": "C gated worst seed",
+  "mode": "normal",
+  "traces": true
+}

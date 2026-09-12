@@ -49,7 +49,9 @@ class JointStatePrediction(JointSearchSolver):
         self.use_prediction = bool(use_prediction)
         self.negatives = {}
         self.diagnostics.update(pred_negatives=0, pred_calls=0, pred_samples_kept=0,
-                                pred_samples_total=0, pred_reorders=0)
+                                pred_samples_total=0, pred_reorders=0,
+                                pred_predicted_gain_s=0., pred_pred_calls=0,
+                                pred_gate_rejections=0)
 
     # ---- state layer ---------------------------------------------------
     def action(self, path, p, c):
@@ -114,13 +116,34 @@ class JointStatePrediction(JointSearchSolver):
         return out
 
     # ---- ordering only -------------------------------------------------
+    def _expected_travel(self, samples, points, order):
+        """Expected path length (s) until every sample is within 20 m of a visited point."""
+        remaining = np.ones(len(samples), bool)
+        travel = 0.
+        cur = np.asarray(self.pos, float)
+        for j in order:
+            pt = np.asarray(points[j], float)
+            travel += float(np.linalg.norm(pt - cur)) / 5
+            cur = pt
+            remaining &= ~(np.linalg.norm(samples - pt, axis=1) <= 20.)
+            if not remaining.any():
+                break
+        return travel
+
     def _order_by_mass(self, c, points):
-        """Greedy order of the SAME points by how much filtered mass they finish."""
+        """Greedy order of the SAME points by filtered mass, gated by the prediction.
+
+        The candidate order is applied only when the model *predicts* a shorter
+        expected travel than the baseline order; otherwise the baseline order is
+        kept (spec: no predicted advantage -> fall back to the baseline action).
+        """
+        from solver import open_route
         if not self.use_prediction or len(points) < 2:
             return list(range(len(points)))
+        baseline_order = open_route(points, self.pos)
         samples = self._filtered_samples(c)
         if not len(samples):
-            return list(range(len(points)))
+            return baseline_order
         remaining = np.ones(len(samples), bool)
         order = []
         left = set(range(len(points)))
@@ -133,6 +156,17 @@ class JointStatePrediction(JointSearchSolver):
             order.append(best)
             left.discard(best)
             remaining &= ~(np.linalg.norm(samples - np.asarray(points[best], float), axis=1) <= 20.)
+        base = self._expected_travel(samples, points, baseline_order)
+        mass = self._expected_travel(samples, points, order)
+        if not (np.isfinite(base) and np.isfinite(mass)):
+            self.diagnostics['pred_gate_rejections'] += 1
+            return baseline_order
+        gain = float(base - mass)
+        self.diagnostics['pred_predicted_gain_s'] += gain
+        self.diagnostics['pred_pred_calls'] += 1
+        if gain <= 0.:
+            self.diagnostics['pred_gate_rejections'] += 1
+            return baseline_order
         self.diagnostics['pred_reorders'] += 1
         return order
 

@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3491124,
+  "count": 1,
+  "workers": 2,
+  "round": "r68_traceA_q4_worst",
+  "hypothesis": "A Q4 worst seed",
+  "mode": "normal",
+  "traces": true
+}

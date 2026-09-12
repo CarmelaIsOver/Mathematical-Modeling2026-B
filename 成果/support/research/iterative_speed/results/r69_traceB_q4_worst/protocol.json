@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "ins_q4"
+  ],
+  "start": 3491215,
+  "count": 1,
+  "workers": 2,
+  "round": "r69_traceB_q4_worst",
+  "hypothesis": "B Q4 worst seed",
+  "mode": "normal",
+  "traces": true
+}

@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3491107,
+  "count": 1,
+  "workers": 2,
+  "round": "r67b_traceA_q3_typical",
+  "hypothesis": "A Q3 typical seed",
+  "mode": "normal",
+  "traces": true
+}

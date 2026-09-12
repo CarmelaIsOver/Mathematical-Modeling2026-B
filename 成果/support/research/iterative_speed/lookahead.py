@@ -33,7 +33,8 @@ class LookaheadMixin:
         self.lookahead_mode = mode
         self.diagnostics.update(lookahead_calls=0, lookahead_active=0, lookahead_changed=0,
                                 lookahead_branches=0, lookahead_budget_aborts=0,
-                                lookahead_numeric_aborts=0)
+                                lookahead_numeric_aborts=0, lookahead_pred_saving_s=0.,
+                                lookahead_pred_calls=0)
         # Hard per-call compute budget: exceeding it falls back to the baseline
         # action instead of stalling the schedule.
         self.lookahead_budget = int(max(1, self.lookahead_max_candidates * self.lookahead_max_branches * 2))
@@ -54,6 +55,11 @@ class LookaheadMixin:
 
     def _branch_cost(self, q, post, c, next_task, kind='direction'):
         """Charged cost from q to a cleared channel plus the exit leg, one branch."""
+        if kind == 'near':
+            # The source sits within 5 m of q: measure (already charged in the
+            # action cost), then clear here: 3 s optical + 2 s laser, exit from q.
+            exit_s = 0. if next_task is None else float(np.linalg.norm(q - np.asarray(next_task, float))) / 5
+            return 5. + exit_s
         rb, mb = radius_bound(post)
         if kind == 'no_signal':
             q2 = self._base_pick(c, post, mb, rb)
@@ -136,6 +142,7 @@ class LookaheadMixin:
         """
         out = [(post, 1., 'direction') for post, _ in outcomes(poly, q, bins=bins)]
         out.append((poly, 1., 'no_signal'))
+        out.append((np.asarray([q], float), 1., 'near'))
         return out
 
     def _coarse_score(self, c, q, poly, next_task):
@@ -148,9 +155,12 @@ class LookaheadMixin:
             branches = [branches[i] for i in idx]
         self.diagnostics['lookahead_branches'] += len(branches)
         action = float(np.linalg.norm(q - self.pos)) / 5 + 5. + int(c != self.channel)
-        near_dist = float(np.linalg.norm(q - self.pos))
         costs = []
         for post, _w, kind in branches:
+            if kind == 'near':
+                exit_s = 0. if next_task is None else float(np.linalg.norm(q - np.asarray(next_task, float))) / 5
+                costs.append(5. + exit_s)
+                continue
             rb, mb = radius_bound(post)
             if kind == 'no_signal':
                 costs.append(float(np.linalg.norm(q - mb)) / 5 + 5. + float(rb) / 5
@@ -225,6 +235,14 @@ class LookaheadMixin:
             return base
         if base is not None and float(np.linalg.norm(best - base)) > .1:
             self.diagnostics['lookahead_changed'] += 1
+            # Predicted saving of the chosen action versus the baseline action,
+            # priced by the same model (used for the prediction-error analysis).
+            nb = self._next_task_point(c)
+            j_base = self._coarse_score(c, base, poly, nb)
+            j_best = self._coarse_score(c, best, poly, nb)
+            if j_base is not None and j_best is not None and np.isfinite(j_base) and np.isfinite(j_best):
+                self.diagnostics['lookahead_pred_saving_s'] += float(j_base - j_best)
+                self.diagnostics['lookahead_pred_calls'] += 1
         return best
 
 

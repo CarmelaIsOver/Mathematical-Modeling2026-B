@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "ins_q3"
+  ],
+  "start": 3491200,
+  "count": 32,
+  "workers": 8,
+  "round": "r60b_screenB_q3_32",
+  "hypothesis": "B screen vs strong baseline (Q3)",
+  "mode": "normal",
+  "traces": false
+}

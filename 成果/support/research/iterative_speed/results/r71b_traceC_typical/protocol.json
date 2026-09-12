@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_q4"
+  ],
+  "start": 3491528,
+  "count": 1,
+  "workers": 2,
+  "round": "r71b_traceC_typical",
+  "hypothesis": "C gated typical seed",
+  "mode": "normal",
+  "traces": true
+}

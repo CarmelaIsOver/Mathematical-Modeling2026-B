@@ -1,0 +1,16 @@
+{
+  "round": "r63_screenC_q4_32",
+  "control": "baseline",
+  "arm": "sp_q4",
+  "diagnostic_key": "pred_predicted_gain_s",
+  "n": 32,
+  "scenes_with_prediction": 6,
+  "mean_predicted_saving_s": -80.54,
+  "mean_realised_saving_s": -17.95,
+  "sum_predicted_saving_s": -2577.4,
+  "sum_realised_saving_s": -574.3,
+  "mean_absolute_error_s": 85.34,
+  "sign_agreement": 0.875,
+  "sign_agreement_when_predicted": 0.833,
+  "correlation": 0.784
+}

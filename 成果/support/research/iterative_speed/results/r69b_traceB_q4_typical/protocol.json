@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "ins_q4"
+  ],
+  "start": 3491208,
+  "count": 1,
+  "workers": 2,
+  "round": "r69b_traceB_q4_typical",
+  "hypothesis": "B Q4 typical seed",
+  "mode": "normal",
+  "traces": true
+}

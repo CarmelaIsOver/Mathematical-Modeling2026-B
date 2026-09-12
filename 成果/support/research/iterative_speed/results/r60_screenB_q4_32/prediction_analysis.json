@@ -1,0 +1,16 @@
+{
+  "round": "r60_screenB_q4_32",
+  "control": "baseline",
+  "arm": "ins_q4",
+  "diagnostic_key": "insertion_predicted_savings",
+  "n": 32,
+  "scenes_with_prediction": 32,
+  "mean_predicted_saving_s": 145.18,
+  "mean_realised_saving_s": -5.97,
+  "sum_predicted_saving_s": 4645.6,
+  "sum_realised_saving_s": -190.9,
+  "mean_absolute_error_s": 151.14,
+  "sign_agreement": 0.406,
+  "sign_agreement_when_predicted": 0.406,
+  "correlation": 0.017
+}

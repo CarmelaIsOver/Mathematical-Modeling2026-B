@@ -1,0 +1,16 @@
+{
+  "round": "r57b_screenA_q4_32",
+  "control": "baseline",
+  "arm": "la_q4_service",
+  "diagnostic_key": "lookahead_pred_saving_s",
+  "n": 32,
+  "scenes_with_prediction": 31,
+  "mean_predicted_saving_s": 12.5,
+  "mean_realised_saving_s": 0.14,
+  "sum_predicted_saving_s": 400.1,
+  "sum_realised_saving_s": 4.5,
+  "mean_absolute_error_s": 14.7,
+  "sign_agreement": 0.688,
+  "sign_agreement_when_predicted": 0.677,
+  "correlation": -0.116
+}

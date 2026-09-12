@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_q4"
+  ],
+  "start": 3491300,
+  "count": 32,
+  "workers": 8,
+  "round": "r63_screenC_q4_32",
+  "hypothesis": "C screen vs strong baseline (Q4)",
+  "mode": "normal",
+  "traces": false
+}

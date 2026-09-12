@@ -1,0 +1,58 @@
+{
+  "baseline": {
+    "virtual_time_s": 6426.382203599089,
+    "move_m": 23011.911017995444,
+    "measure": 296.0,
+    "failed_clear": 1.0,
+    "fallback": 0.0,
+    "wall_s": 0.22674149999511428,
+    "local_no_signal": 2.0,
+    "n": 1,
+    "failures": 0,
+    "mean": 459.0273002570778,
+    "p95": 459.0273002570778,
+    "p99": 459.0273002570778,
+    "cvar95": 459.0273002570778,
+    "worst": 459.0273002570778,
+    "worst_ratio": 1.0,
+    "worst_seed": 3491208,
+    "slower5": 0,
+    "wins": 0,
+    "phases": {
+      "coverage": 15145.141889009594,
+      "localization": 4176.269673606296,
+      "clear": 3690.499455379558
+    },
+    "gain": 0.0,
+    "promising": false,
+    "tail_gate": true
+  },
+  "ins_q4": {
+    "virtual_time_s": 6491.923237750049,
+    "move_m": 24444.616188750242,
+    "measure": 260.0,
+    "failed_clear": 2.0,
+    "fallback": 0.0,
+    "wall_s": 0.27526989999751095,
+    "local_no_signal": 3.0,
+    "n": 1,
+    "failures": 0,
+    "mean": 463.7088026964321,
+    "p95": 463.7088026964321,
+    "p99": 463.7088026964321,
+    "cvar95": 463.7088026964321,
+    "worst": 463.7088026964321,
+    "worst_ratio": 1.0101987451219838,
+    "worst_seed": 3491208,
+    "slower5": 0,
+    "wins": 0,
+    "phases": {
+      "coverage": 14168.043958199476,
+      "localization": 6728.091806843682,
+      "clear": 3548.4804237070957
+    },
+    "gain": -0.010198745121983821,
+    "promising": false,
+    "tail_gate": false
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_q4"
+  ],
+  "start": 3491500,
+  "count": 32,
+  "workers": 8,
+  "round": "r66_screenC_q4_gated32",
+  "hypothesis": "C gated screen: reorder only when the model predicts a shorter expected travel",
+  "mode": "normal",
+  "traces": false
+}

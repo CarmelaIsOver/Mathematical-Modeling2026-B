@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3491000,
+  "count": 4,
+  "workers": 4,
+  "round": "r56_smokeA_q3",
+  "hypothesis": "A smoke before screen (final code)",
+  "mode": "normal",
+  "traces": true
+}

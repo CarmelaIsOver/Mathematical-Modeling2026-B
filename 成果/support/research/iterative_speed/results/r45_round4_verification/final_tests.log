@@ -22,6 +22,6 @@ run.py: error: --q3-probe-radius requires --strategy integrated --problem 3
 run.py: error: --q4-probe-radius requires --strategy integrated --problem 4
 ............
 ----------------------------------------------------------------------
-Ran 86 tests in 22.759s
+Ran 86 tests in 22.599s
 
 OK

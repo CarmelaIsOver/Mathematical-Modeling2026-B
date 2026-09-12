@@ -1,0 +1,16 @@
+{
+  "round": "r60b_screenB_q3_32",
+  "control": "skip12_probe60",
+  "arm": "ins_q3",
+  "diagnostic_key": "insertion_predicted_savings",
+  "n": 32,
+  "scenes_with_prediction": 24,
+  "mean_predicted_saving_s": 96.69,
+  "mean_realised_saving_s": -9.92,
+  "sum_predicted_saving_s": 3094.0,
+  "sum_realised_saving_s": -317.5,
+  "mean_absolute_error_s": 106.61,
+  "sign_agreement": 0.375,
+  "sign_agreement_when_predicted": 0.167,
+  "correlation": -0.402
+}

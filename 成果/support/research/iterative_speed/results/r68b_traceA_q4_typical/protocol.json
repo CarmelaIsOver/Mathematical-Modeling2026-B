@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3491108,
+  "count": 1,
+  "workers": 2,
+  "round": "r68b_traceA_q4_typical",
+  "hypothesis": "A Q4 typical seed",
+  "mode": "normal",
+  "traces": true
+}
