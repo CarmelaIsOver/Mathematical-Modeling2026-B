@@ -23,12 +23,16 @@ def main():
     ap.add_argument('--radius',type=float);ap.add_argument('--all-directional',action='store_true')
     ap.add_argument('--negative-observations',action='store_true',
                     help='Q3 integrated only: received/not-received bisector constraints (opt-in, default off)')
+    ap.add_argument('--q3-ring-guard',choices=['off','aggressive','conservative'],default='off',
+                    help='Q3 integrated only: guarded 1123m seven-site ring shrink (opt-in, default off)')
     ap.add_argument('--output',default=None)
     a=ap.parse_args()
     if a.strategy is None:a.strategy='integrated'
     if a.layout is None:a.layout='radial' if a.strategy=='integrated' and a.problem==4 else 'original'
     if a.negative_observations and not (a.strategy=='integrated' and a.problem==3):
         ap.error('--negative-observations requires --strategy integrated --problem 3')
+    if a.q3_ring_guard!='off' and not (a.strategy=='integrated' and a.problem==3):
+        ap.error('--q3-ring-guard requires --strategy integrated --problem 3')
     if a.strategy=='integrated':
         required_layouts=('radial','rings') if a.problem==4 else ('original',)
         if a.layout not in required_layouts or a.spacing!=950.:
@@ -62,10 +66,12 @@ def main():
         try:
             kwargs={'coverage_layout':a.layout}
             if a.negative_observations:kwargs['negative_observations']=True
+            if a.q3_ring_guard!='off':kwargs['ring_guard']=a.q3_ring_guard
             r=controller(port,a.problem,a.spacing,a.refine,**kwargs).run()
             r['strategy']=a.strategy
             r['coverage_layout']=a.layout
             r['negative_observations']=bool(a.negative_observations)
+            r['q3_ring_guard']=a.q3_ring_guard
             r.update(normal_exit=port.exited,max_step_time_error_s=port.max_step_error_s,**port.parts)
             r['provenance']='Official HTTP interface; case code and module come from simulator UI'
             if a.mode=='offline':

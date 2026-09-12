@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close_skip12",
+    "guard1123_close_skip12_k6"
+  ],
+  "start": 3480000,
+  "count": 200,
+  "workers": 8,
+  "round": "r25_q3_fixed200",
+  "hypothesis": "fixed candidate, 200 fresh seeds",
+  "mode": "normal",
+  "traces": false
+}

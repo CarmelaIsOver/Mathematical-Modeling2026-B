@@ -5,16 +5,25 @@ Waiting for three sites is not a reason to force a long trip. Once no search
 sites remain, every known target is still mandatory and is cleared in turn.
 """
 import time
+import math
 import numpy as np
 from geometry import optical_cover, feasible, enclosing_circle
 from solver import Solver, open_route
 from joint_search import search_route
 from negative_observations import apply_negative_halfplanes
 
+# Guarded seven-site shrink (research candidate). The ring radius must stay inside
+# [1800cos30 - sqrt((1800cos30)^2 - 2240000), 1800cos30 + sqrt(...)] so that the
+# centre plus six ring sites still cover every source of the 1800 m disk while
+# every site stays within 1000 m of its covered sources.
+RING_RADIUS=1123.
+RING_GUARDS=('off','aggressive','conservative')
+
 
 class OmniSearchSolver(Solver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original',
-                 negative_observations=False,certify_on_tight=False,negative_route=False):
+                 negative_observations=False,certify_on_tight=False,negative_route=False,
+                 ring_guard='off'):
         if problem!=3 or coverage_layout!='original':
             raise ValueError('Omni joint scheduling requires Q3 and original seven-site coverage')
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
@@ -33,9 +42,48 @@ class OmniSearchSolver(Solver):
         self.diagnostics.update(skipped_known_measurements=0,route_replans=0,
                                 negative_observations=0,negative_region_fallbacks=0,
                                 negative_constraints=0)
+        # Optional guarded shrink of the Q3 seven-site ring. 'off' keeps the
+        # team layout untouched; the other modes only replace the station set
+        # after the centre scan itself observed real sources, and every variant
+        # stays a certified covering layout.
+        if ring_guard not in RING_GUARDS:
+            raise ValueError('Unknown ring guard mode')
+        self.ring_guard=ring_guard
+        self.observed_channels=set()
+        self.ring_activated=False
+        self.min_origin_seen=1 if ring_guard=='aggressive' else 6
+        self.skip_known_radius=1200.
+        angles=np.arange(6)*math.pi/3
+        self.ring_points=np.vstack([np.zeros((1,2)),
+                                    RING_RADIUS*np.c_[np.cos(angles),np.sin(angles)]])
+        self.diagnostics.update(ring_activated=0,coverage_sites_cancelled=0)
+
+    def _install_ring(self):
+        """Replace the seven sites with the certified 1123 m ring."""
+        previous=len(self.stations)
+        self.stations=self.ring_points.copy()
+        if len(self.stations)!=previous:
+            # Different station count: rebuild pending indices, keeping every
+            # unvisited site but never re-queueing the centre currently being
+            # scanned (its index was already removed before the scan started).
+            self.pending_stations=[i for i in range(len(self.stations))
+                                   if i not in self.visited and i!=0]
+        self.ring_activated=True
+        self.diagnostics['ring_activated']=1
 
     def action(self,path,p,c):
         response=super().action(path,p,c)
+        if (self.ring_guard!='off' and path=='/measure'
+                and response['measure_result'] in ('direction','near')):
+            self.observed_channels.add(c)
+            if (not self.ring_activated and not self.visited
+                    and len(self.observed_channels)>=self.min_origin_seen):
+                self._install_ring()
+            if len(self.observed_channels)==16 and self.pending_stations:
+                # The stated source upper bound is reached from observations:
+                # unknown-channel discovery is over, clearance is not.
+                self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
+                self.pending_stations=[]
         if (self.use_negatives and path=='/measure'
                 and response['measure_result']=='no_signal' and c not in self.cleared):
             # A not-received reading is retained even before the source is found.
@@ -126,6 +174,12 @@ class OmniSearchSolver(Solver):
         raise RuntimeError('Exhausted optical cover')
 
     def skip_station_measurement(self,c,p):
+        if self.ring_guard!='off' and c in self.deferred:
+            # Known targets are cleared regardless; a station pass beyond this
+            # distance adds a scan without a reliable movement benefit.
+            _,center,radius=self.region(c)
+            if np.linalg.norm(np.asarray(center)-np.asarray(p))>self.skip_known_radius:
+                return True
         if c not in self.deferred:return False
         _,center,radius=self.region(c)
         # No claim that an unknown channel is absent is made here. Known

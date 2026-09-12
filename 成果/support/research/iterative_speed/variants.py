@@ -44,10 +44,13 @@ class OmniVariant(OmniSearchSolver):
         angles=np.arange(self.ring_count)*2*math.pi/self.ring_count
         if self.align_ring and self.first_bearing is not None:
             angles=angles+math.radians(self.first_bearing)
+        previous=len(self.stations)
         self.stations=np.vstack([np.zeros((1,2)),radius*np.c_[np.cos(angles),np.sin(angles)]])
-        # Rebuild pending indices: a layout with a different station count must
-        # keep every unvisited site, preserving visited indices.
-        self.pending_stations=[i for i in range(len(self.stations)) if i not in self.visited]
+        if len(self.stations)!=previous:
+            # Different station count: rebuild pending indices, keeping every
+            # unvisited site but never re-queueing the centre currently scanned.
+            self.pending_stations=[i for i in range(len(self.stations))
+                                   if i not in self.visited and i!=0]
         self.ring_activated=True
         self.diagnostics['ring_activated']=1
         self.diagnostics['ring_radius_used']=radius

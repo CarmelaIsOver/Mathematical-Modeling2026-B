@@ -57,7 +57,8 @@ class PolicyTests(unittest.TestCase):
             result=solver.run()
             self.assertTrue(solver.ring_activated,ring_count)
             self.assertEqual(len(solver.cleared),16,ring_count)
-            self.assertEqual(set(solver.visited),set(range(len(solver.stations))),ring_count)
+            # Every site visited exactly once (no duplicate centre scan).
+            self.assertEqual(sorted(solver.visited),list(range(len(solver.stations))),ring_count)
 
     def test_known_skip_radius_only_skips_known_targets(self):
         solver=OmniVariant(None,3,ring_radius=1123.,guard_initial=True,close_known=True,skip_known_radius=1200.)
