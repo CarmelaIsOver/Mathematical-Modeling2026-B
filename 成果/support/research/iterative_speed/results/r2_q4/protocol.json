@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "rings55",
+    "finish_step"
+  ],
+  "start": 3300000,
+  "count": 24,
+  "workers": 4,
+  "round": "r2_q4",
+  "hypothesis": "Combine certified 22-site layout with smaller local step; independently restrict rescheduling to completed discovery",
+  "mode": "normal",
+  "traces": false
+}

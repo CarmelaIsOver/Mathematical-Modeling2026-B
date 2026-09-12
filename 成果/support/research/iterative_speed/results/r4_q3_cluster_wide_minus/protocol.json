@@ -1,0 +1,14 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123"
+  ],
+  "start": 3900000,
+  "count": 6,
+  "workers": 4,
+  "round": "r4_q3_cluster_wide_minus",
+  "hypothesis": "Adversarial guard check: cluster can be received from center",
+  "mode": "cluster_wide_minus",
+  "traces": false
+}

@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "convex_candidates",
+    "during_probe"
+  ],
+  "start": 3300000,
+  "count": 24,
+  "workers": 4,
+  "round": "r3_q4",
+  "hypothesis": "Guaranteed reception convex candidates versus a bounded optical probe after region contraction",
+  "mode": "normal",
+  "traces": false
+}

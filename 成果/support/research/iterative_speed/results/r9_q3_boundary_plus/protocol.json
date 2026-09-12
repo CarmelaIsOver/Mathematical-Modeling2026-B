@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "ring1123_close_unguarded"
+  ],
+  "start": 3920300,
+  "count": 6,
+  "workers": 6,
+  "round": "r9_q3_boundary_plus",
+  "hypothesis": "stress boundary_plus",
+  "mode": "boundary_plus",
+  "traces": false
+}

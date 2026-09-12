@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123",
+    "guard1300"
+  ],
+  "start": 3400000,
+  "count": 48,
+  "workers": 4,
+  "round": "r4_q3_holdout",
+  "hypothesis": "Frozen observation guarded ring candidates on fresh small holdout",
+  "mode": "normal",
+  "traces": true
+}

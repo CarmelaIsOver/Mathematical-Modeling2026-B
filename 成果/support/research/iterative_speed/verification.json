@@ -1,0 +1,12 @@
+{
+  "guard_initial_scope_replay": 48,
+  "matching_times": true,
+  "production_sources_unchanged": true,
+  "policy_tests_passed": 5,
+  "final_source_hashes": {
+    "report.py": "8015009f5aecc1eb1f1302c3e3e414b950808482f2a6879d36d3eeaca1048a72",
+    "study.py": "bc05a40d0cff81863df8db6e8ca40fac8dbdad6b3d63f279804105fce3b95ce4",
+    "test_policies.py": "c91f7115a406924a607f8a2f72676cbe74cad72d2f561971fbfd533bd3f1ff31",
+    "variants.py": "8baab62aadc0431d81eb709ac05aab1dbb2c426042ee55a4ea8725efda9412bc"
+  }
+}

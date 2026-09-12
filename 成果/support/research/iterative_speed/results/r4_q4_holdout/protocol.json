@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "rings22",
+    "choose_layout"
+  ],
+  "start": 3500000,
+  "count": 48,
+  "workers": 4,
+  "round": "r4_q4_holdout",
+  "hypothesis": "Frozen layout candidates on independent seeds",
+  "mode": "normal",
+  "traces": true
+}

@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "guard1123_close_skip14",
+    "guard1123_close_skip12"
+  ],
+  "start": 3420000,
+  "count": 48,
+  "workers": 8,
+  "round": "r12_q3_skip",
+  "hypothesis": "station-skip radius to cut scan-only tail",
+  "mode": "normal",
+  "traces": false
+}

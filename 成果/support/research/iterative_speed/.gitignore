@@ -1,0 +1,2 @@
+# Large raw action traces; regenerate with study.py --traces when needed
+traces/

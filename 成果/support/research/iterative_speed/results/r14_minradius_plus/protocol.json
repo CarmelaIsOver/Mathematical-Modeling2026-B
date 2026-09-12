@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "guard1123_close_skip12"
+  ],
+  "start": 3930500,
+  "count": 6,
+  "workers": 6,
+  "round": "r14_minradius_plus",
+  "hypothesis": "stress minradius_plus with skip",
+  "mode": "minradius_plus",
+  "traces": false
+}

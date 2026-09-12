@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "guard1140_close",
+    "guard1160_close",
+    "guard1200_close"
+  ],
+  "start": 3410000,
+  "count": 48,
+  "workers": 8,
+  "round": "r10_q3_margin",
+  "hypothesis": "radius safety margin vs tail",
+  "mode": "normal",
+  "traces": false
+}

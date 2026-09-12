@@ -1,0 +1,18 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "choose_layout",
+    "choose_strict85",
+    "choose_strict92",
+    "choose_aggressive",
+    "rings22"
+  ],
+  "start": 3310000,
+  "count": 24,
+  "workers": 8,
+  "round": "r5_q4_screen",
+  "hypothesis": "layout switch threshold sweep",
+  "mode": "normal",
+  "traces": false
+}

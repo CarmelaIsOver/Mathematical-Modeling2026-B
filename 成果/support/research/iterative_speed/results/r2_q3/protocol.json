@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "ring1123_negative",
+    "ring1300_negative"
+  ],
+  "start": 3200000,
+  "count": 24,
+  "workers": 4,
+  "round": "r2_q3",
+  "hypothesis": "Combine only measurement-ranking negative constraints with complete ring contraction",
+  "mode": "normal",
+  "traces": false
+}

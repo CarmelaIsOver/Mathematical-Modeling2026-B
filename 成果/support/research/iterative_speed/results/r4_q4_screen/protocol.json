@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "choose_layout"
+  ],
+  "start": 3300000,
+  "count": 24,
+  "workers": 4,
+  "round": "r4_q4_screen",
+  "hypothesis": "Choose a certified 22 or 25 site layout after center scan using estimated total remaining route and scanning cost",
+  "mode": "normal",
+  "traces": false
+}

@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "rings22",
+    "step55",
+    "step65",
+    "step80narrow"
+  ],
+  "start": 3300000,
+  "count": 24,
+  "workers": 4,
+  "round": "r1_q4",
+  "hypothesis": "Independent screening of certified 22 sites and directional step geometry on closure enabled baseline",
+  "mode": "normal",
+  "traces": false
+}

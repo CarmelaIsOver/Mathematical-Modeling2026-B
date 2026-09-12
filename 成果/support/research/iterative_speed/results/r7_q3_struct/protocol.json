@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "guard_ring7_close",
+    "guard_ring8_close",
+    "guard_ring9_close"
+  ],
+  "start": 3210024,
+  "count": 24,
+  "workers": 8,
+  "round": "r7_q3_struct",
+  "hypothesis": "ring count after pending-index fix",
+  "mode": "normal",
+  "traces": false
+}

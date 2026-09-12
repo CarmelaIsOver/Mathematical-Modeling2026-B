@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123_close",
+    "guard1123_close_skip12"
+  ],
+  "start": 3930100,
+  "count": 6,
+  "workers": 6,
+  "round": "r14_cluster_plus",
+  "hypothesis": "stress cluster_plus with skip",
+  "mode": "cluster_plus",
+  "traces": false
+}

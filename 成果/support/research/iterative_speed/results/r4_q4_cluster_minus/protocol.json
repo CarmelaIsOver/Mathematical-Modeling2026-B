@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "rings22",
+    "choose_layout"
+  ],
+  "start": 3800500,
+  "count": 6,
+  "workers": 4,
+  "round": "r4_q4_cluster_minus",
+  "hypothesis": "Frozen layout pressure validation",
+  "mode": "cluster_minus",
+  "traces": false
+}

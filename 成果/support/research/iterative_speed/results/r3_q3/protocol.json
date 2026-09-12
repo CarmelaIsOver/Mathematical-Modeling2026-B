@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123",
+    "guard1300",
+    "closure"
+  ],
+  "start": 3200000,
+  "count": 24,
+  "workers": 4,
+  "round": "r3_q3",
+  "hypothesis": "Observation guarded ring contraction and independent observed upper-bound discovery closure",
+  "mode": "normal",
+  "traces": false
+}

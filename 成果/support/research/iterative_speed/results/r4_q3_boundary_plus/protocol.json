@@ -1,0 +1,14 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123"
+  ],
+  "start": 3700200,
+  "count": 6,
+  "workers": 4,
+  "round": "r4_q3_boundary_plus",
+  "hypothesis": "Frozen guard pressure validation",
+  "mode": "boundary_plus",
+  "traces": false
+}

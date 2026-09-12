@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "ring1123",
+    "ring1300"
+  ],
+  "start": 3600400,
+  "count": 6,
+  "workers": 3,
+  "round": "r2_q3_cluster_plus",
+  "hypothesis": "Check known ring-contraction failure mechanisms before selecting candidate",
+  "mode": "cluster_plus",
+  "traces": false
+}
