@@ -1,20 +1,30 @@
 """Direction A: complete-service-cost short lookahead for localization picks.
 
-J(a) = real move/action cost of a
-     + E_branch[ certified-clear leg from a + exit leg to the next retained task ]
+J(a) = charged action cost of a
+     + E_branch[ clear leg from a + exit leg to the next retained task ]
      + lam * ( worst-branch cost - mean-branch cost )
 
-Branches are the bounded bearing bins from ``outcomes`` (equal-weight planning
-assumption, never a probability claim about the true source). All costs are charged
-as the backend does: 1 s per 5 m, 5 s per measure, 1 s per channel switch,
-3 s optical + 2 s laser per successful clear.
-
-``mode``
-  base       -> untouched base policy (strong-baseline control)
-  cand_paper -> extended candidate set, old max-gap style score (isolates the value
-                of the candidate set alone)
-  service    -> extended candidates plus the full service-cost model above
+Design rules (round 5 revision)
+  * Branch set: bearing bins from ``outcomes`` plus the ``no_signal`` and ``near``
+    outcomes. Compression never drops ``no_signal``/``near``; only the bearing bins
+    are subsampled. A branch is created only when it is geometrically feasible
+    (``near`` requires q to be inside the posterior or within the 5 m clear radius).
+  * Cost model: 1 s per 5 m, 5 s per measure, 1 s per channel switch, 3 s optical
+    + 2 s laser per successful clear, charged exactly as the backend does.
+  * Hypothesised continuation: a lightweight assumed state (no backend, no mutation
+    of the real controller) advances position, channel, observations and measured
+    points, then the *baseline* policy continues for a bounded number of steps.
+    Truncated branches are reported as such; they never masquerade as a finished
+    clear.
+  * Ranking: coarse scores only shortlist candidates; the winner is chosen among
+    fine scores of the same scale, and the strong-baseline action is always in the
+    final comparison.
+  * Prediction bookkeeping keeps three buckets per decision: all candidates, the
+    adopted action, the best rejected action. They are diagnostics only - they are
+    never summed into a scene-level gain.
 """
+import math
+
 import numpy as np
 
 from active_localization import ActiveLocalizationSolver, outcomes, radius_bound
@@ -23,22 +33,74 @@ from omni_search import OmniSearchSolver
 from solver import Solver, safe_clear_point
 
 
+class _HypState:
+    """Assumed observation state for continuation; never touches the real solver."""
+
+    __slots__ = ('pos', 'channel', 'problem', 'key', 'obs', 'measured', 'diagnostics')
+
+    def __init__(self, key, pos, channel, problem, obs_c, measured_c, diagnostics):
+        self.key = int(key)
+        self.pos = np.asarray(pos, float)
+        self.channel = int(channel)
+        self.problem = problem
+        self.obs = {self.key: list(obs_c)}
+        self.measured = {self.key: [np.asarray(p, float) for p in measured_c]}
+        self.diagnostics = diagnostics
+
+    def copy(self):
+        return _HypState(self.key, self.pos, self.channel, self.problem, self.obs[self.key],
+                         self.measured[self.key], self.diagnostics)
+
+    def advance(self, c, q, ang=None):
+        q = np.asarray(q, float)
+        self.pos = q
+        self.measured[self.key].append(q)
+        if ang is not None:
+            self.obs[self.key].append((q, float(ang)))
+        self.channel = int(c)
+
+
+def _inside_convex(poly, q, eps=1e-9):
+    n = len(poly)
+    if n < 3:
+        return True
+    pos = neg = False
+    for i in range(n):
+        a, b = poly[i], poly[(i + 1) % n]
+        cross = (b[0] - a[0]) * (q[1] - a[1]) - (b[1] - a[1]) * (q[0] - a[0])
+        if cross > eps:
+            pos = True
+        elif cross < -eps:
+            neg = True
+        if pos and neg:
+            return False
+    return True
+
+
 class LookaheadMixin:
     def _setup_lookahead(self, lookahead_radius=400., lam=.5, max_candidates=12,
-                         max_branches=8, mode='service'):
+                         max_branches=8, mode='service', continue_depth=2):
         self.lookahead_radius = float(lookahead_radius)
         self.lookahead_lam = float(lam)
         self.lookahead_max_candidates = int(max_candidates)
         self.lookahead_max_branches = int(max_branches)
         self.lookahead_mode = mode
-        self.diagnostics.update(lookahead_calls=0, lookahead_active=0, lookahead_changed=0,
-                                lookahead_branches=0, lookahead_budget_aborts=0,
-                                lookahead_numeric_aborts=0, lookahead_pred_saving_s=0.,
-                                lookahead_pred_calls=0)
-        # Hard per-call compute budget: exceeding it falls back to the baseline
-        # action instead of stalling the schedule.
+        self.lookahead_depth = int(continue_depth)
+        self.diagnostics.update(
+            lookahead_calls=0, lookahead_active=0, lookahead_changed=0,
+            lookahead_branches=0, lookahead_budget_aborts=0, lookahead_numeric_aborts=0,
+            lookahead_truncated=0,
+            lookahead_pred_all_sum_s=0., lookahead_pred_all_n=0,
+            lookahead_pred_adopted_s=0., lookahead_pred_rejected_max_s=0.,
+            lookahead_pred_calls=0, lookahead_pred_rejected_calls=0)
         self.lookahead_budget = int(max(1, self.lookahead_max_candidates * self.lookahead_max_branches * 2))
+        # Development / counterfactual support: the offline evaluator reads the
+        # per-decision picks to fork a single deviation and restore the baseline.
+        # They live in diagnostics so they are saved with the run metrics.
+        self.diagnostics['lookahead_picks'] = []
+        self.diagnostics['lookahead_pred_log'] = []
 
+    # ---- helpers -------------------------------------------------------
     def _next_task_point(self, c):
         pts = [self.stations[i] for i in self.pending_stations]
         for k in self.deferred:
@@ -53,56 +115,227 @@ class LookaheadMixin:
         arr = np.asarray(pts, float)
         return arr[int(np.argmin(np.linalg.norm(arr - self.pos, axis=1)))]
 
-    def _branch_cost(self, q, post, c, next_task, kind='direction'):
-        """Charged cost from q to a cleared channel plus the exit leg, one branch."""
-        if kind == 'near':
-            # The source sits within 5 m of q: measure (already charged in the
-            # action cost), then clear here: 3 s optical + 2 s laser, exit from q.
-            exit_s = 0. if next_task is None else float(np.linalg.norm(q - np.asarray(next_task, float))) / 5
-            return 5. + exit_s
-        rb, mb = radius_bound(post)
-        if kind == 'no_signal':
-            q2 = self._base_pick(c, post, mb, rb)
-            if q2 is None:
-                return float(np.linalg.norm(q - mb)) / 5 + 5. + float(rb) / 5
-            _, end, _, tail = self._terminal_estimate(c, post, q2)
-            leg = float(np.linalg.norm(q - q2)) / 5 + 5. + int(c != self.channel) + tail
-            exit_s = 0. if next_task is None else float(np.linalg.norm(end - np.asarray(next_task, float))) / 5
-            return leg + exit_s
-        if rb <= 19.99:
-            cp = np.asarray(safe_clear_point(q, mb, rb), float)
-            leg = float(np.linalg.norm(q - cp)) / 5 + 5.
-            end = cp
-        else:
-            q2 = Solver.next_measure(self, c, post, mb, rb)
-            if q2 is None:
-                leg = float(np.linalg.norm(q - mb)) / 5 + 5. + float(rb) / 5
-                end = np.asarray(mb, float)
-            else:
-                _, end, _, tail = self._terminal_estimate(c, post, q2)
-                leg = float(np.linalg.norm(q - q2)) / 5 + 5. + int(c != self.channel) + tail
-        exit_s = 0. if next_task is None else float(np.linalg.norm(end - np.asarray(next_task, float))) / 5
-        return leg + exit_s
-
-    def _terminal_estimate(self, c, post, q2):
-        """Terminal estimate on a hypothesised posterior: baseline rule plus clear leg."""
-        branches = outcomes(post, q2, bins=8)
-        if branches:
-            rb2, mb2 = radius_bound(branches[0][0])
-        else:
-            rb2, mb2 = radius_bound(post)
-        if rb2 <= 19.99:
-            cp = np.asarray(safe_clear_point(q2, mb2, rb2), float)
-            tail = float(np.linalg.norm(q2 - cp)) / 5 + 5.
-            end = cp
-        else:
-            tail = float(np.linalg.norm(q2 - mb2)) / 5 + float(rb2) / 5
-            end = np.asarray(mb2, float)
-        return rb2, end, mb2, tail
-
     def _base_pick(self, c, poly, center, radius):
         """Strong-baseline measurement choice (overridden per problem)."""
         return Solver.next_measure(self, c, poly, center, radius)
+
+    def _branches(self, c, q, poly, bins=12):
+        """Feasible observation branches; compression keeps no_signal and near."""
+        q = np.asarray(q, float)
+        out = [(post, 1., 'direction') for post, _ in outcomes(poly, q, bins=bins)]
+        # no_signal (out of range or back-facing) cannot be excluded from public
+        # observations: R in [1000,1500] and theta are unknown, so it stays feasible
+        # while the posterior is non-empty. No weight is invented for it beyond the
+        # declared equal-weight planning assumption.
+        if len(poly):
+            out.append((poly, 1., 'no_signal'))
+        # near needs the source within the 5 m clear radius of q.
+        if len(poly):
+            dmin = float(np.min(np.linalg.norm(poly - q, axis=1)))
+            if _inside_convex(poly, q) or dmin <= 5. + 1e-9:
+                out.append((np.asarray([q], float), 1., 'near'))
+        return out
+
+    def _compress(self, branches):
+        """Subsample bearing bins only; never drop no_signal/near."""
+        near = [b for b in branches if b[2] == 'near']
+        nosig = [b for b in branches if b[2] == 'no_signal']
+        direc = [b for b in branches if b[2] == 'direction']
+        room = max(1, self.lookahead_max_branches - len(near) - len(nosig))
+        if len(direc) > room:
+            idx = np.linspace(0, len(direc) - 1, room, dtype=int)
+            direc = [direc[i] for i in idx]
+        return direc + nosig + near
+
+    def _assumed_state(self, c, q):
+        return _HypState(c, q, c, self.problem, self.obs[c], self.measured[c], self.diagnostics)
+
+    def _advance(self, state, c, q, post, kind):
+        """Advance a copy of the assumed state for one branch outcome.
+
+        Returns ``(state_or_None, poly)``: ``None`` means the branch cleared the
+        channel at q, so no continuation is needed.
+        """
+        if kind == 'near':
+            return None, None
+        nxt = state.copy()
+        if kind == 'no_signal':
+            nxt.advance(c, q, None)
+            return nxt, post
+        centroid = np.asarray(post, float).mean(axis=0)
+        ang = math.degrees(math.atan2(centroid[1] - q[1], centroid[0] - q[0])) % 360.
+        nxt.advance(c, q, ang)
+        return nxt, post
+
+    def _exit_cost(self, end, next_task):
+        if next_task is None:
+            return 0.
+        return float(np.linalg.norm(np.asarray(end, float) - np.asarray(next_task, float))) / 5
+
+    def _continue_cost(self, state, c, poly, center, radius, next_task, depth):
+        """Remaining charged cost from an assumed state until clear plus exit.
+
+        Uses the baseline policy for a bounded number of steps. When the bound is
+        reached without a certificate the shortcut is reported (``lookahead_truncated``)
+        and priced by a documented lower-bound-style estimate, never as a finished
+        clear.
+        """
+        rb, mb = radius_bound(poly)
+        if rb <= 19.99:
+            cp = np.asarray(safe_clear_point(state.pos, mb, rb), float)
+            return float(np.linalg.norm(state.pos - cp)) / 5 + 5. + self._exit_cost(cp, next_task)
+        if depth <= 0:
+            self.diagnostics['lookahead_truncated'] += 1
+            # Truncation estimate: one more measure at the posterior centre plus a
+            # residual half-radius walk. Explicitly a heuristic, not a certificate.
+            return (float(np.linalg.norm(state.pos - mb)) / 5 + 5. + 0.5 * float(rb) / 5
+                    + self._exit_cost(mb, next_task))
+        q2 = Solver.next_measure(state, c, poly, mb, rb)
+        if q2 is None:
+            self.diagnostics['lookahead_truncated'] += 1
+            return (float(np.linalg.norm(state.pos - mb)) / 5 + 5. + 0.5 * float(rb) / 5
+                    + self._exit_cost(mb, next_task))
+        q2 = np.asarray(q2, float)
+        action = float(np.linalg.norm(state.pos - q2)) / 5 + 5. + int(c != state.channel)
+        branches = self._compress(self._branches(c, q2, poly))
+        costs = []
+        for post, _w, kind in branches:
+            if kind == 'near':
+                costs.append(5. + self._exit_cost(q2, next_task))
+                continue
+            nxt, npoly = self._advance(state, c, q2, post, kind)
+            nrb, nmb = radius_bound(npoly)
+            costs.append(self._continue_cost(nxt, c, npoly, nmb, nrb, next_task, depth - 1))
+        costs = np.asarray(costs, float)
+        return action + float(costs.mean()) + self.lookahead_lam * float(costs.max() - costs.mean())
+
+    # ---- scoring -------------------------------------------------------
+    def _coarse_score(self, c, q, poly, next_task):
+        """Cheap screening score; never used for the final ranking."""
+        branches = self._compress(self._branches(c, q, poly))
+        if not branches:
+            return None
+        self.diagnostics['lookahead_branches'] += len(branches)
+        action = float(np.linalg.norm(np.asarray(q, float) - self.pos)) / 5 + 5. + int(c != self.channel)
+        costs = []
+        for post, _w, kind in branches:
+            if kind == 'near':
+                costs.append(5. + self._exit_cost(q, next_task))
+                continue
+            rb, mb = radius_bound(post)
+            if kind == 'no_signal':
+                costs.append(float(np.linalg.norm(np.asarray(q, float) - mb)) / 5 + 5. + 0.5 * float(rb) / 5
+                             + self._exit_cost(mb, next_task))
+                continue
+            if rb <= 19.99:
+                cp = np.asarray(safe_clear_point(q, mb, rb), float)
+                costs.append(float(np.linalg.norm(np.asarray(q, float) - cp)) / 5 + 5.
+                             + self._exit_cost(cp, next_task))
+            else:
+                costs.append(float(np.linalg.norm(np.asarray(q, float) - mb)) / 5 + 5. + 0.5 * float(rb) / 5
+                             + self._exit_cost(mb, next_task))
+        costs = np.asarray(costs, float)
+        if self.lookahead_mode == 'cand_paper':
+            return action + float(costs.max())
+        return action + float(costs.mean()) + self.lookahead_lam * float(costs.max() - costs.mean())
+
+    def _fine_score(self, c, q, poly, next_task):
+        """Same-scale score used for the final ranking."""
+        state = self._assumed_state(c, q)
+        branches = self._compress(self._branches(c, q, poly))
+        if not branches:
+            return None
+        action = float(np.linalg.norm(np.asarray(q, float) - self.pos)) / 5 + 5. + int(c != self.channel)
+        costs = []
+        for post, _w, kind in branches:
+            if kind == 'near':
+                costs.append(5. + self._exit_cost(q, next_task))
+                continue
+            nxt, npoly = self._advance(state, c, q, post, kind)
+            nrb, nmb = radius_bound(npoly)
+            costs.append(self._continue_cost(nxt, c, npoly, nmb, nrb, next_task, self.lookahead_depth - 1))
+        costs = np.asarray(costs, float)
+        if not np.all(np.isfinite(costs)):
+            return None
+        if self.lookahead_mode == 'cand_paper':
+            return action + float(costs.max())
+        return action + float(costs.mean()) + self.lookahead_lam * float(costs.max() - costs.mean())
+
+    def _score_candidates(self, c, poly, center, radius, cands, fine_top=3):
+        """Coarse shortlist, then a final ranking on one common (fine) scale."""
+        next_task = self._next_task_point(c)
+        base = self._base_pick(c, poly, center, radius)
+        coarse = []
+        spent = 0
+        for q in cands:
+            if spent >= self.lookahead_budget:
+                self.diagnostics['lookahead_budget_aborts'] += 1
+                break
+            sc = self._coarse_score(c, q, poly, next_task)
+            spent += self.lookahead_max_branches
+            if sc is not None and np.isfinite(sc):
+                coarse.append((sc, np.asarray(q, float)))
+        if not coarse:
+            return None, None, None
+        coarse.sort(key=lambda t: t[0])
+        shortlist = [q for _, q in coarse[:fine_top]]
+        if base is not None and not any(float(np.linalg.norm(b - np.asarray(base, float))) < .1 for b in shortlist):
+            shortlist.append(np.asarray(base, float))     # baseline always competes
+        fine = []
+        for q in shortlist:
+            sc = self._fine_score(c, q, poly, next_task)
+            if sc is not None and np.isfinite(sc):
+                fine.append((sc, q))
+        if not fine:
+            return None, None, None
+        fine.sort(key=lambda t: t[0])
+        j_base = next((sc for sc, q in fine
+                       if base is not None and float(np.linalg.norm(q - np.asarray(base, float))) < .1), None)
+        rejected = fine[1:]
+        return fine[0][1], j_base, rejected
+
+    # ---- entry point ---------------------------------------------------
+    def next_measure(self, c, poly, center, radius):
+        self.diagnostics['lookahead_calls'] += 1
+        if self.lookahead_mode == 'base' or radius > self.lookahead_radius:
+            return self._base_pick(c, poly, center, radius)
+        self.diagnostics['lookahead_active'] += 1
+        base = self._base_pick(c, poly, center, radius)
+        try:
+            best, j_base, rejected = self._score_candidates(
+                c, poly, center, radius, self._lookahead_candidates(c, poly, center, radius))
+        except (ValueError, ArithmeticError, FloatingPointError, IndexError):
+            self.diagnostics['lookahead_numeric_aborts'] += 1
+            return base
+        if best is None or not np.all(np.isfinite(best)):
+            return base
+        picked = best
+        if base is not None and float(np.linalg.norm(picked - np.asarray(base, float))) < .1:
+            picked = base
+        self.diagnostics['lookahead_picks'].append(np.asarray(picked, float).tolist())
+        if j_base is not None:
+            j_best = self._fine_score(c, picked, poly, self._next_task_point(c))
+            adopted = 0.
+            if j_best is not None and np.isfinite(j_best):
+                adopted = float(j_base - j_best)
+                self.diagnostics['lookahead_pred_adopted_s'] += adopted
+                self.diagnostics['lookahead_pred_calls'] += 1
+                all_scores = [j_best] + [sc for sc, q in (rejected or [])
+                                         if float(np.linalg.norm(np.asarray(q, float) - picked)) > .1]
+                self.diagnostics['lookahead_pred_all_sum_s'] += float(np.sum(all_scores))
+                self.diagnostics['lookahead_pred_all_n'] += len(all_scores)
+            rej_savings = [float(j_base - sc) for sc, q in (rejected or [])
+                           if float(np.linalg.norm(np.asarray(q, float) - picked)) > .1]
+            rejected_saving = 0.
+            if rej_savings:
+                rejected_saving = max(rej_savings)
+                self.diagnostics['lookahead_pred_rejected_max_s'] += rejected_saving
+                self.diagnostics['lookahead_pred_rejected_calls'] += 1
+            self.diagnostics['lookahead_pred_log'].append({'adopted_saving_s': adopted,
+                                                          'rejected_saving_s': rejected_saving})
+        if base is not None and float(np.linalg.norm(picked - np.asarray(base, float))) > .1:
+            self.diagnostics['lookahead_changed'] += 1
+        return picked
 
     def _lookahead_candidates(self, c, poly, center, radius):
         base = self._base_pick(c, poly, center, radius)
@@ -131,128 +364,15 @@ class LookaheadMixin:
             out = [out[i] for i in order[:self.lookahead_max_candidates]]
         return out
 
-    def _branches(self, c, q, poly, bins=12):
-        """Bearing bins plus the non-progressing outcomes the spec requires.
-
-        Planning assumption only: ``near`` and ``no_signal`` each get the weight of
-        one bearing bin. They are not claimed to be equally probable; without a
-        stated prior an equal-weight sample is the transparent choice, and the
-        no_signal branch keeps its real cost (no region update, continuation from
-        the unchanged polygon).
-        """
-        out = [(post, 1., 'direction') for post, _ in outcomes(poly, q, bins=bins)]
-        out.append((poly, 1., 'no_signal'))
-        out.append((np.asarray([q], float), 1., 'near'))
-        return out
-
-    def _coarse_score(self, c, q, poly, next_task):
-        """Cheap one-ply score: no nested baseline continuation."""
-        branches = self._branches(c, q, poly)
-        if not branches:
-            return None
-        if len(branches) > self.lookahead_max_branches:
-            idx = np.linspace(0, len(branches) - 1, self.lookahead_max_branches, dtype=int)
-            branches = [branches[i] for i in idx]
-        self.diagnostics['lookahead_branches'] += len(branches)
-        action = float(np.linalg.norm(q - self.pos)) / 5 + 5. + int(c != self.channel)
-        costs = []
-        for post, _w, kind in branches:
-            if kind == 'near':
-                exit_s = 0. if next_task is None else float(np.linalg.norm(q - np.asarray(next_task, float))) / 5
-                costs.append(5. + exit_s)
-                continue
-            rb, mb = radius_bound(post)
-            if kind == 'no_signal':
-                costs.append(float(np.linalg.norm(q - mb)) / 5 + 5. + float(rb) / 5
-                             + (0. if next_task is None
-                                else float(np.linalg.norm(mb - np.asarray(next_task, float))) / 5))
-                continue
-            if rb <= 19.99:
-                cp = np.asarray(safe_clear_point(q, mb, rb), float)
-                leg = float(np.linalg.norm(q - cp)) / 5 + 5.
-                end = cp
-            else:
-                leg = float(np.linalg.norm(q - mb)) / 5 + 5. + float(rb) / 5
-                end = np.asarray(mb, float)
-            exit_s = 0. if next_task is None else float(np.linalg.norm(end - np.asarray(next_task, float))) / 5
-            costs.append(leg + exit_s)
-        costs = np.asarray(costs, float)
-        if self.lookahead_mode == 'cand_paper':
-            return action + float(costs.max())
-        return action + float(costs.mean()) + self.lookahead_lam * float(costs.max() - costs.mean())
-
-    def _fine_score(self, c, q, poly, next_task):
-        """Two-ply score: non-certified branches continue with the baseline rule."""
-        branches = self._branches(c, q, poly)
-        if not branches:
-            return None
-        if len(branches) > self.lookahead_max_branches:
-            idx = np.linspace(0, len(branches) - 1, self.lookahead_max_branches, dtype=int)
-            branches = [branches[i] for i in idx]
-        action = float(np.linalg.norm(q - self.pos)) / 5 + 5. + int(c != self.channel)
-        costs = np.asarray([self._branch_cost(q, post, c, next_task, kind) for post, _w, kind in branches], float)
-        if self.lookahead_mode == 'cand_paper':
-            return action + float(costs.max())
-        return action + float(costs.mean()) + self.lookahead_lam * float(costs.max() - costs.mean())
-
-    def _score_candidates(self, c, poly, radius, cands, fine_top=3):
-        next_task = self._next_task_point(c)
-        scored = []
-        spent = 0
-        for q in cands:
-            if spent >= self.lookahead_budget:
-                self.diagnostics['lookahead_budget_aborts'] += 1
-                break
-            sc = self._coarse_score(c, q, poly, next_task)
-            spent += self.lookahead_max_branches
-            if sc is not None and np.isfinite(sc):
-                scored.append((sc, q))
-        if not scored:
-            return None
-        scored.sort(key=lambda t: t[0])
-        best_q = scored[0][1]
-        for _, q in scored[:fine_top]:
-            sc = self._fine_score(c, q, poly, next_task)
-            if sc is not None and np.isfinite(sc) and sc < scored[0][0]:
-                scored[0] = (sc, q)
-        best_q = min(scored, key=lambda t: t[0])[1]
-        return best_q
-
-    def next_measure(self, c, poly, center, radius):
-        self.diagnostics['lookahead_calls'] += 1
-        if self.lookahead_mode == 'base' or radius > self.lookahead_radius:
-            return self._base_pick(c, poly, center, radius)
-        self.diagnostics['lookahead_active'] += 1
-        base = self._base_pick(c, poly, center, radius)
-        try:
-            best = self._score_candidates(c, poly, radius,
-                                          self._lookahead_candidates(c, poly, center, radius))
-        except (ValueError, ArithmeticError, FloatingPointError, IndexError):
-            # Numeric or geometric anomaly: never stall, never guess - use baseline.
-            self.diagnostics['lookahead_numeric_aborts'] += 1
-            return base
-        if best is None or not np.all(np.isfinite(best)):
-            return base
-        if base is not None and float(np.linalg.norm(best - base)) > .1:
-            self.diagnostics['lookahead_changed'] += 1
-            # Predicted saving of the chosen action versus the baseline action,
-            # priced by the same model (used for the prediction-error analysis).
-            nb = self._next_task_point(c)
-            j_base = self._coarse_score(c, base, poly, nb)
-            j_best = self._coarse_score(c, best, poly, nb)
-            if j_base is not None and j_best is not None and np.isfinite(j_base) and np.isfinite(j_best):
-                self.diagnostics['lookahead_pred_saving_s'] += float(j_base - j_best)
-                self.diagnostics['lookahead_pred_calls'] += 1
-        return best
-
 
 class JointLookahead(JointSearchSolver, LookaheadMixin):
     def _base_pick(self, c, poly, center, radius):
         return ActiveLocalizationSolver.next_measure(self, c, poly, center, radius)
 
-    def __init__(self, *args, lookahead_radius=400., lam=.5, mode='service', **kwargs):
+    def __init__(self, *args, lookahead_radius=400., lam=.5, mode='service', continue_depth=2, **kwargs):
         JointSearchSolver.__init__(self, *args, **kwargs)
-        self._setup_lookahead(lookahead_radius=lookahead_radius, lam=lam, mode=mode)
+        self._setup_lookahead(lookahead_radius=lookahead_radius, lam=lam, mode=mode,
+                              continue_depth=continue_depth)
 
     def next_measure(self, c, poly, center, radius):
         return LookaheadMixin.next_measure(self, c, poly, center, radius)
@@ -262,9 +382,8 @@ class JointLookahead(JointSearchSolver, LookaheadMixin):
         if self.lookahead_mode == 'base' or radius > self.lookahead_radius or not opts:
             return opts
         self.diagnostics['lookahead_active'] += 1
-        best = self._score_candidates(c, poly, radius, list(opts))
+        best, _j_base, _rej = self._score_candidates(c, poly, center, radius, list(opts))
         if best is None:
             return opts
-        out = [best] + [np.asarray(q, float) for q in opts
-                        if float(np.linalg.norm(np.asarray(q, float) - best)) > .1]
-        return out
+        return [best] + [np.asarray(q, float) for q in opts
+                         if float(np.linalg.norm(np.asarray(q, float) - best)) > .1]

@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_service"
+  ],
+  "start": 3493100,
+  "count": 4,
+  "workers": 4,
+  "round": "r73_smokeA_q3_v2",
+  "hypothesis": "A rev2 smoke: assumed-state continuation, same-scale ranking",
+  "mode": "normal",
+  "traces": true
+}

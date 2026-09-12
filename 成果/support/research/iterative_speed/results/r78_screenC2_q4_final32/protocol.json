@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c2"
+  ],
+  "start": 3493700,
+  "count": 32,
+  "workers": 8,
+  "round": "r78_screenC2_q4_final32",
+  "hypothesis": "C2 independent screen with option-gain prediction record (sign-fixed joint consistency)",
+  "mode": "normal",
+  "traces": false
+}

@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c1"
+  ],
+  "start": 3493600,
+  "count": 32,
+  "workers": 8,
+  "round": "r77_screenC1_q4_margin32",
+  "hypothesis": "C1 corrected gate: require the predicted advantage to exceed max(5s, 1% of baseline score)",
+  "mode": "normal",
+  "traces": false
+}

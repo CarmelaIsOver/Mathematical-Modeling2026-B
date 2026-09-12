@@ -1,0 +1,125 @@
+{
+  "use": "development_only_not_independent_acceptance",
+  "arm": "la_q3_service",
+  "control": "skip12_probe60",
+  "rows": [
+    {
+      "seed": 3493000,
+      "decision": 0,
+      "predicted_saving_s": 20.705,
+      "realised_saving_s": 15.568,
+      "complete": true
+    },
+    {
+      "seed": 3493000,
+      "decision": 12,
+      "predicted_saving_s": 8.316,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493000,
+      "decision": 24,
+      "predicted_saving_s": 0.0,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493001,
+      "decision": 0,
+      "predicted_saving_s": 45.542,
+      "realised_saving_s": 54.551,
+      "complete": true
+    },
+    {
+      "seed": 3493001,
+      "decision": 12,
+      "predicted_saving_s": 18.291,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493001,
+      "decision": 25,
+      "predicted_saving_s": 9.203,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493002,
+      "decision": 0,
+      "predicted_saving_s": 0.0,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493002,
+      "decision": 8,
+      "predicted_saving_s": 145.105,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493002,
+      "decision": 17,
+      "predicted_saving_s": 106.184,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493003,
+      "decision": 0,
+      "predicted_saving_s": 31.195,
+      "realised_saving_s": 1.052,
+      "complete": true
+    },
+    {
+      "seed": 3493003,
+      "decision": 16,
+      "predicted_saving_s": 32.476,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493003,
+      "decision": 33,
+      "predicted_saving_s": 3.367,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493004,
+      "decision": 0,
+      "predicted_saving_s": 5.951,
+      "realised_saving_s": 7.944,
+      "complete": true
+    },
+    {
+      "seed": 3493004,
+      "decision": 10,
+      "predicted_saving_s": 29.002,
+      "realised_saving_s": 0.0,
+      "complete": true
+    },
+    {
+      "seed": 3493004,
+      "decision": 20,
+      "predicted_saving_s": 0.0,
+      "realised_saving_s": 0.0,
+      "complete": true
+    }
+  ],
+  "states": 15,
+  "seeds": [
+    3493000,
+    3493001,
+    3493002,
+    3493003,
+    3493004
+  ],
+  "mean_predicted_saving_s": 30.356,
+  "mean_realised_saving_s": 5.274,
+  "mean_absolute_error_s": 26.548,
+  "sign_agreement": 0.467,
+  "correlation": 0.058
+}

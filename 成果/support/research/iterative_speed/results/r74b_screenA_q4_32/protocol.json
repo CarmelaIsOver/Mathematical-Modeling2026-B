@@ -1,0 +1,15 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_candpaper",
+    "la_q4_service"
+  ],
+  "start": 3493200,
+  "count": 32,
+  "workers": 8,
+  "round": "r74b_screenA_q4_32",
+  "hypothesis": "A rev2 screen vs strong baseline (Q4)",
+  "mode": "normal",
+  "traces": false
+}

@@ -1,4 +1,4 @@
-......................................................usage: run.py [-h] [--mode {offline,official}] [--problem {3,4}]
+...............................................................usage: run.py [-h] [--mode {offline,official}] [--problem {3,4}]
               [--strategy {standard,paper,integrated}]
               [--layout {original,compact,radial,rings}] [--robot-id ROBOT_ID]
               [--url URL] [--http-health-probe] [--runs RUNS] [--seed SEED]
@@ -20,8 +20,8 @@ run.py: error: --q3-probe-radius requires --strategy integrated --problem 3
               [--q4-probe-radius Q4_PROBE_RADIUS]
               [--q3-probe-radius Q3_PROBE_RADIUS] [--output OUTPUT]
 run.py: error: --q4-probe-radius requires --strategy integrated --problem 4
-............
+......................
 ----------------------------------------------------------------------
-Ran 86 tests in 22.599s
+Ran 105 tests in 24.131s
 
 OK

@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "la_q3_candpaper",
+    "la_q3_service"
+  ],
+  "start": 3493200,
+  "count": 32,
+  "workers": 8,
+  "round": "r74_screenA_q3_32",
+  "hypothesis": "A rev2 screen vs strong baseline",
+  "mode": "normal",
+  "traces": false
+}

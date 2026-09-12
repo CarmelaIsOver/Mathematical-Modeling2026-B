@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "la_q4_service"
+  ],
+  "start": 3493100,
+  "count": 4,
+  "workers": 4,
+  "round": "r73b_smokeA_q4_v2",
+  "hypothesis": "A rev2 smoke Q4",
+  "mode": "normal",
+  "traces": true
+}
