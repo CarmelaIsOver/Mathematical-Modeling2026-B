@@ -1,5 +1,12 @@
 """Q3 negative-observation half-plane: geometry, integration and completeness."""
+import contextlib
+import io
+import json
+import sys
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 
@@ -7,6 +14,7 @@ from negative_observations import apply_negative_halfplanes
 from backend import LocalBackend
 from audit import AuditPort
 from omni_search import OmniSearchSolver
+import run as entry
 
 
 class HalfPlaneGeometryTests(unittest.TestCase):
@@ -65,6 +73,31 @@ class NegativeIntegrationTests(unittest.TestCase):
         _, _, after = solver.tight_region(c)
         self.assertEqual(solver.cache[c][0], (1, 1))
         self.assertLessEqual(after, before + 1e-9)
+
+
+class EntryFlagTests(unittest.TestCase):
+    def test_official_entry_exposes_the_opt_in(self):
+        with tempfile.TemporaryDirectory() as folder:
+            with patch.object(sys, 'argv', ['run.py', '--mode', 'official', '--problem', '3',
+                 '--strategy', 'integrated', '--negative-observations',
+                 '--robot-id', 'TEST_PLACEHOLDER', '--output', folder]), \
+                 patch.object(entry, 'HTTPBackend',
+                              side_effect=lambda *args: LocalBackend(990025, 3)), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                entry.main()
+            r = json.loads(next(Path(folder).glob('client_*.json')).read_text())
+            self.assertTrue(r['negative_observations'])
+            self.assertEqual(r['cleared'], 16)
+            self.assertTrue(r['normal_exit'])
+
+    def test_flag_is_rejected_outside_q3_integrated(self):
+        for argv in (['run.py', '--mode', 'official', '--problem', '4',
+                      '--negative-observations', '--robot-id', 'TEST'],
+                     ['run.py', '--mode', 'offline', '--problem', '3', '--strategy', 'paper',
+                      '--negative-observations']):
+            with patch.object(sys, 'argv', argv), contextlib.redirect_stderr(io.StringIO()):
+                with self.assertRaises(SystemExit):
+                    entry.main()
 
 
 if __name__ == '__main__':

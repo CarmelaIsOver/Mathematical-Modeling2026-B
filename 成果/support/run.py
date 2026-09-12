@@ -21,10 +21,14 @@ def main():
     ap.add_argument('--spacing',type=float,default=950.);ap.add_argument('--refine',type=int,default=8)
     ap.add_argument('--error',choices=['fixed','plus','minus'],default='fixed')
     ap.add_argument('--radius',type=float);ap.add_argument('--all-directional',action='store_true')
+    ap.add_argument('--negative-observations',action='store_true',
+                    help='Q3 integrated only: received/not-received bisector constraints (opt-in, default off)')
     ap.add_argument('--output',default=None)
     a=ap.parse_args()
     if a.strategy is None:a.strategy='integrated'
     if a.layout is None:a.layout='radial' if a.strategy=='integrated' and a.problem==4 else 'original'
+    if a.negative_observations and not (a.strategy=='integrated' and a.problem==3):
+        ap.error('--negative-observations requires --strategy integrated --problem 3')
     if a.strategy=='integrated':
         required_layouts=('radial','rings') if a.problem==4 else ('original',)
         if a.layout not in required_layouts or a.spacing!=950.:
@@ -56,9 +60,12 @@ def main():
                  else LocalBackend(a.seed+i,a.problem,a.error,a.radius,all_directional=a.all_directional))
         port=AuditPort(backend)
         try:
-            r=controller(port,a.problem,a.spacing,a.refine,coverage_layout=a.layout).run()
+            kwargs={'coverage_layout':a.layout}
+            if a.negative_observations:kwargs['negative_observations']=True
+            r=controller(port,a.problem,a.spacing,a.refine,**kwargs).run()
             r['strategy']=a.strategy
             r['coverage_layout']=a.layout
+            r['negative_observations']=bool(a.negative_observations)
             r.update(normal_exit=port.exited,max_step_time_error_s=port.max_step_error_s,**port.parts)
             r['provenance']='Official HTTP interface; case code and module come from simulator UI'
             if a.mode=='offline':
