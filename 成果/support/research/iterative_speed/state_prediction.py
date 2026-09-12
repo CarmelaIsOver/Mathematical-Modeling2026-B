@@ -28,6 +28,10 @@ CLEAR_RANGE = 20.
 R_GRID = (1000., 1250., 1500.)
 THETA_BINS = 24
 MAX_RECORDS = 240
+# Documented bounded measurement error of the bearing interface (+/-1 degree); the
+# joint state must explain every positive bearing within this cone, and a no_signal
+# is judged with the same margin.
+BEARING_TOL_DEG = 1.0
 
 
 def _inside_convex(poly, q, eps=1e-9):
@@ -73,21 +77,42 @@ class JointStatePrediction(JointSearchSolver):
 
     # ---- hypothesis sampling -------------------------------------------
     def _hypothesis_samples(self, c):
+        """Hypothesis positions consistent with the bounded bearing error by construction.
+
+        When positive receptions exist, samples are drawn along the observed bearing
+        directions within the +/-1 degree cone (uniform in distance), because a uniform
+        area draw inside a 2 degree wedge of a large posterior is essentially impossible.
+        Without positives the sampler falls back to a uniform area draw in the posterior.
+        """
         poly, center, radius = self.region(c)
         if radius <= 1e-9 or len(poly) < 3:
             return np.zeros((0, 2))
+        positives = [(np.asarray(p, float), float(a)) for p, a in self.obs[c]]
         rng = np.random.default_rng(1000003 + 7919 * c + 31 * len(self.obs[c])
                                    + 17 * len(self.negatives.get(c, [])))
+        tol = math.radians(BEARING_TOL_DEG)
         pts = []
         tries = 0
-        while len(pts) < self.n_samples and tries < 25 * self.n_samples:
+        while len(pts) < self.n_samples and tries < 40 * self.n_samples:
             tries += 1
-            r = radius * math.sqrt(rng.random())
-            th = rng.uniform(0, 2 * math.pi)
-            q = np.asarray(center, float) + r * np.array([math.cos(th), math.sin(th)])
+            if positives:
+                p0, ang = positives[int(rng.integers(len(positives)))]
+                delta = rng.uniform(-tol, tol)
+                dist = float(rng.uniform(0., 1500.))
+                q = p0 + dist * np.array([math.cos(math.radians(ang) + delta),
+                                          math.sin(math.radians(ang) + delta)])
+            else:
+                r = radius * math.sqrt(rng.random())
+                th = rng.uniform(0, 2 * math.pi)
+                q = np.asarray(center, float) + r * np.array([math.cos(th), math.sin(th)])
             if _inside_convex(poly, q):
                 pts.append(q)
-        return np.asarray(pts, float) if pts else np.zeros((0, 2))
+        if not pts and positives:
+            # Last resort: the posterior centroid is not guaranteed to satisfy the cone,
+            # so return nothing rather than an inconsistent hypothesis set.
+            return np.zeros((0, 2))
+        return np.asarray(pts, float)
+
 
     def _state_records(self, c):
         """Feasible (g, R, type, theta) records explaining every public observation."""
@@ -108,29 +133,41 @@ class JointStatePrediction(JointSearchSolver):
         cos, sin = np.cos(thetas), np.sin(thetas)
         records = []
         for g in samples:
-            dist_p = np.linalg.norm(np.asarray([p for p, _ in positives]) - g, axis=1) if positives else np.zeros(0)
-            dist_n = np.linalg.norm(np.asarray(negatives) - g, axis=1) if negatives else np.zeros(0)
+            dist_p = np.asarray([float(np.linalg.norm(q - g)) for q, _ in positives], float)
+            dist_n = np.asarray([float(np.linalg.norm(q - g)) for q in negatives], float)
             for R in R_GRID:
                 # omni: no orientation constraint at all
-                if (not positives or float(dist_p.max()) <= R) and \
-                   (not negatives or float(dist_n.min()) > R):
+                if (len(dist_p) == 0 or float(dist_p.max()) <= R) and \
+                   (len(dist_n) == 0 or float(dist_n.min()) > R):
                     records.append((g, R, 'omni', 0))
                     self.diagnostics['pred_omni_records'] += 1
                 if self.c2_enabled:
+                    sin_tol = math.sin(math.radians(BEARING_TOL_DEG))
                     front_ok = np.ones(THETA_BINS, bool)
-                    for p, _a in positives:
+                    for p, ang_obs in positives:
                         d = np.asarray(p, float) - g
-                        if float(np.linalg.norm(d)) > R:
+                        dist_pg = float(np.linalg.norm(d))
+                        if dist_pg > R:
                             front_ok[:] = False
                             break
-                        front_ok &= (d[0] * cos + d[1] * sin) >= -1e-9
+                        # (a) the observed bearing must match within the bounded error
+                        ang_g = math.degrees(math.atan2(g[1] - p[1], g[0] - p[0])) % 360.
+                        diff = abs((ang_g - float(ang_obs) + 180.) % 360. - 180.)
+                        if diff > BEARING_TOL_DEG:
+                            front_ok[:] = False
+                            break
+                        # (b) visibility half-plane widened by the same bounded error
+                        u = d / max(dist_pg, 1e-9)
+                        front_ok &= (u[0] * cos + u[1] * sin) >= -sin_tol
                     back_ok = np.ones(THETA_BINS, bool)
                     for p in negatives:
                         d = g - np.asarray(p, float)
-                        if float(np.linalg.norm(np.asarray(p, float) - g)) > R:
+                        dist_n_p = float(np.linalg.norm(np.asarray(p, float) - g))
+                        if dist_n_p > R:
                             continue          # out of range hides the source for any theta
-                        # not visible <=> (p-g).v < 0 <=> (g-p).v > 0
-                        back_ok &= (d[0] * cos + d[1] * sin) > 1e-9
+                        u = d / max(dist_n_p, 1e-9)
+                        # not visible <=> (p-g).v < 0, widened by the bounded error
+                        back_ok &= (u[0] * cos + u[1] * sin) >= -sin_tol
                     ok = front_ok & back_ok
                     for idx in np.where(ok)[0]:
                         records.append((g, R, 'direction', float(thetas[idx])))
@@ -145,8 +182,13 @@ class JointStatePrediction(JointSearchSolver):
         return records
 
     # ---- C1: mean first-hit time ---------------------------------------
-    def _first_hit_stats(self, samples, points, order, include_attempt_cost=True):
-        """(mean, p95) of the time each sample first enters the clear range."""
+    def _first_hit_stats(self, samples, points, order, include_attempt_cost=True, exit_point=None):
+        """(mean, p95) of the time each sample first enters the clear range.
+
+        The departure leg after a successful clear is included when ``exit_point`` is
+        given: a sample first hit at point j is charged the movement from that point to
+        the next retained task, because the mission has to leave the clear site anyway.
+        """
         if not len(samples) or not len(points):
             return 0., 0.
         remaining = np.ones(len(samples), bool)
@@ -159,9 +201,11 @@ class JointStatePrediction(JointSearchSolver):
             cur = pt
             if include_attempt_cost:
                 t += 3.
+            exit_s = (0. if exit_point is None
+                      else float(np.linalg.norm(pt - np.asarray(exit_point, float))) / 5)
             inside = np.linalg.norm(samples - pt, axis=1) <= CLEAR_RANGE
             newly = inside & remaining
-            hits[newly] = t + (2. if include_attempt_cost else 0.)
+            hits[newly] = t + (2. if include_attempt_cost else 0.) + exit_s
             remaining &= ~inside
             if not remaining.any():
                 break
@@ -174,16 +218,31 @@ class JointStatePrediction(JointSearchSolver):
         mean, p95 = stats
         return mean + .5 * (p95 - mean)
 
+    def _next_task_point(self, c):
+        pts = [self.stations[i] for i in self.pending_stations]
+        for k in self.deferred:
+            if k == c:
+                continue
+            try:
+                pts.append(self.region(k)[1])
+            except Exception:
+                pass
+        if not pts:
+            return None
+        arr = np.asarray(pts, float)
+        return arr[int(np.argmin(np.linalg.norm(arr - self.pos, axis=1)))]
+
     def _order_by_first_hit(self, c, points):
         if not self.use_prediction or len(points) < 2:
             return list(range(len(points)))
         from solver import open_route
         baseline_order = list(open_route(points, self.pos))
+        exit_point = self._next_task_point(c)
         records = self._state_records(c)
         samples = np.asarray([r[0] for r in records], float) if records else np.zeros((0, 2))
         if not len(samples):
             return baseline_order
-        base_stats = self._first_hit_stats(samples, points, baseline_order)
+        base_stats = self._first_hit_stats(samples, points, baseline_order, exit_point=exit_point)
         # greedy: repeatedly append the point that minimises the running score
         order, rest = [], list(range(len(points)))
         cur = np.asarray(self.pos, float)
@@ -196,9 +255,11 @@ class JointStatePrediction(JointSearchSolver):
                 pt = np.asarray(points[j], float)
                 step = float(np.linalg.norm(pt - cur)) / 5 + 3.
                 cand_hits = hits.copy()
+                exit_s = (0. if exit_point is None
+                          else float(np.linalg.norm(pt - np.asarray(exit_point, float))) / 5)
                 inside = np.linalg.norm(samples - pt, axis=1) <= CLEAR_RANGE
                 newly = inside & remaining
-                cand_hits[newly] = t + step + 2.
+                cand_hits[newly] = t + step + 2. + exit_s
                 cand_remaining = remaining & ~inside
                 if cand_remaining.any():
                     cand_hits[cand_remaining] = t + step
@@ -215,7 +276,7 @@ class JointStatePrediction(JointSearchSolver):
             remaining &= ~inside
             order.append(best)
             rest.remove(best)
-        cand_stats = self._first_hit_stats(samples, points, order)
+        cand_stats = self._first_hit_stats(samples, points, order, exit_point=exit_point)
         gain = self._score_from_stats(base_stats) - self._score_from_stats(cand_stats)
         self.diagnostics['pred_predicted_gain_s'] += float(gain)
         self.diagnostics['pred_pred_calls'] += 1

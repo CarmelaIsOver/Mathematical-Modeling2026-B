@@ -1,0 +1,5 @@
+{
+  "superseded_by": "r84b_screenC2_v2_32",
+  "reason": "C2 v1 (uniform area sampler, exact half-plane); v2 uses the +/-1 deg cone sampler and bounded angular error",
+  "note": "kept for the record; conclusions must use the replacement round"
+}

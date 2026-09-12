@@ -1,0 +1,18 @@
+{
+  "round": "r84_screenC1_v2_32",
+  "control": "baseline",
+  "arms": {
+    "sp_c1": {
+      "counter": "pred_reorders",
+      "n_scenes": 32,
+      "total_triggers": 0,
+      "triggers_per_scene": 0.0,
+      "scenes_with_trigger": 0,
+      "trigger_rate": 0.0,
+      "mean_delta_pct_all": 0.0,
+      "mean_delta_pct_fired": null,
+      "mean_delta_pct_not_fired": 0.0,
+      "worst_delta_pct_fired": null
+    }
+  }
+}

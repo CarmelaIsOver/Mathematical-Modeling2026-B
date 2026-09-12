@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c2"
+  ],
+  "start": 3495000,
+  "count": 4,
+  "workers": 4,
+  "round": "r83b_smokeC2_v2",
+  "hypothesis": "C2 v2: cone sampler + bounded angular error",
+  "mode": "normal",
+  "traces": true
+}

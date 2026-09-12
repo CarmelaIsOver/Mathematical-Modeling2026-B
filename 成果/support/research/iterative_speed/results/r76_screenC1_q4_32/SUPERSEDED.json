@@ -1,0 +1,5 @@
+{
+  "superseded_by": "r84_screenC1_v2_32",
+  "reason": "C1 v1 (no exit effect); v2 adds the departure leg and the gate now rejects every reorder",
+  "note": "kept for the record; conclusions must use the replacement round"
+}

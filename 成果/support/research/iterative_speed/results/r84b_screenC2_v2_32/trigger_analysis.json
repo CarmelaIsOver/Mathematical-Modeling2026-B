@@ -1,0 +1,18 @@
+{
+  "round": "r84b_screenC2_v2_32",
+  "control": "baseline",
+  "arms": {
+    "sp_c2": {
+      "counter": "pred_measure_scored",
+      "n_scenes": 32,
+      "total_triggers": 765,
+      "triggers_per_scene": 23.91,
+      "scenes_with_trigger": 32,
+      "trigger_rate": 1.0,
+      "mean_delta_pct_all": 0.268,
+      "mean_delta_pct_fired": 0.268,
+      "mean_delta_pct_not_fired": null,
+      "worst_delta_pct_fired": 1.478
+    }
+  }
+}

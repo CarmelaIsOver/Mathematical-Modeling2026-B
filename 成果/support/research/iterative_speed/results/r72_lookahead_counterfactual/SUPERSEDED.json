@@ -1,0 +1,10 @@
+{
+  "superseded_by": "r72_lookahead_counterfactual/prediction_counterfactual_samestate.json",
+  "reason": "the first artifact forked on the BASELINE trajectory, so the injected action was evaluated at a different public-observation state than the one it was predicted for; the corrected run mirrors the arm prefix so both forks share the state",
+  "voided_headline_numbers": {
+    "sign_agreement": 0.467,
+    "mean_absolute_error_s": 26.548,
+    "mean_realised_saving_s": 5.274
+  },
+  "kept_for_the_record": true
+}

@@ -1,0 +1,26 @@
+{
+  "round": "r84b_screenC2_v2_32",
+  "control": "baseline",
+  "arms": {
+    "sp_c2": {
+      "n": 32,
+      "mean_of_ratios_delta_pct": 0.268,
+      "median_of_ratios_delta_pct": 0.021,
+      "ratio_of_means_delta_pct": 0.284,
+      "slower5": 0,
+      "slower10": 0,
+      "better5": 0,
+      "failures": 0,
+      "worst_seed": 3495108,
+      "worst_delta_pct": 1.478,
+      "best_seed": 3495109,
+      "typical_seed": 3495106,
+      "typical_delta_pct": 0.028,
+      "worst_percentile": {
+        "p95_delta_pct": 1.208,
+        "p99_delta_pct": 1.469,
+        "cvar95_delta_pct": 1.463
+      }
+    }
+  }
+}

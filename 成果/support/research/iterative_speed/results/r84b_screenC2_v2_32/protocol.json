@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c2"
+  ],
+  "start": 3495100,
+  "count": 32,
+  "workers": 8,
+  "round": "r84b_screenC2_v2_32",
+  "hypothesis": "C2 v2 independent screen vs strong Q4 baseline",
+  "mode": "normal",
+  "traces": false
+}

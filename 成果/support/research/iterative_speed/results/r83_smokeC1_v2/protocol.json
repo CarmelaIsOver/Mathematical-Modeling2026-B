@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "sp_c1"
+  ],
+  "start": 3495000,
+  "count": 4,
+  "workers": 4,
+  "round": "r83_smokeC1_v2",
+  "hypothesis": "C1 v2: first-hit with exit effect",
+  "mode": "normal",
+  "traces": true
+}
