@@ -118,6 +118,66 @@ class ActiveLocalizationSolver(Solver):
             return min(choices,key=lambda x:x[0])[1]
         return super().next_measure(c,poly,center,radius)
 
+    def directional_options(self,c,poly,center,radius):
+        """Ordered candidate measurements for directional localization.
+
+        Shared by the blocking ``locate_directional`` loop and the single-step
+        ``directional_step`` so both rank positions identically.
+        """
+        p0=self.obs[c][-1][0];d=center-p0;length=np.linalg.norm(d)
+        if length<1e-8:return []
+        side=np.array([-d[1],d[0]])/length
+        options=[p0+.8*d+sign*min(100.,.35*length)*side for sign in (-1,1)]
+        options.sort(key=lambda p:np.linalg.norm(p-self.pos))
+        if radius<=120:
+            q=self.next_measure(c,poly,center,radius)
+            if q is not None:options.insert(0,q)
+        return options
+
+    def directional_step(self,c):
+        """At most one region-updating directional measurement for channel c.
+
+        Returns ``'cleared'`` when the target is gone, ``'open'`` when the
+        feasible region was updated and the scheduler may re-plan, and
+        ``'no_progress'`` when every candidate position was already measured
+        (which requires the caller's fallback).
+        """
+        if (np.linalg.norm(self.pos-self.obs[c][-1][0])>80
+                and not any(np.linalg.norm(self.pos-p)<.1 for p in self.measured[c])):
+            result=self.action('/measure',self.pos,c)['measure_result']
+            if result=='near':
+                if not self.clear(self.pos,c):raise RuntimeError('Near clear failed')
+                return 'cleared'
+            if result=='direction':
+                return 'open'
+        poly,center,radius=self.region(c)
+        if radius<=19.99:
+            self.certified_clear(c,poly,center,radius);return 'cleared'
+        for q in self.directional_options(c,poly,center,radius):
+            if any(np.linalg.norm(q-p)<.1 for p in self.measured[c]):continue
+            result=self.action('/measure',q,c)['measure_result']
+            if result=='near':
+                if not self.clear(q,c):raise RuntimeError('Near clear failed')
+                return 'cleared'
+            if result=='direction':
+                return 'open'
+        return 'no_progress'
+
+    def directional_fallback(self,c):
+        """Blocking completion of an unresolved directional target.
+
+        Used once the per-target measurement budget is spent; it cannot be
+        interrupted by re-planning.
+        """
+        poly,center,radius=self.region(c)
+        if radius<=19.99:
+            self.certified_clear(c,poly,center,radius);return
+        self.counts['fallback']+=1
+        points=optical_cover(poly,self.obs[c][0][1])
+        for i in open_route(points,self.pos):
+            if self.clear(points[i],c):return
+        raise RuntimeError('Exhausted optical cover')
+
     def locate_directional(self,c):
         if np.linalg.norm(self.pos-self.obs[c][-1][0])>80 and not any(np.linalg.norm(self.pos-p)<.1 for p in self.measured[c]):
             result=self.action('/measure',self.pos,c)['measure_result']
@@ -128,14 +188,8 @@ class ActiveLocalizationSolver(Solver):
             poly,center,radius=self.region(c)
             if radius<=19.99:
                 self.certified_clear(c,poly,center,radius);return
-            p0=self.obs[c][-1][0];d=center-p0;length=np.linalg.norm(d)
-            if length<1e-8:break
-            side=np.array([-d[1],d[0]])/length
-            options=[p0+.8*d+sign*min(100.,.35*length)*side for sign in (-1,1)]
-            options.sort(key=lambda p:np.linalg.norm(p-self.pos))
-            if radius<=120:
-                q=self.next_measure(c,poly,center,radius)
-                if q is not None:options.insert(0,q)
+            options=self.directional_options(c,poly,center,radius)
+            if not options:break
             positive=False
             for q in options:
                 if any(np.linalg.norm(q-p)<.1 for p in self.measured[c]):continue
@@ -145,11 +199,4 @@ class ActiveLocalizationSolver(Solver):
                     return
                 if result=='direction':positive=True;break
             if not positive:break
-        poly,center,radius=self.region(c)
-        if radius<=19.99:
-            self.certified_clear(c,poly,center,radius);return
-        self.counts['fallback']+=1
-        points=optical_cover(poly,self.obs[c][0][1])
-        for i in open_route(points,self.pos):
-            if self.clear(points[i],c):return
-        raise RuntimeError('Exhausted optical cover')
+        self.directional_fallback(c)

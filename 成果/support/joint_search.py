@@ -37,16 +37,48 @@ def search_route(points,start):
 
 
 class JointSearchSolver(ActiveLocalizationSolver):
-    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial'):
+    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
+                 reschedule_after_step=False,target_measure_budget=None,step_skip_known=False):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
         self.diagnostics.update(route_replans=0,skipped_known_measurements=0,
                                 small_region_probes=0,small_region_successes=0,
-                                coverage_sites_cancelled=0)
+                                coverage_sites_cancelled=0,rescheduled_targets=0,
+                                reschedule_steps=0,reschedule_fallbacks=0)
+        # Opt-in: end a scheduling turn after one region-updating measurement.
+        # Measurement budget is per channel and never reset by re-planning.
+        self.reschedule_after_step=bool(reschedule_after_step)
+        self.target_measure_budget=max_refine if target_measure_budget is None else int(target_measure_budget)
+        self.target_measures={}
+        self.small_probe_state={}
+        # When stepping, a station pass must not duplicate a target's dedicated
+        # measurements; open targets are resolved by their own turns instead.
+        self.step_skip_known=bool(step_skip_known)
 
     def locate(self,c):
+        if not self.reschedule_after_step:
+            return self._locate_full(c)
+        if self._small_region_probe(c):
+            return
+        if self.target_measures.get(c,0)>=self.target_measure_budget:
+            # Budget spent: finish the target as one uninterrupted fallback.
+            self.diagnostics['reschedule_fallbacks']+=1
+            return self.directional_fallback(c)
+        status=self.directional_step(c)
+        self.target_measures[c]=self.target_measures.get(c,0)+1
+        self.diagnostics['reschedule_steps']+=1
+        if status=='cleared':
+            return
+        if status=='no_progress':
+            self.diagnostics['reschedule_fallbacks']+=1
+            return self.directional_fallback(c)
+        # 'open': return to the scheduler so the next turn sees the new region.
+        self.diagnostics['rescheduled_targets']+=1
+        return None
+
+    def _locate_full(self,c):
         _,center,radius=self.region(c)
         if 19.99<radius<=40.:
             # A cheap attempt along the planned visit. Failure never certifies
@@ -57,8 +89,30 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 return
         return super().locate(c)
 
+    def _small_region_probe(self,c):
+        """Small-region optical probe, attempted once per region state.
+
+        Returns True when the probe cleared the channel. A failed probe is not
+        repeated until a new observation changes the region, so re-planning
+        cannot re-run the same trial.
+        """
+        _,center,radius=self.region(c)
+        if not 19.99<radius<=40.:
+            return False
+        state=len(self.obs[c])
+        if self.small_probe_state.get(c)==state:
+            return False
+        self.small_probe_state[c]=state
+        self.diagnostics['small_region_probes']+=1
+        if self.clear(center,c):
+            self.diagnostics['small_region_successes']+=1
+            return True
+        return False
+
     def skip_known_measurement(self,c,p):
         if c not in self.deferred:return False
+        if self.reschedule_after_step and self.step_skip_known:
+            return True
         _,center,radius=self.region(c)
         return (radius<=19.99 or np.linalg.norm(p-center)-radius>1500.
                 or (len(self.obs[c])>=2 and radius<=40.))
@@ -76,6 +130,13 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 # Unknown-channel discovery is finished, clearance is not.
                 self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
                 self.pending_stations=[]
+            if self.reschedule_after_step and known and not self.pending_stations:
+                # Coverage is finished and every known target stays mandatory;
+                # resolve the nearest one directly instead of re-solving a
+                # targets-only open route on every single measurement step.
+                c=min(known,key=lambda ch:np.linalg.norm(self.region(ch)[1]-self.pos))
+                self.locate(c)
+                continue
             points=[self.region(c)[1] for c in known]+[self.stations[i] for i in self.pending_stations]
             nodes=[('target',c) for c in known]+[('station',i) for i in self.pending_stations]
             if not nodes:break
