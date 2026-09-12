@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "guard1123",
+    "guard1123_close",
+    "guard1123_close_skip12"
+  ],
+  "start": 3470000,
+  "count": 120,
+  "workers": 8,
+  "round": "r23_q3_ablation",
+  "hypothesis": "component ablation: guard / close_known / skip12",
+  "mode": "normal",
+  "traces": false
+}
