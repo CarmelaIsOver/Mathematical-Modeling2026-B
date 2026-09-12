@@ -4,10 +4,10 @@
 每条包含：机制、样本量、结果、判定、证据位置、提交。
 
 - 基线：`f27c88b`（队友原始默认）
-- 本批优化起点：克隆队友仓库后新建分支 `codex/q3-q4-upgrade`
-- 当前版本：`student-opt-v1`（提交 `7119afb`）；本轮优化（`opt/v2` HEAD）无采用项，版本不变
+- 本批优化起点：克隆队友仓库后新建分支 `codex/q3-q4-upgrade`；本轮工作在 `B题-team-pi` 的 `opt/v2`
+- 当前版本：**`student-opt-v2`**（本地 `opt/v2` 标签）；Q3 推荐 `--q3-ring-guard aggressive --q3-probe-radius 60`
 - 口径：`LOCAL_SYNTHETIC` 离线模拟，同种子配对；时间单位"秒/源 = `virtual_time_s / cleared`"
-- 全量回归：`python -m unittest discover -p "test_*.py"` → **69 项全部通过**
+- 全量回归：`python -m unittest discover -p "test_*.py"` → **86 项全部通过**
 
 ---
 
@@ -184,6 +184,7 @@ python run.py --mode official --problem 4 --robot-id <队号> --output practice_
 | `81a460c` | 三层组件消融（120 全新种子） |
 | `884ef0a` | 520 相同种子绝对口径对比 |
 | `7119afb` | **受保护缩环接入 run.py + 修复重复中心站扫描** |
-| 本轮 HEAD（`opt/v2`） | 生产入口三档移植对拍（20 种子 / 480 行为字段 0 不一致）+ 三档统一对照 + 修正 conservative 尾部表述 + 优先2 两方向（bearing dedup、near-edge 路由）粗筛否决 + 生产口径 200 场复核 |
+| 第二轮 HEAD（`opt/v2`） | 生产入口三档移植对拍（20 种子 / 480 行为字段 0 不一致）+ 三档统一对照 + 修正 conservative 尾部表述 + 优先2 两方向（bearing dedup、near-edge 路由）粗筛否决 + 生产口径 200 场复核 |
+| **第三轮 HEAD（`opt/v2`，`student-opt-v2`）** | Q3 60m 小区域光学试探接入（A7，−0.74%，200 场）+ Q4 重试覆盖验证与 TCP 健康探测（A8）+ Q4 试探窗参数化（A9）+ 方向 C/E 几何否决（R28/R29）+ 方向 F/F2/D 与自主迭代否决（R30–R33）+ 全量 86 项 + 生产 200 场确认 −14.22% |
 
 研究目录：`research/iterative_speed/`（`variants.py` 策略定义、`study.py` 配对实验、`RESULTS.md`/`JOURNAL.md` 逐轮记录、`results/rN_*/` 逐局数据）。
