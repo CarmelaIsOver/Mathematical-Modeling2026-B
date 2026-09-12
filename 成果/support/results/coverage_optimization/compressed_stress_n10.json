@@ -1,0 +1,65 @@
+{
+  "config": {
+    "start": 1600000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "compressed"
+    ],
+    "localization": "paper",
+    "scenario": "n10",
+    "tag": "compressed_stress_n10"
+  },
+  "comparisons": {
+    "compressed": {
+      "runs": 20,
+      "reference_mean": 973.7995538396211,
+      "candidate_mean": 868.9952560908794,
+      "improvement": 0.10762409711064869,
+      "p95_reference": 1048.6996296821537,
+      "p95_candidate": 930.4850366068139,
+      "worst_ratio": 0.9047671811916568,
+      "slower_10pct": 0.0,
+      "win_fraction": 1.0,
+      "all_complete": true,
+      "worst_seed": 1600015,
+      "adopt": true,
+      "move_s": {
+        "centered": 7437.0455383962135,
+        "compressed": 6388.602560908794
+      },
+      "measure": {
+        "centered": 379.9,
+        "compressed": 380.05
+      },
+      "failed_clear": {
+        "centered": 4.15,
+        "compressed": 3.95
+      },
+      "fallback": {
+        "centered": 0.6,
+        "compressed": 0.55
+      },
+      "stations_visited": {
+        "centered": 31.0,
+        "compressed": 31.0
+      },
+      "tail_time_s": {
+        "centered": 4691.143304212041,
+        "compressed": 3745.1616917594497
+      },
+      "wall_s": {
+        "centered": 0.49728984000030324,
+        "compressed": 0.47944471499795327
+      },
+      "n10-15": {
+        "runs": 20,
+        "improvement": 0.10762409711064869,
+        "worst_ratio": 0.9047671811916568,
+        "win_fraction": 1.0
+      }
+    }
+  },
+  "source_sha256": "4477a572c99283698cd4232c1b32fb16ae329986cd12d505c785004027ba102e",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

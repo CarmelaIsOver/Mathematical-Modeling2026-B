@@ -1,0 +1,21 @@
+{
+  "default_q4": "integrated/radial",
+  "default_q3": "integrated/original",
+  "candidate": "integrated/rings",
+  "candidate_adopted_as_default": false,
+  "target400_met": false,
+  "independent_runs_per_strategy": 200,
+  "stress_runs_per_strategy": 60,
+  "all_complete": true,
+  "tests_passed": 39,
+  "reproduction_matches_saved_results": true,
+  "q3_controller_unchanged": true,
+  "hashes": {
+    "joint_search.py": "f337314678d415691366d30c88cd57b2e8cb26f8d06e2ee95eba70cd7b91c5c3",
+    "run.py": "5fdd9988fd79ceff2b5d02b88d40d1ed2b2864d57ee03727d8f5a43534cdbfc2",
+    "geometry.py": "c217443491733861c9e87f17504b47cbe6236e16d0f80bd838c10546939159ef",
+    "coverage_geometry.py": "a7018254b73cf2f7ad2c51822753d77e127cefe8925f2364f568a4ad0594317a",
+    "test_coverage_rings.py": "d3655da4835d9e0ccbb03d4c7eadef1b84a9d3a911bcb3814323e46b4fd93a9a",
+    "verify_q4_coverage.py": "a419348f17c859000863361e607364330bc4a09969adbbcf5034a1369543a6f9"
+  }
+}

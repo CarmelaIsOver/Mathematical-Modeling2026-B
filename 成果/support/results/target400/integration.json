@@ -1,0 +1,32 @@
+{
+  "default_q4": {
+    "strategy": "integrated",
+    "coverage_layout": "radial"
+  },
+  "default_q3": "standard/original",
+  "independent_runs": 200,
+  "all_independent_complete": true,
+  "stress_runs": 60,
+  "all_stress_complete": true,
+  "unique_unit_tests_passed": 28,
+  "frozen_trace_match_seeds": [
+    1800000,
+    1800011,
+    1800023
+  ],
+  "reproduction_smoke_seed": 1900000,
+  "official_new_policy_tested": false,
+  "target400_met": false,
+  "implementation_hashes": {
+    "run.py": "8efe36acefd6cfdd44feb626dbb0d087732764d9d0531daa4857dda8a06fe92d",
+    "joint_search.py": "b538aef08f72cb397eb82f9fe97930ec0c6e08c7adab0f8654d62ef6ddc8833e",
+    "geometry.py": "3ea06d153cd73ad2cded18172c6635ebc9b6ca4e09c87008df46187ef25da238",
+    "active_localization.py": "55729e7755a312b930c9f5c2c1224df281f378c7ad3e1de39c62d493f6d41444",
+    "solver.py": "9eb88249675990e9b51d7e4909bc7451a87afbc61a79056f637fbfc664de30d3",
+    "audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623",
+    "backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "test_joint_search.py": "35ee1121884cc20ad4ff7f9fe91172f12b98a6ea87093793241bc30f8b75e12e",
+    "verify_target_experiments.py": "44cf4fe4c07a34f8edd835b9170e5930f6081741d212071abb1ac4c23247b912"
+  },
+  "frozen_reproduction_matches_saved_results": true
+}

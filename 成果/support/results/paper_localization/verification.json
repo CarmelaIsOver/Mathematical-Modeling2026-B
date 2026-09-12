@@ -1,0 +1,10 @@
+{
+  "tmp/paper_experiment.py": true,
+  "tmp/test_paper_geometry.py": true,
+  "成果/support/solver.py": true,
+  "成果/support/backend.py": true,
+  "成果/support/geometry.py": true,
+  "成果/support/audit.py": true,
+  "reproduction_exact_virtual_time": true,
+  "production_solver_unchanged": true
+}

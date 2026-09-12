@@ -1,0 +1,35 @@
+{
+  "original": {
+    "runs": 1,
+    "all_complete": true,
+    "mean": 711.5141639805673,
+    "p95": 711.5141639805673,
+    "max": 711.5141639805673,
+    "under400": 0.0,
+    "move_s": 8119.198295727942,
+    "measures": 294.0,
+    "failed_clear": 17.0
+  },
+  "reference": {
+    "runs": 1,
+    "all_complete": true,
+    "mean": 643.7294341981761,
+    "p95": 643.7294341981761,
+    "max": 643.7294341981761,
+    "under400": 0.0,
+    "move_s": 7170.212078774464,
+    "measures": 294.0,
+    "failed_clear": 17.0
+  },
+  "multitour": {
+    "runs": 1,
+    "all_complete": true,
+    "mean": 449.44773252816276,
+    "p95": 449.44773252816276,
+    "max": 449.44773252816276,
+    "under400": 0.0,
+    "move_s": 4564.268255394277,
+    "measures": 280.0,
+    "failed_clear": 1.0
+  }
+}

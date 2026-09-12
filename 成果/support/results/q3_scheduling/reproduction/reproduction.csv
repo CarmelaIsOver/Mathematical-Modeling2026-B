@@ -1,0 +1,3 @@
+﻿candidate_evaluations,clear,cleared,complete,deferred_targets,error,failed_clear,fallback,forced_targets,kind,laser_s,max_step_time_error_s,mean_time_s,measure,measure_s,mode,move_s,normal_exit,ok,opportunistic_measures,optical_s,problem,program_time_s,safe_clear_points,seed,skipped_known_measurements,stations_visited,switch_s,total,virtual_time_s
+297,14,14,True,14,,0,0,7,random,28.0,0.0,283.2761702760765,114,570.0,baseline,3218.866383865072,True,True,24,42.0,3,0.22946610001963563,14,2300000,0,7,107.0,14,3965.8663838650714
+319,14,14,True,14,,0,0,2,random,28.0,0.0,237.17136968448366,113,565.0,tour_select,2580.39917558277,True,True,15,42.0,3,0.22180939998361282,13,2300000,6,7,105.0,14,3320.3991755827715

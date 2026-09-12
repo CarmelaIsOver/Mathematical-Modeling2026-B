@@ -1,0 +1,71 @@
+{
+  "config": {
+    "start": 1600000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "compressed"
+    ],
+    "localization": "paper",
+    "scenario": "boundary_outward",
+    "tag": "compressed_stress_boundary_outward"
+  },
+  "comparisons": {
+    "compressed": {
+      "runs": 20,
+      "reference_mean": 1000.2988675941233,
+      "candidate_mean": 863.1689823348904,
+      "improvement": 0.1370889138253769,
+      "p95_reference": 1171.6323707325707,
+      "p95_candidate": 1019.8577630080971,
+      "worst_ratio": 0.9425889546766151,
+      "slower_10pct": 0.0,
+      "win_fraction": 1.0,
+      "all_complete": true,
+      "worst_seed": 1600006,
+      "adopt": true,
+      "move_s": {
+        "centered": 8716.29840789732,
+        "compressed": 7107.399308799331
+      },
+      "measure": {
+        "centered": 529.95,
+        "compressed": 524.9
+      },
+      "failed_clear": {
+        "centered": 112.75,
+        "compressed": 98.45
+      },
+      "fallback": {
+        "centered": 7.9,
+        "compressed": 6.1
+      },
+      "stations_visited": {
+        "centered": 31.0,
+        "compressed": 30.9
+      },
+      "tail_time_s": {
+        "centered": 181.6152594572928,
+        "compressed": 174.8739827369771
+      },
+      "wall_s": {
+        "centered": 0.88285204000058,
+        "compressed": 1.3118246199999704
+      },
+      "n10-15": {
+        "runs": 19,
+        "improvement": 0.13883341684784467,
+        "worst_ratio": 0.9425889546766151,
+        "win_fraction": 1.0
+      },
+      "n16": {
+        "runs": 1,
+        "improvement": 0.0947421268404901,
+        "worst_ratio": 0.9052578731595099,
+        "win_fraction": 1.0
+      }
+    }
+  },
+  "source_sha256": "4477a572c99283698cd4232c1b32fb16ae329986cd12d505c785004027ba102e",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

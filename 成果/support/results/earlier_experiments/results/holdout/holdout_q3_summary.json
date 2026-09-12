@@ -1,0 +1,18 @@
+[
+  {
+    "strategy": "joint_safe",
+    "runs": 100,
+    "all_cleared": true,
+    "baseline_mean": 357.4441979735242,
+    "optimized_mean": 317.1565811943697,
+    "improvement": 0.11271022723982937,
+    "baseline_p95": 430.39775361127676,
+    "optimized_p95": 380.04882694741104,
+    "p95_ratio": 0.8830176825008723,
+    "worst_paired_ratio": 1.2275607712523784,
+    "win_rate": 0.89,
+    "max_program_s": 0.35886640001263004,
+    "fallback": 0,
+    "max_virtual_s": 5175.831260646115
+  }
+]

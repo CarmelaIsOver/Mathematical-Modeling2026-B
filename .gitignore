@@ -1,0 +1,17 @@
+# 匹配所有目录下，以Jammers-simulator开头的文件/文件夹
+**/Jammers-simulator*
+
+# 所有子目录下都忽略这个视频、pdf
+**/模拟器操作演示.mp4
+**/先读下载说明.pdf
+
+# 忽略临时目录和日志
+**/tmp/
+**/practice_logs/
+*.jlog
+
+# 如果你还有其他压缩包，可以加
+*.7z
+*.zip
+*.rar
+

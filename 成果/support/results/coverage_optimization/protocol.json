@@ -1,0 +1,43 @@
+{
+  "selected_layout": "shifted",
+  "spacing_m": 950,
+  "lattice_translation": [
+    0.3333333333333333,
+    0.3333333333333333
+  ],
+  "development": {
+    "start": 1100000,
+    "count": 40,
+    "localization": "paper"
+  },
+  "holdout": {
+    "start": 1200000,
+    "count": 200,
+    "localizations": [
+      "paper",
+      "standard"
+    ]
+  },
+  "stress": {
+    "start": 1300000,
+    "count_per_scenario": 20,
+    "scenarios": [
+      "n10",
+      "n16",
+      "plus",
+      "minus",
+      "boundary_outward",
+      "boundary_tangent"
+    ],
+    "localization": "paper"
+  },
+  "criteria": {
+    "minimum_improvement": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "maximum_ratio": 1.2,
+    "fraction_slower_than_10_percent": 0.05,
+    "all_complete": true
+  },
+  "production_adoption": "Require paired holdout thresholds for both localization policies, stress all-complete, geometric checks and identical imported action traces. No tuning after holdout.",
+  "scope": "Only station coordinates change. Target ordering rules, localization, channel order, termination and HTTP logic unchanged. Actual routes may differ. Controllers only see AuditPort."
+}

@@ -1,0 +1,455 @@
+{
+  "cases": [
+    {
+      "case_code": "RRC8-YH5A-GJBX-R2X9",
+      "platform_counts": {
+        "jammer_count": 14,
+        "omnidirectional_jammer_count": 14,
+        "directional_jammer_count": 0
+      },
+      "summary": {
+        "problem": 3,
+        "complete": true,
+        "cleared": 14,
+        "virtual_time_s": 3467.938862,
+        "mean_time_s": 247.70991871428572,
+        "program_time_s": 0.7642379000026267,
+        "stations_visited": 7,
+        "scheduling_policy": "joint_route",
+        "measure": 115,
+        "clear": 14,
+        "failed_clear": 0,
+        "fallback": 0,
+        "move_s": 2714.938860161739,
+        "switch_s": 108.0,
+        "measure_s": 575.0,
+        "optical_s": 42.0,
+        "laser_s": 28.0,
+        "candidate_evaluations": 285,
+        "deferred_targets": 14,
+        "forced_targets": 3,
+        "opportunistic_measures": 18,
+        "safe_clear_points": 12,
+        "skipped_known_measurements": 5,
+        "route_replans": 17,
+        "strategy": "integrated",
+        "coverage_layout": "original",
+        "normal_exit": true,
+        "max_step_time_error_s": 4.896592145087197e-07,
+        "provenance": "Official HTTP interface; case code and module come from simulator UI"
+      },
+      "export_matches_platform": true,
+      "export_header_identity": {
+        "problem_no": 3,
+        "practice_run_no": 5576343884613684746,
+        "case_code": "RRC8-YH5A-GJBX-R2X9"
+      },
+      "accepted_records": 131,
+      "error_records": 0,
+      "replay_all_actions_match": true,
+      "replay_normal_exit": true,
+      "independent_parts": {
+        "move_s": 2714.938860161738,
+        "switch_s": 108,
+        "measure_s": 575,
+        "optical_s": 42,
+        "laser_s": 28
+      },
+      "measure_outcomes": {
+        "no_signal": 75,
+        "direction": 38,
+        "near": 2
+      },
+      "last_clear_time": 3467.938862,
+      "tail_time_s": 0.0,
+      "tail_parts": {
+        "move_s": 0,
+        "switch_s": 0,
+        "measure_s": 0,
+        "optical_s": 0,
+        "laser_s": 0
+      },
+      "tail_measures": 0,
+      "stations_seen_at_last_clear": 7,
+      "absent_channel_measures": 42,
+      "absent_channel_measure_and_switch_s": 251,
+      "discovery": [
+        {
+          "channel": 2,
+          "time": 11,
+          "stations_seen": 1
+        },
+        {
+          "channel": 6,
+          "time": 35,
+          "stations_seen": 1
+        },
+        {
+          "channel": 7,
+          "time": 41,
+          "stations_seen": 1
+        },
+        {
+          "channel": 11,
+          "time": 65,
+          "stations_seen": 1
+        },
+        {
+          "channel": 15,
+          "time": 89,
+          "stations_seen": 1
+        },
+        {
+          "channel": 16,
+          "time": 95,
+          "stations_seen": 1
+        },
+        {
+          "channel": 17,
+          "time": 101,
+          "stations_seen": 1
+        },
+        {
+          "channel": 18,
+          "time": 107,
+          "stations_seen": 1
+        },
+        {
+          "channel": 5,
+          "time": 500.986936,
+          "stations_seen": 2
+        },
+        {
+          "channel": 14,
+          "time": 1040.895366,
+          "stations_seen": 3
+        },
+        {
+          "channel": 19,
+          "time": 1646.32346,
+          "stations_seen": 4
+        },
+        {
+          "channel": 1,
+          "time": 2633.27157,
+          "stations_seen": 6
+        },
+        {
+          "channel": 3,
+          "time": 3116.540462,
+          "stations_seen": 7
+        },
+        {
+          "channel": 8,
+          "time": 3134.540462,
+          "stations_seen": 7
+        }
+      ],
+      "clearances": [
+        {
+          "channel": 18,
+          "time": 383.92903,
+          "stations_seen": 1
+        },
+        {
+          "channel": 5,
+          "time": 729.473726,
+          "stations_seen": 2
+        },
+        {
+          "channel": 14,
+          "time": 1114.491305,
+          "stations_seen": 3
+        },
+        {
+          "channel": 17,
+          "time": 1215.050197,
+          "stations_seen": 3
+        },
+        {
+          "channel": 16,
+          "time": 1323.579948,
+          "stations_seen": 3
+        },
+        {
+          "channel": 11,
+          "time": 1403.992937,
+          "stations_seen": 3
+        },
+        {
+          "channel": 2,
+          "time": 1802.874343,
+          "stations_seen": 4
+        },
+        {
+          "channel": 19,
+          "time": 1930.922728,
+          "stations_seen": 4
+        },
+        {
+          "channel": 15,
+          "time": 2087.707522,
+          "stations_seen": 4
+        },
+        {
+          "channel": 1,
+          "time": 2835.674015,
+          "stations_seen": 6
+        },
+        {
+          "channel": 6,
+          "time": 3013.479872,
+          "stations_seen": 6
+        },
+        {
+          "channel": 8,
+          "time": 3222.807525,
+          "stations_seen": 7
+        },
+        {
+          "channel": 3,
+          "time": 3323.746401,
+          "stations_seen": 7
+        },
+        {
+          "channel": 7,
+          "time": 3467.938862,
+          "stations_seen": 7
+        }
+      ],
+      "required_saving_to_400": -2132.061138
+    },
+    {
+      "case_code": "SGB7-A2C9-48RB-SXAH",
+      "platform_counts": {
+        "jammer_count": 15,
+        "omnidirectional_jammer_count": 11,
+        "directional_jammer_count": 4
+      },
+      "summary": {
+        "problem": 4,
+        "complete": true,
+        "cleared": 15,
+        "virtual_time_s": 5995.337257,
+        "mean_time_s": 399.68915046666666,
+        "stations_visited": 25,
+        "program_time_s": 1.1222062000015285,
+        "measure": 273,
+        "clear": 15,
+        "failed_clear": 0,
+        "fallback": 0,
+        "move_s": 4309.33725675553,
+        "switch_s": 246.0,
+        "measure_s": 1365.0,
+        "optical_s": 45.0,
+        "laser_s": 30.0,
+        "candidate_evaluations": 80,
+        "deferred_targets": 15,
+        "forced_targets": 0,
+        "opportunistic_measures": 0,
+        "safe_clear_points": 7,
+        "paper_measurements_selected": 0,
+        "route_replans": 40,
+        "skipped_known_measurements": 59,
+        "small_region_probes": 8,
+        "small_region_successes": 8,
+        "coverage_sites_cancelled": 0,
+        "strategy": "integrated",
+        "coverage_layout": "radial",
+        "normal_exit": true,
+        "max_step_time_error_s": 4.991043169866316e-07,
+        "provenance": "Official HTTP interface; case code and module come from simulator UI"
+      },
+      "export_matches_platform": true,
+      "export_header_identity": {
+        "problem_no": 4,
+        "practice_run_no": 5194681686314195469,
+        "case_code": "SGB7-A2C9-48RB-SXAH"
+      },
+      "accepted_records": 290,
+      "error_records": 0,
+      "replay_all_actions_match": true,
+      "replay_normal_exit": true,
+      "independent_parts": {
+        "move_s": 4309.337256755531,
+        "switch_s": 246,
+        "measure_s": 1365,
+        "optical_s": 45,
+        "laser_s": 30
+      },
+      "measure_outcomes": {
+        "no_signal": 234,
+        "direction": 39
+      },
+      "last_clear_time": 5495.69595,
+      "tail_time_s": 499.64130699999987,
+      "tail_parts": {
+        "move_s": 411.64130672171467,
+        "switch_s": 13,
+        "measure_s": 75,
+        "optical_s": 0,
+        "laser_s": 0
+      },
+      "tail_measures": 15,
+      "stations_seen_at_last_clear": 22,
+      "absent_channel_measures": 125,
+      "absent_channel_measure_and_switch_s": 738,
+      "discovery": [
+        {
+          "channel": 4,
+          "time": 23,
+          "stations_seen": 1
+        },
+        {
+          "channel": 10,
+          "time": 59,
+          "stations_seen": 1
+        },
+        {
+          "channel": 14,
+          "time": 83,
+          "stations_seen": 1
+        },
+        {
+          "channel": 16,
+          "time": 95,
+          "stations_seen": 1
+        },
+        {
+          "channel": 17,
+          "time": 101,
+          "stations_seen": 1
+        },
+        {
+          "channel": 19,
+          "time": 113,
+          "stations_seen": 1
+        },
+        {
+          "channel": 1,
+          "time": 374.953493,
+          "stations_seen": 2
+        },
+        {
+          "channel": 8,
+          "time": 410.953493,
+          "stations_seen": 2
+        },
+        {
+          "channel": 20,
+          "time": 476.953493,
+          "stations_seen": 2
+        },
+        {
+          "channel": 2,
+          "time": 2496.100344,
+          "stations_seen": 10
+        },
+        {
+          "channel": 11,
+          "time": 2538.100344,
+          "stations_seen": 10
+        },
+        {
+          "channel": 13,
+          "time": 2811.100344,
+          "stations_seen": 11
+        },
+        {
+          "channel": 6,
+          "time": 3919.406944,
+          "stations_seen": 16
+        },
+        {
+          "channel": 9,
+          "time": 4247.116309,
+          "stations_seen": 17
+        },
+        {
+          "channel": 15,
+          "time": 4617.981188,
+          "stations_seen": 18
+        }
+      ],
+      "clearances": [
+        {
+          "channel": 14,
+          "time": 268.796883,
+          "stations_seen": 1
+        },
+        {
+          "channel": 4,
+          "time": 344.505531,
+          "stations_seen": 1
+        },
+        {
+          "channel": 17,
+          "time": 1966.125922,
+          "stations_seen": 8
+        },
+        {
+          "channel": 16,
+          "time": 1980.001456,
+          "stations_seen": 8
+        },
+        {
+          "channel": 19,
+          "time": 2280.867922,
+          "stations_seen": 9
+        },
+        {
+          "channel": 13,
+          "time": 2983.825559,
+          "stations_seen": 11
+        },
+        {
+          "channel": 2,
+          "time": 3219.092959,
+          "stations_seen": 13
+        },
+        {
+          "channel": 11,
+          "time": 3328.108616,
+          "stations_seen": 13
+        },
+        {
+          "channel": 10,
+          "time": 4108.085847,
+          "stations_seen": 16
+        },
+        {
+          "channel": 1,
+          "time": 4342.078055,
+          "stations_seen": 17
+        },
+        {
+          "channel": 9,
+          "time": 4483.225004,
+          "stations_seen": 17
+        },
+        {
+          "channel": 20,
+          "time": 4781.243136,
+          "stations_seen": 19
+        },
+        {
+          "channel": 8,
+          "time": 4795.58757,
+          "stations_seen": 19
+        },
+        {
+          "channel": 15,
+          "time": 4976.050226,
+          "stations_seen": 19
+        },
+        {
+          "channel": 6,
+          "time": 5495.69595,
+          "stations_seen": 22
+        }
+      ],
+      "required_saving_to_400": -4.662742999999864
+    }
+  ],
+  "both_complete": true
+}

@@ -1,0 +1,43 @@
+{
+  "runs": 40,
+  "all_complete": true,
+  "reference_mean": 728.2532314198037,
+  "paper_mean": 720.6814297480117,
+  "improvement": 0.01039720985107051,
+  "p95_reference": 1010.5137258735983,
+  "p95_paper": 1003.802654166383,
+  "worst_ratio": 1.0055225191143309,
+  "slower_10pct": 0.0,
+  "win_fraction": 0.975,
+  "adopt": false,
+  "move_s": {
+    "reference": 7488.529931071006,
+    "paper": 7386.278789130512
+  },
+  "measure": {
+    "reference": 284.5,
+    "paper": 285.15
+  },
+  "failed_clear": {
+    "reference": 10.875,
+    "paper": 10.875
+  },
+  "fallback": {
+    "reference": 0.875,
+    "paper": 0.9
+  },
+  "stations_visited": {
+    "reference": 27.75,
+    "paper": 27.75
+  },
+  "wall_s": {
+    "reference": 0.38512513500027123,
+    "paper": 0.586406870000792
+  },
+  "worst_seed": 930023,
+  "problem": 4,
+  "start": 930000,
+  "stress": null,
+  "source_sha256": "4dc0e5f4c825c7b5817cf7c6c1b02292ea6e8c6d456cf7d94743305c2fb83c3a",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

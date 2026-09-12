@@ -1,0 +1,22 @@
+[
+  {
+    "problem": 3,
+    "record": "v2_q3_20260911_140501_784100600.jsonl",
+    "requests": 147,
+    "all_actions_match": true,
+    "cleared": 10,
+    "normal_exit": true,
+    "virtual_time_s": 4067.231664,
+    "max_step_error_s": 4.7003118197608273e-07
+  },
+  {
+    "problem": 4,
+    "record": "v2_q4_20260911_140553_538329500.jsonl",
+    "requests": 203,
+    "all_actions_match": true,
+    "cleared": 16,
+    "normal_exit": true,
+    "virtual_time_s": 5761.78444,
+    "max_step_error_s": 4.934753405905212e-07
+  }
+]

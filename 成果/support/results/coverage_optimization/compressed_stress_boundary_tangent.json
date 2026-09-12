@@ -1,0 +1,71 @@
+{
+  "config": {
+    "start": 1600000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "compressed"
+    ],
+    "localization": "paper",
+    "scenario": "boundary_tangent",
+    "tag": "compressed_stress_boundary_tangent"
+  },
+  "comparisons": {
+    "compressed": {
+      "runs": 20,
+      "reference_mean": 783.004612216132,
+      "candidate_mean": 699.6691687676195,
+      "improvement": 0.10643033533691315,
+      "p95_reference": 1027.847058894246,
+      "p95_candidate": 899.6239475605421,
+      "worst_ratio": 0.9381462199500714,
+      "slower_10pct": 0.0,
+      "win_fraction": 1.0,
+      "all_complete": true,
+      "worst_seed": 1600018,
+      "adopt": true,
+      "move_s": {
+        "centered": 7193.828051903702,
+        "compressed": 6170.08804936652
+      },
+      "measure": {
+        "centered": 378.6,
+        "compressed": 381.05
+      },
+      "failed_clear": {
+        "centered": 0.0,
+        "compressed": 1.35
+      },
+      "fallback": {
+        "centered": 0.0,
+        "compressed": 0.1
+      },
+      "stations_visited": {
+        "centered": 30.75,
+        "compressed": 30.75
+      },
+      "tail_time_s": {
+        "centered": 1445.1444673526107,
+        "compressed": 878.586676167956
+      },
+      "wall_s": {
+        "centered": 0.5096586549989297,
+        "compressed": 0.522673229999782
+      },
+      "n10-15": {
+        "runs": 19,
+        "improvement": 0.10720287709618248,
+        "worst_ratio": 0.9381462199500714,
+        "win_fraction": 1.0
+      },
+      "n16": {
+        "runs": 1,
+        "improvement": 0.08384736858393993,
+        "worst_ratio": 0.9161526314160601,
+        "win_fraction": 1.0
+      }
+    }
+  },
+  "source_sha256": "4477a572c99283698cd4232c1b32fb16ae329986cd12d505c785004027ba102e",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

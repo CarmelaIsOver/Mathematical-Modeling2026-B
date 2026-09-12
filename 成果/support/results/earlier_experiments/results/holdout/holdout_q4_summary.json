@@ -1,0 +1,18 @@
+[
+  {
+    "strategy": "directional_layers_safe",
+    "runs": 100,
+    "all_cleared": true,
+    "baseline_mean": 823.9821736580366,
+    "optimized_mean": 760.4685506183413,
+    "improvement": 0.07708130718135453,
+    "baseline_p95": 1072.1988182384198,
+    "optimized_p95": 1005.9371552100058,
+    "p95_ratio": 0.938200208859324,
+    "worst_paired_ratio": 1.3764364249110577,
+    "win_rate": 0.84,
+    "max_program_s": 1.0358045999892056,
+    "fallback": 79,
+    "max_virtual_s": 11002.60517856127
+  }
+]

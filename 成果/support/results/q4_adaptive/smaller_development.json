@@ -1,0 +1,35 @@
+{
+  "compact21": {
+    "runs": 32,
+    "all_complete": true,
+    "mean": 478.7438699565671,
+    "p95": 619.8082539353114,
+    "max": 667.246628604172,
+    "under400": 0.1875,
+    "move_s": 4490.386746850854,
+    "measure": 254.5,
+    "replacements": 0.0
+  },
+  "compact21_merge": {
+    "runs": 32,
+    "all_complete": true,
+    "mean": 478.7438699565671,
+    "p95": 619.8082539353114,
+    "max": 667.246628604172,
+    "under400": 0.1875,
+    "move_s": 4490.386746850854,
+    "measure": 254.5,
+    "replacements": 0.0
+  },
+  "tight_merge": {
+    "runs": 32,
+    "all_complete": true,
+    "mean": 487.98497995931444,
+    "p95": 589.9741692909906,
+    "max": 643.6608783342253,
+    "under400": 0.09375,
+    "move_s": 4575.526415912233,
+    "measure": 264.1875,
+    "replacements": 0.09375
+  }
+}

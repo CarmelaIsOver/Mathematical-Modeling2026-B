@@ -1,0 +1,25 @@
+{
+  "development": {
+    "start": 720000,
+    "count": 60
+  },
+  "holdout": {
+    "start": 820000,
+    "count": 200
+  },
+  "criteria": {
+    "minimum_improvement": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "fraction_slower_than_10_percent": 0.05,
+    "maximum_ratio": 1.2
+  },
+  "sha256": {
+    "candidate.py": "7cdc02d5b89ee9a73f8b1220a56e0c00450411f997e60b3971937c12356a8850",
+    "belief.py": "d34cff54ced86e2eade6665bcdb5a3da1df51c27b9398f88a23c51cd154820bb",
+    "optimized_solver.py": "e03cc4bfb9159d8b86e60b1545eec0ea83c2cf67b8dc44998db9a4dd941ab147",
+    "baseline_solver.py": "ab180cd7f0a5cc8435966d5e60b972930a89f751bbe32bd9f330324ff2c1fcbd",
+    "backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "geometry.py": "2a8702dc7059c5b309168daba675beaaf261425d9eac89785c8197e26e917d1b",
+    "audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623"
+  }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "strategy": "directional",
+    "runs": 40,
+    "all_cleared": true,
+    "baseline_mean": 830.4251213737203,
+    "optimized_mean": 819.1467100636448,
+    "improvement": 0.013581490997548795,
+    "baseline_p95": 1100.6390441810759,
+    "optimized_p95": 1094.3590419149532,
+    "p95_ratio": 0.994294221798396,
+    "worst_paired_ratio": 1.1442256220568956,
+    "win_rate": 0.775,
+    "max_program_s": 0.15165630000410601,
+    "fallback": 27,
+    "max_virtual_s": 12363.744044637946
+  },
+  {
+    "strategy": "directional_route",
+    "runs": 40,
+    "all_cleared": true,
+    "baseline_mean": 830.4251213737203,
+    "optimized_mean": 814.1910504547053,
+    "improvement": 0.019549108644690394,
+    "baseline_p95": 1100.6390441810759,
+    "optimized_p95": 1056.76823947093,
+    "p95_ratio": 0.960140606548455,
+    "worst_paired_ratio": 1.1648265274407215,
+    "win_rate": 0.6,
+    "max_program_s": 0.34853190000285394,
+    "fallback": 26,
+    "max_virtual_s": 12054.385919897779
+  },
+  {
+    "strategy": "directional_safe",
+    "runs": 40,
+    "all_cleared": true,
+    "baseline_mean": 830.4251213737203,
+    "optimized_mean": 800.8777906617,
+    "improvement": 0.035580969254810135,
+    "baseline_p95": 1100.6390441810759,
+    "optimized_p95": 1021.2977079813045,
+    "p95_ratio": 0.9279133912073737,
+    "worst_paired_ratio": 1.1455260162951348,
+    "win_rate": 0.7,
+    "max_program_s": 0.709799699994619,
+    "fallback": 25,
+    "max_virtual_s": 11260.99562865409
+  }
+]

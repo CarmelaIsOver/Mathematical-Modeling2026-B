@@ -1,0 +1,25 @@
+{
+  "development": {
+    "start": 930000,
+    "count": 40
+  },
+  "holdout": {
+    "start": 940000,
+    "count": 200
+  },
+  "criteria": {
+    "minimum_improvement": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "fraction_slower_than_10_percent": 0.05,
+    "maximum_ratio": 1.2,
+    "all_complete": true
+  },
+  "scope": "Local synthetic paired evaluation; controller has observation-only AuditPort. Global routing rules unchanged, actual routes may change due to localization endpoints. No official sessions. No manuscript changes.",
+  "selection": "Use major-axis / approach candidates only when radius <=120m and all 48 conservative positive-output bin posteriors fit a radius <=19.99m; sampled visibility score >=.995 is a heuristic, not a probability guarantee. Existing fallback retained.",
+  "sources": [
+    "https://josh.vanderhook.info/media/pdf/icra2012bot.pdf",
+    "https://tokekar.com/pubs/tokekar2013asensor.pdf",
+    "https://tokekar.com/pubs/vanderhook2014cautious.pdf"
+  ],
+  "frozen_sha256": "f2e08da992f7bba93ce4b12592c29dcb8f4cdbbc9a91f0a4363442ea655471b5"
+}

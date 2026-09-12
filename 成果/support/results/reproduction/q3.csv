@@ -1,0 +1,4 @@
+﻿problem,cleared,virtual_time_s,mean_time_s,program_time_s,complete,stations_visited,measure,clear,failed_clear,fallback,mode,seed,total,normal_exit,strategy,move_s,switch_s,measure_s,optical_s,laser_s,candidate_evaluations,deferred_targets,forced_targets,opportunistic_measures,safe_clear_points,belief_decisions,belief_unavailable,route_decisions,planning_time_s
+3,12,4327.36501458021,360.61375121501754,0.1601160999998683,True,7,110,12,0,0,original,820000,12,True,,,,,,,,,,,,,,,
+3,12,3903.59490942131,325.2995757851092,0.17642940000223462,True,7,120,12,0,0,reference,820000,12,True,joint_safe,3131.5949094213106,112.0,600.0,36.0,24.0,283,12,6,17,12,,,,
+3,12,4021.1329107568927,335.0944092297411,0.5567369000054896,True,7,126,12,0,0,combined,820000,12,True,,,,,,,,,,,,22,0,15,0.3930790999875171

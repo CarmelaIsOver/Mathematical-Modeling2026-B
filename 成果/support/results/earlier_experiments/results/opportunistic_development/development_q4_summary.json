@@ -1,0 +1,18 @@
+[
+  {
+    "strategy": "directional_opportunistic_safe",
+    "runs": 40,
+    "all_cleared": true,
+    "baseline_mean": 830.4251213737203,
+    "optimized_mean": 833.0741490211109,
+    "improvement": -0.0031899656925218345,
+    "baseline_p95": 1100.6390441810759,
+    "optimized_p95": 1097.7356000014036,
+    "p95_ratio": 0.9973620378133754,
+    "worst_paired_ratio": 1.365056967332063,
+    "win_rate": 0.375,
+    "max_program_s": 0.802545899990946,
+    "fallback": 33,
+    "max_virtual_s": 12314.156343820548
+  }
+]

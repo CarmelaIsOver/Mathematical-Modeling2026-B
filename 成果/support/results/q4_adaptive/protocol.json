@@ -1,0 +1,31 @@
+{
+  "objective": "arithmetic mean of per-case T/N <= 400 with full clearance and normal exit",
+  "development": [
+    2500000,
+    2500031
+  ],
+  "holdout": [
+    2600000,
+    2600199
+  ],
+  "selected": "capped",
+  "baseline": "baseline",
+  "incremental_adoption": {
+    "mean_gain_at_least": 0.05,
+    "p95_no_worse": true,
+    "slow_over_10pct_fraction_at_most": 0.05,
+    "all_complete": true
+  },
+  "official_validation": false,
+  "hashes": {
+    "tmp/q4_adaptive_experiment.py": "ed0cd58db8148d69e4d17928f7342d143d06aceed4d8658baf4119b533947f30",
+    "tmp/q4_coverage_certificate.py": "912bd1817d0d7517f83e905ed3a071872fa67658f629f2f34520921ed3d1c8cc",
+    "tmp/q4_coverage_probe.py": "93e869ae90c927aa7fbefaed18335e9476130cbde94ac63bc3c9620cc5a7360a",
+    "\u6210\u679c/support/joint_search.py": "b538aef08f72cb397eb82f9fe97930ec0c6e08c7adab0f8654d62ef6ddc8833e",
+    "\u6210\u679c/support/active_localization.py": "55729e7755a312b930c9f5c2c1224df281f378c7ad3e1de39c62d493f6d41444",
+    "\u6210\u679c/support/solver.py": "9eb88249675990e9b51d7e4909bc7451a87afbc61a79056f637fbfc664de30d3",
+    "\u6210\u679c/support/geometry.py": "3ea06d153cd73ad2cded18172c6635ebc9b6ca4e09c87008df46187ef25da238",
+    "\u6210\u679c/support/backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "\u6210\u679c/support/audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623"
+  }
+}

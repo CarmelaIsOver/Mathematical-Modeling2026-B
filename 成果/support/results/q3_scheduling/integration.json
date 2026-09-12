@@ -1,0 +1,29 @@
+{
+  "default_q3": "integrated/original",
+  "default_q4": "integrated/radial",
+  "official_new_q3_policy_tested": false,
+  "holdout_runs_per_policy": 200,
+  "stress_runs_per_policy": 100,
+  "all_complete": true,
+  "adoption_passed": true,
+  "frozen_reproduction_matches_saved_results": true,
+  "frozen_trace_match_seeds": [
+    2200000,
+    2200013,
+    2200039
+  ],
+  "q4_dependencies_unchanged": {
+    "joint_search.py": true,
+    "geometry.py": true,
+    "solver.py": true,
+    "active_localization.py": true,
+    "backend.py": true,
+    "audit.py": true
+  },
+  "runtime_hashes": {
+    "omni_search.py": "4af80844fc192289bf71fb0e4e9f8ec054bd1d30c643e399bf7a82eeade90b7f",
+    "run.py": "fc0aac48a4b6fb12e68d24efdc3999d3d966c2f5754faa2294e5ace6e7f21e2b",
+    "test_omni_search.py": "424361b0993b704c4a63ebdc7e8c56665bf652a01a1e62fefd6ffa831937b298",
+    "verify_q3_scheduling.py": "fcb9afdfa6cd0267c664fe45f035fdde07b800668ab396298e3023dafdb7ab15"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "frozen_at_utc": "2026-09-11T03:27:43.319110+00:00",
+  "profiles": {
+    "3": "joint_safe",
+    "4": "directional_layers_safe"
+  },
+  "sha256": {
+    "optimized_solver.py": "e03cc4bfb9159d8b86e60b1545eec0ea83c2cf67b8dc44998db9a4dd941ab147",
+    "baseline_solver.py": "ab180cd7f0a5cc8435966d5e60b972930a89f751bbe32bd9f330324ff2c1fcbd",
+    "geometry.py": "2a8702dc7059c5b309168daba675beaaf261425d9eac89785c8197e26e917d1b",
+    "backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623",
+    "run.py": "c528b1af90c57abfefe60fcb85b9456e5bae905445feb5aa6e8fc37c98da4b04",
+    "benchmark.py": "1846281af2afb34bcf2f6fc5e0ab56063c5ab330e3987506ff47291a0559f6a1",
+    "protocol.json": "aa85f2ec069b122c2f2809292f7bdbe15d2b2ef93453cadfca4502cf3e62b623"
+  },
+  "selection_basis": "40 development scenarios per problem; holdout not yet accessed"
+}

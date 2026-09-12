@@ -1,0 +1,11 @@
+{
+  "station_count": 25,
+  "faces": 36,
+  "collapsed_faces_removed": 6,
+  "max_triangle_edge_m": 983.5123713896912,
+  "boundary_vertices": 12,
+  "boundary_inradius_m": 1835.2590699492298,
+  "encloses_domain": true,
+  "signed_area_sum": 10829999.99999858,
+  "interior_13_unchanged": true
+}

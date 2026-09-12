@@ -1,0 +1,21 @@
+{
+  "code_sha256": {
+    "audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623",
+    "backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "experiments.py": "979d688a70ffdbab016877f6c1fce6fe5a03d1a0082bbd39748a0073e26f8e43",
+    "geometry.py": "2a8702dc7059c5b309168daba675beaaf261425d9eac89785c8197e26e917d1b",
+    "question2.py": "95ce29c569556c248ddf891d2046c4ffbf410ad2b008661f10f0e34bd5905f89",
+    "run.py": "51e70069a886ad1f98d69c95a28a7922aed0e4dc35d3b4be2dc52c33de659b59",
+    "solver.py": "07dfd735a4973f56251734259e3b8a21ab54c57a4f74337d876a61ff0d330a82",
+    "test_controller.py": "1d06a88cbdc91bc923425edf3058d71398798d2f5b66bfe3fc03f73279e8c469",
+    "test_model.py": "3407e4f88eca81c8d7a7dfec8ec2c5a8c01af275cd1af9db8c2fb1cbf8a6acf8",
+    "verify_experiments.py": "e67865140a6d763fd36eae7e5ef276f2e1ec5fcc1a760d839fc84b9c5d6a7de9"
+  },
+  "policy": "single maintained controller; additional research candidates not adopted",
+  "tests": 16,
+  "integration_scenarios": 200,
+  "official_record_replay_requests": [
+    147,
+    203
+  ]
+}

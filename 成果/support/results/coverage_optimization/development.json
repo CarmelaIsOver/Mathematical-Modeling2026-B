@@ -1,0 +1,126 @@
+{
+  "config": {
+    "start": 1100000,
+    "count": 40,
+    "layouts": [
+      "centered",
+      "shifted",
+      "shifted_origin"
+    ],
+    "localization": "paper",
+    "scenario": "random",
+    "tag": "development"
+  },
+  "comparisons": {
+    "shifted": {
+      "runs": 40,
+      "reference_mean": 706.4156304721346,
+      "candidate_mean": 634.2780561187437,
+      "improvement": 0.10211774944047813,
+      "p95_reference": 888.5872254198956,
+      "p95_candidate": 800.740297187379,
+      "worst_ratio": 1.1232465267243696,
+      "slower_10pct": 0.025,
+      "win_fraction": 0.95,
+      "all_complete": true,
+      "worst_seed": 1100010,
+      "adopt": true,
+      "move_s": {
+        "centered": 7894.50959411309,
+        "shifted": 7047.821464412458
+      },
+      "measure": {
+        "centered": 283.875,
+        "shifted": 260.05
+      },
+      "failed_clear": {
+        "centered": 9.225,
+        "shifted": 12.625
+      },
+      "fallback": {
+        "centered": 0.925,
+        "shifted": 1.0
+      },
+      "stations_visited": {
+        "centered": 29.45,
+        "shifted": 25.625
+      },
+      "tail_time_s": {
+        "centered": 3378.2904468012484,
+        "shifted": 2698.8767577902395
+      },
+      "wall_s": {
+        "centered": 0.4138931574994785,
+        "shifted": 0.40464445000034177
+      },
+      "n10-15": {
+        "runs": 35,
+        "improvement": 0.10228698830658767,
+        "worst_ratio": 1.0313155993807286,
+        "win_fraction": 0.9714285714285714
+      },
+      "n16": {
+        "runs": 5,
+        "improvement": 0.10029392256859226,
+        "worst_ratio": 1.1232465267243696,
+        "win_fraction": 0.8
+      }
+    },
+    "shifted_origin": {
+      "runs": 40,
+      "reference_mean": 706.4156304721346,
+      "candidate_mean": 645.4008704512738,
+      "improvement": 0.08637232443466947,
+      "p95_reference": 888.5872254198956,
+      "p95_candidate": 794.8094075016356,
+      "worst_ratio": 1.215432443583937,
+      "slower_10pct": 0.025,
+      "win_fraction": 0.975,
+      "all_complete": true,
+      "worst_seed": 1100010,
+      "adopt": false,
+      "move_s": {
+        "centered": 7894.50959411309,
+        "shifted_origin": 7154.616400956727
+      },
+      "measure": {
+        "centered": 283.875,
+        "shifted_origin": 267.775
+      },
+      "failed_clear": {
+        "centered": 9.225,
+        "shifted_origin": 11.15
+      },
+      "fallback": {
+        "centered": 0.925,
+        "shifted_origin": 0.925
+      },
+      "stations_visited": {
+        "centered": 29.45,
+        "shifted_origin": 26.65
+      },
+      "tail_time_s": {
+        "centered": 3378.2904468012484,
+        "shifted_origin": 2374.6461343829556
+      },
+      "wall_s": {
+        "centered": 0.4138931574994785,
+        "shifted_origin": 0.39465432749966567
+      },
+      "n10-15": {
+        "runs": 35,
+        "improvement": 0.08439287922892758,
+        "worst_ratio": 0.9966520626023546,
+        "win_fraction": 1.0
+      },
+      "n16": {
+        "runs": 5,
+        "improvement": 0.10770409910706935,
+        "worst_ratio": 1.215432443583937,
+        "win_fraction": 0.8
+      }
+    }
+  },
+  "source_sha256": "6d316f540fbb894bd3558ef9bc535a8c36203f55964de9a7ca16071e5f686ad5",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

@@ -1,0 +1,65 @@
+{
+  "config": {
+    "start": 1300000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "shifted"
+    ],
+    "localization": "paper",
+    "scenario": "n10",
+    "tag": "stress_n10"
+  },
+  "comparisons": {
+    "shifted": {
+      "runs": 20,
+      "reference_mean": 971.6428375678981,
+      "candidate_mean": 883.3245760678585,
+      "improvement": 0.09089580871208547,
+      "p95_reference": 1016.0164217029518,
+      "p95_candidate": 943.4684493216414,
+      "worst_ratio": 0.9690184202265874,
+      "slower_10pct": 0.0,
+      "win_fraction": 1.0,
+      "all_complete": true,
+      "worst_seed": 1300006,
+      "adopt": true,
+      "move_s": {
+        "centered": 7431.678375678983,
+        "shifted": 6778.695760678585
+      },
+      "measure": {
+        "centered": 375.65,
+        "shifted": 335.65
+      },
+      "failed_clear": {
+        "centered": 7.3,
+        "shifted": 9.35
+      },
+      "fallback": {
+        "centered": 0.55,
+        "shifted": 0.5
+      },
+      "stations_visited": {
+        "centered": 31.0,
+        "shifted": 27.0
+      },
+      "tail_time_s": {
+        "centered": 4310.298739768999,
+        "shifted": 3502.423253440199
+      },
+      "wall_s": {
+        "centered": 0.34031940499990015,
+        "shifted": 0.30446043999982064
+      },
+      "n10-15": {
+        "runs": 20,
+        "improvement": 0.09089580871208547,
+        "worst_ratio": 0.9690184202265874,
+        "win_fraction": 1.0
+      }
+    }
+  },
+  "source_sha256": "6d316f540fbb894bd3558ef9bc535a8c36203f55964de9a7ca16071e5f686ad5",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

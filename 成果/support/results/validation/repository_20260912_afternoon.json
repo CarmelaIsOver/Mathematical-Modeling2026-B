@@ -1,0 +1,102 @@
+{
+  "checks": [
+    {
+      "file": "omni_search.py",
+      "reference": "q3_scheduling",
+      "exact_match": true
+    },
+    {
+      "file": "test_omni_search.py",
+      "reference": "q3_scheduling",
+      "exact_match": true
+    },
+    {
+      "file": "verify_q3_scheduling.py",
+      "reference": "q3_scheduling",
+      "exact_match": true
+    },
+    {
+      "file": "joint_search.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "run.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "geometry.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "coverage_geometry.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "test_coverage_rings.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "verify_q4_coverage.py",
+      "reference": "q4_adaptive",
+      "exact_match": true
+    },
+    {
+      "file": "active_localization.py",
+      "reference": "q4_adaptive/frozen_sources",
+      "exact_match": false,
+      "normalized_match": true
+    },
+    {
+      "file": "solver.py",
+      "reference": "q4_adaptive/frozen_sources",
+      "exact_match": true,
+      "normalized_match": true
+    },
+    {
+      "file": "backend.py",
+      "reference": "q4_adaptive/frozen_sources",
+      "exact_match": true,
+      "normalized_match": true
+    },
+    {
+      "file": "audit.py",
+      "reference": "q4_adaptive/frozen_sources",
+      "exact_match": true,
+      "normalized_match": true
+    }
+  ],
+  "index": {
+    "run.py": {
+      "exists_in_index": true,
+      "exists_in_worktree": true,
+      "sha256": "a9f2e1734aecb017d0986805db47d3cf90605b09f6201432cfdc7f21e92fd484",
+      "normalized_matches_worktree": false
+    },
+    "active_localization.py": {
+      "exists_in_index": true,
+      "exists_in_worktree": true,
+      "sha256": "4794ea981a1f8b59ebabecfad69acb9fe3ae3b0e21c125e1c11081e4b644dbe5",
+      "normalized_matches_worktree": true
+    },
+    "adaptive_coverage.py": {
+      "exists_in_index": true,
+      "exists_in_worktree": false,
+      "sha256": "0407be8d1dfcba292f53114772b0d0dd81b1049eea3dd72227cfc1ca59a24a96"
+    },
+    "adaptive_search.py": {
+      "exists_in_index": true,
+      "exists_in_worktree": false,
+      "sha256": "a45ce6f2c6c0610422ca64c76e88e1d948c36588c6f6118ff2564eda8874715f"
+    }
+  },
+  "tests_passed": 39,
+  "default_q3": "integrated/original",
+  "default_q4": "integrated/radial",
+  "recent_three_q4_mean": 502.19567799842224,
+  "source_modified_by_this_audit": false
+}

@@ -1,0 +1,65 @@
+{
+  "config": {
+    "start": 1600000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "compressed"
+    ],
+    "localization": "paper",
+    "scenario": "n16",
+    "tag": "compressed_stress_n16"
+  },
+  "comparisons": {
+    "compressed": {
+      "runs": 20,
+      "reference_mean": 405.9504898828247,
+      "candidate_mean": 404.68322344726005,
+      "improvement": 0.0031217265827919727,
+      "p95_reference": 590.0291091009655,
+      "p95_candidate": 544.2078213537068,
+      "worst_ratio": 1.3602875016431883,
+      "slower_10pct": 0.05,
+      "win_fraction": 0.25,
+      "all_complete": true,
+      "worst_seed": 1600018,
+      "adopt": false,
+      "move_s": {
+        "centered": 5377.957838125195,
+        "compressed": 5326.481575156161
+      },
+      "measure": {
+        "centered": 174.5,
+        "compressed": 177.9
+      },
+      "failed_clear": {
+        "centered": 8.05,
+        "compressed": 11.9
+      },
+      "fallback": {
+        "centered": 0.75,
+        "compressed": 0.75
+      },
+      "stations_visited": {
+        "centered": 14.5,
+        "compressed": 15.2
+      },
+      "tail_time_s": {
+        "centered": 0.0,
+        "compressed": 0.0
+      },
+      "wall_s": {
+        "centered": 0.7192260550000356,
+        "compressed": 0.724366049998207
+      },
+      "n16": {
+        "runs": 20,
+        "improvement": 0.0031217265827919727,
+        "worst_ratio": 1.3602875016431883,
+        "win_fraction": 0.25
+      }
+    }
+  },
+  "source_sha256": "4477a572c99283698cd4232c1b32fb16ae329986cd12d505c785004027ba102e",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

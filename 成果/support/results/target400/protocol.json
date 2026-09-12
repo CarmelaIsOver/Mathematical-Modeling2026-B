@@ -1,0 +1,34 @@
+{
+  "objective": "arithmetic mean of per-case T/N <= 400 s/source with all sources cleared and normal exit",
+  "development_seeds": [
+    1800000,
+    1800023
+  ],
+  "selected_mode": "multitour",
+  "holdout_seeds": [
+    1900000,
+    1900199
+  ],
+  "baselines": [
+    "original",
+    "reference"
+  ],
+  "primary_goal": 400,
+  "report": [
+    "mean",
+    "p95",
+    "max",
+    "under400",
+    "paired savings",
+    "completion"
+  ],
+  "official_validation": false,
+  "source_hashes": {
+    "tmp/target400_experiment.py": "552dae889e48b3f518ea39a0570886414713479486a860e897e31ece84bad0d4",
+    "\u6210\u679c/support/active_localization.py": "55729e7755a312b930c9f5c2c1224df281f378c7ad3e1de39c62d493f6d41444",
+    "\u6210\u679c/support/solver.py": "9eb88249675990e9b51d7e4909bc7451a87afbc61a79056f637fbfc664de30d3",
+    "\u6210\u679c/support/geometry.py": "1642c221eba93e52c27d85e9e56748b4fc798858e519e369aa2b5511c8576abd",
+    "\u6210\u679c/support/backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "\u6210\u679c/support/audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623"
+  }
+}

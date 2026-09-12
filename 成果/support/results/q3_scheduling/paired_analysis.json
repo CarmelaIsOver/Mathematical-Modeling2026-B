@@ -1,0 +1,16 @@
+{
+  "mean_gain": 0.10286215361742002,
+  "p95_gain": 0.09781405041431568,
+  "wins": 180,
+  "ties": 1,
+  "slow_over10_count": 0,
+  "worst_ratio": 1.0778941355541622,
+  "worst_seed": 2300196,
+  "paired_saving_95ci": [
+    28.822074480743233,
+    35.969199127044455
+  ],
+  "slow_cases": [],
+  "all_complete": true,
+  "adopt": true
+}

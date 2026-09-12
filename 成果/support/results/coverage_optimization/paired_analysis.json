@@ -1,0 +1,28 @@
+{
+  "paper": {
+    "mean_saved_seconds_per_source": 71.00757305868792,
+    "paired_bootstrap_ci95": [
+      65.5926742091613,
+      75.83762477954906
+    ],
+    "unique_scenes": 200,
+    "targets_per_policy": 2597,
+    "cases_slower_than_10pct": [
+      1500048,
+      1500149
+    ]
+  },
+  "standard": {
+    "mean_saved_seconds_per_source": 71.1556123182927,
+    "paired_bootstrap_ci95": [
+      65.84445616015036,
+      75.90621721726464
+    ],
+    "unique_scenes": 200,
+    "targets_per_policy": 2597,
+    "cases_slower_than_10pct": [
+      1500048,
+      1500149
+    ]
+  }
+}

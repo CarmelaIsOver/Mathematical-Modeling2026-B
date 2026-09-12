@@ -1,0 +1,124 @@
+{
+  "3": {
+    "worst_seed": 940169,
+    "first_divergence_action": 22,
+    "first_actions": [
+      {
+        "path": "/measure",
+        "p": [
+          -157.27208857782398,
+          -846.0416632336155
+        ],
+        "channel": 3,
+        "result": {
+          "accepted": true,
+          "measure_result": "direction",
+          "svd_deg": 317.37,
+          "virtual_time_s": 302.91465102839567
+        }
+      },
+      {
+        "path": "/measure",
+        "p": [
+          -13.78128707242644,
+          -908.2267059890244
+        ],
+        "channel": 3,
+        "result": {
+          "accepted": true,
+          "measure_result": "direction",
+          "svd_deg": 248.91,
+          "virtual_time_s": 318.34500983901165
+        }
+      }
+    ],
+    "details": [
+      {
+        "cleared": 16,
+        "mean_time_s": 244.88598032171814,
+        "move_s": 3213.17568514749,
+        "measure": 106,
+        "switch_s": 95.0,
+        "failed_clear": 0,
+        "fallback": 0,
+        "stations_visited": 6
+      },
+      {
+        "cleared": 16,
+        "mean_time_s": 291.2926429235423,
+        "move_s": 3908.6822867766773,
+        "measure": 114,
+        "switch_s": 102.0,
+        "failed_clear": 0,
+        "fallback": 0,
+        "stations_visited": 7
+      }
+    ],
+    "saved_seconds_per_source_ci95": [
+      -0.3295901122559753,
+      1.021762816744994
+    ],
+    "total_sources": 2634,
+    "negative_cases": 45
+  },
+  "4": {
+    "worst_seed": 940130,
+    "first_divergence_action": 23,
+    "first_actions": [
+      {
+        "path": "/measure",
+        "p": [
+          537.7224109452952,
+          758.6172270842798
+        ],
+        "channel": 20,
+        "result": {
+          "accepted": true,
+          "measure_result": "no_signal",
+          "virtual_time_s": 369.17196738766694
+        }
+      },
+      {
+        "path": "/measure",
+        "p": [
+          449.99312561284796,
+          662.8285675876424
+        ],
+        "channel": 20,
+        "result": {
+          "accepted": true,
+          "measure_result": "no_signal",
+          "virtual_time_s": 344.760409546729
+        }
+      }
+    ],
+    "details": [
+      {
+        "cleared": 11,
+        "mean_time_s": 858.7188580392457,
+        "move_s": 7397.907438431704,
+        "measure": 339,
+        "switch_s": 298.0,
+        "failed_clear": 0,
+        "fallback": 0,
+        "stations_visited": 31
+      },
+      {
+        "cleared": 11,
+        "mean_time_s": 914.861637718813,
+        "move_s": 7920.478014906947,
+        "measure": 356,
+        "switch_s": 308.0,
+        "failed_clear": 0,
+        "fallback": 0,
+        "stations_visited": 31
+      }
+    ],
+    "saved_seconds_per_source_ci95": [
+      4.212490425116632,
+      6.485232303033519
+    ],
+    "total_sources": 2634,
+    "negative_cases": 17
+  }
+}

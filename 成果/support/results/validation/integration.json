@@ -1,0 +1,1808 @@
+{
+  "cases": 200,
+  "runs": 400,
+  "all_cleared": true,
+  "exact_action_trace_match": true,
+  "rows": [
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923000,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 3618.2643514733254,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923001,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4008.1172836404785,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923002,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3809.3619471340685,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923003,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3844.318227015969,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923004,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4008.048152692579,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923005,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4252.3630715691,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923006,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4342.497086494726,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923007,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 3320.3961662087445,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923008,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 3345.8093938023394,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923009,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3805.6948699676914,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923010,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4543.582543940842,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923011,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4827.067663445149,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923012,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4791.800041612686,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923013,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4627.399055852932,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923014,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4392.370770548602,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923015,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 3439.3794656401733,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923016,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3772.9867636070576,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923017,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3959.528596538946,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923018,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4530.5679236921,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "random",
+      "seed": 923019,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4273.113978547344,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923100,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4095.5211106244446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923101,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4988.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923102,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3615.9505613950314,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923103,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4141.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923104,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4293.260293987111,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923105,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4441.022756733659,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923106,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4260.6194735366125,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923107,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4095.5211106244446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923108,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4988.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923109,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3613.9505613950314,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923110,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4141.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923111,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4293.260293987111,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923112,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4440.022756733659,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923113,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4260.6194735366125,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923114,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4094.5211106244446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923115,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4988.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923116,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3614.9505613950314,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923117,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4141.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923118,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4292.260293987111,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "positive_boundary",
+      "seed": 923119,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4439.022756733659,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923200,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4096.521110624446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923201,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4988.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923202,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3614.950561395032,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923203,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4139.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923204,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4292.260293987114,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923205,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4441.022756733661,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923206,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4259.619473536704,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923207,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4096.521110624446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923208,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4987.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923209,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3615.950561395032,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923210,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4141.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923211,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4293.260293987114,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923212,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4440.022756733661,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923213,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4260.619473536704,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923214,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 4096.521110624446,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923215,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4988.644026512755,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923216,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3614.950561395032,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923217,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4140.691538774627,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923218,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4292.260293987114,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "negative_tangent",
+      "seed": 923219,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4441.022756733661,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923300,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 2962.235003499589,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923301,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 2966.7057971455242,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923302,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3028.130697628053,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923303,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3141.5369016014706,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923304,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 3140.32347880914,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923305,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 3145.3934579722295,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923306,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 1291.7678339321606,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923307,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 2976.748504154104,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923308,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 2984.0068946589727,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923309,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3039.943177778176,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923310,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3068.0489336549595,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923311,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 3148.908607750243,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923312,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 3105.476372639271,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923313,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 1357.4449950456094,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923314,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 2980.647666327196,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923315,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 2988.793760580873,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923316,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3049.2577838626466,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923317,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3045.054406971138,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923318,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 3121.7794560051,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "cluster",
+      "seed": 923319,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 3100.4955846874295,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923400,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 3685.3098523466656,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923401,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 3650.4315217164376,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923402,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3715.725068355372,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923403,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4499.188761642351,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923404,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 3961.463299825007,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923405,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4553.177867753321,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923406,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 4643.708892485423,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923407,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 3852.0697881739097,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923408,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4029.3814665906625,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923409,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 4081.3457338175394,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923410,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 4290.954068653427,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923411,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 3785.1871752520947,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923412,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 3811.5338949336624,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923413,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 3984.060074237065,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923414,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 3668.32645453066,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923415,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 4583.875690236215,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923416,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 3390.2293516458963,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923417,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 3827.190404263349,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923418,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 4208.779518310645,
+      "normal_exit": true
+    },
+    {
+      "problem": 3,
+      "scenario": "correlated",
+      "seed": 923419,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 4008.1630654854403,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924000,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9265.018520379472,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924001,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 10378.033280559946,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924002,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9571.127475207722,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924003,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 10430.714093849141,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924004,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 9468.637249652353,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924005,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10111.979474173202,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924006,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 9017.332783875852,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924007,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 10073.336919640436,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924008,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9540.00143631993,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924009,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9438.463311444428,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924010,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 10102.6347859764,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924011,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 10753.483662057699,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924012,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 9676.940045420533,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924013,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 5187.965170395045,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924014,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9889.341875905433,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924015,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9962.303321886906,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924016,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 10567.35314802042,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924017,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9965.276020857715,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924018,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 11188.842828770019,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "random",
+      "seed": 924019,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10010.35148450609,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924100,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 11704.330544703509,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924101,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 11657.705544296867,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924102,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 12779.4471170603,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924103,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 12247.46823943794,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924104,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 13151.990904272714,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924105,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 12658.973007652641,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924106,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 13842.549134756006,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924107,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 11705.330544703509,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924108,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 11657.705544296867,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924109,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 12778.4471170603,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924110,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 12247.46823943794,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924111,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 13151.990904272714,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924112,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 12660.973007652641,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924113,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 13843.549134756006,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924114,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 11705.330544703509,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924115,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 11657.705544296867,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924116,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 12779.4471170603,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924117,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 12247.46823943794,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924118,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 13151.990904272714,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "positive_boundary",
+      "seed": 924119,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 12660.973007652641,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924200,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9711.197839669134,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924201,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9634.270737402416,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924202,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9381.187585684527,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924203,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9679.658162906926,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924204,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 9887.4983449724,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924205,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10592.183143133845,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924206,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 5462.706594400771,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924207,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9711.197839669134,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924208,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9634.270737402416,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924209,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9383.187585684527,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924210,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9680.658162906926,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924211,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 9888.4983449724,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924212,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10592.183143133845,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924213,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 5463.706594400771,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924214,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9712.197839669134,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924215,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9634.270737402416,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924216,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9383.187585684527,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924217,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9679.658162906926,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924218,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 9887.4983449724,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "negative_tangent",
+      "seed": 924219,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10591.183143133845,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924300,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9076.964811504,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924301,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 8870.301734796822,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924302,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 8239.457146553006,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924303,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 8238.08321793711,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924304,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 8747.653479428782,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924305,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 9086.452127676132,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924306,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 2922.2393815000078,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924307,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 8240.998425480495,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924308,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 8482.809874125736,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924309,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9283.439078941734,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924310,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 8261.030812975263,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924311,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 8139.895039323337,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924312,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 8815.444061922193,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924313,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 2413.7500086162204,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924314,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9308.62085199485,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924315,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 8610.151104956716,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924316,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 8144.147937792384,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924317,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 8332.476906216416,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924318,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 8576.354584211767,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "cluster",
+      "seed": 924319,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 7969.644579025761,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924400,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 10331.187780137381,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924401,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 10837.92378913487,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924402,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9739.720053436802,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924403,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9502.476756604055,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924404,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 10095.97302338447,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924405,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10014.849063140595,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924406,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 7176.379606549322,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924407,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 10224.534455129036,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924408,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 10559.202141250591,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924409,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 9713.967937202615,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924410,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 10366.307061116479,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924411,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 10378.601241948609,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924412,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10390.335521922203,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924413,
+      "cleared": 16,
+      "total": 16,
+      "virtual_time_s": 8474.392389414927,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924414,
+      "cleared": 10,
+      "total": 10,
+      "virtual_time_s": 9903.277293975547,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924415,
+      "cleared": 11,
+      "total": 11,
+      "virtual_time_s": 9692.238996694256,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924416,
+      "cleared": 12,
+      "total": 12,
+      "virtual_time_s": 10427.913796602297,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924417,
+      "cleared": 13,
+      "total": 13,
+      "virtual_time_s": 9329.329318297043,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924418,
+      "cleared": 14,
+      "total": 14,
+      "virtual_time_s": 10525.412775931447,
+      "normal_exit": true
+    },
+    {
+      "problem": 4,
+      "scenario": "correlated",
+      "seed": 924419,
+      "cleared": 15,
+      "total": 15,
+      "virtual_time_s": 10829.110815297092,
+      "normal_exit": true
+    }
+  ]
+}

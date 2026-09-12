@@ -1,0 +1,44 @@
+{
+  "minus": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 682.1604946468975,
+    "candidate_mean": 673.2376507557426,
+    "worst_ratio": 1.045938566534159
+  },
+  "outward": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 864.1352403636771,
+    "candidate_mean": 841.6206331373585,
+    "worst_ratio": 1.0696113744777063
+  },
+  "plus": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 690.536489920923,
+    "candidate_mean": 690.5478064548315,
+    "worst_ratio": 1.0552522152296773
+  },
+  "sixteen": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 436.56479222129957,
+    "candidate_mean": 442.5557570230265,
+    "worst_ratio": 1.2693678616890205
+  },
+  "tangent": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 722.5917752022734,
+    "candidate_mean": 669.1205898112928,
+    "worst_ratio": 1.167331013122831
+  },
+  "ten": {
+    "runs": 10,
+    "all_complete": true,
+    "baseline_mean": 685.669806584265,
+    "candidate_mean": 688.2488401736214,
+    "worst_ratio": 1.075911650034747
+  }
+}

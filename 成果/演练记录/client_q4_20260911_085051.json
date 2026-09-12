@@ -1,0 +1,14 @@
+{
+  "problem": 4,
+  "cleared": 16,
+  "virtual_time_s": 9500.499624,
+  "mean_time_s": 593.7812265,
+  "program_time_s": 0.5820547999974224,
+  "complete": true,
+  "stations_visited": 26,
+  "measure": 279,
+  "clear": 28,
+  "failed_clear": 12,
+  "fallback": 1,
+  "provenance": "official HTTP client; case code and encrypted export must be obtained from simulator UI"
+}

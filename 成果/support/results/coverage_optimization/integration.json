@@ -1,0 +1,22 @@
+{
+  "default_layout": "original",
+  "opt_in_layout": "compact",
+  "adopt_as_default": false,
+  "reason": "Worst-case ratio exceeds frozen 1.2 threshold for both localization policies.",
+  "unit_checks_passed": 22,
+  "reproduction_exact_virtual_time": true,
+  "original_practice_replay_requests": [
+    129,
+    296
+  ],
+  "holdout_scenes_per_localization": 200,
+  "stress_paired_scenes": 120,
+  "code_sha256": {
+    "geometry.py": "1642c221eba93e52c27d85e9e56748b4fc798858e519e369aa2b5511c8576abd",
+    "solver.py": "9eb88249675990e9b51d7e4909bc7451a87afbc61a79056f637fbfc664de30d3",
+    "active_localization.py": "55729e7755a312b930c9f5c2c1224df281f378c7ad3e1de39c62d493f6d41444",
+    "run.py": "8438b47ee4c5d8e791f83548989855a92bcd58740d31b78ccb7064a2d7714f83",
+    "test_coverage_layout.py": "b88c6e0be732f53affb78b1f22698e6548943870de69ab51760079ed8e49207f",
+    "verify_coverage_experiments.py": "5a5609c46df3fc9b6404b64e5ac119e71b563be09a048c015105a0f23a4bea74"
+  }
+}

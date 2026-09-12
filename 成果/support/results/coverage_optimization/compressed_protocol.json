@@ -1,0 +1,44 @@
+{
+  "selected_layout": "compressed",
+  "spacing_m": 950,
+  "projection": {
+    "move_if_radius_above": 2000,
+    "new_radius": 1950,
+    "inner_stations_unchanged": 13
+  },
+  "development": {
+    "start": 1400000,
+    "count": 40,
+    "localization": "paper"
+  },
+  "holdout": {
+    "start": 1500000,
+    "count": 200,
+    "localizations": [
+      "paper",
+      "standard"
+    ]
+  },
+  "stress": {
+    "start": 1600000,
+    "count_per_scenario": 20,
+    "scenarios": [
+      "n10",
+      "n16",
+      "plus",
+      "minus",
+      "boundary_outward",
+      "boundary_tangent"
+    ],
+    "localization": "paper"
+  },
+  "criteria": {
+    "minimum_improvement": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "maximum_ratio": 1.2,
+    "fraction_slower_than_10_percent": 0.05,
+    "all_complete": true
+  },
+  "production_adoption": "Require paired holdout thresholds for both localization policies, stress all-complete and inspect subgroup regressions, geometric checks and identical imported action traces. No tuning after holdout.",
+  "scope": "Same 31 station indices; project only 12 far stations; preserve 13 interior stations and 6 stations at radius 1900. No localization or ordering rule changes. Retain full coverage and 16-source early termination."
+}

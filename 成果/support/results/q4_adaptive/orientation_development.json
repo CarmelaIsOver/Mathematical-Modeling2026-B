@@ -1,0 +1,24 @@
+{
+  "oriented": {
+    "runs": 32,
+    "all_complete": true,
+    "mean": 485.92359330948005,
+    "p95": 614.1235249998418,
+    "max": 634.7174270951364,
+    "under400": 0.125,
+    "move_s": 4541.04451074122,
+    "measure": 263.0,
+    "replacements": 0.0
+  },
+  "oriented_cross": {
+    "runs": 32,
+    "all_complete": true,
+    "mean": 484.63514730232,
+    "p95": 616.4758479427915,
+    "max": 639.3297688956516,
+    "under400": 0.1875,
+    "move_s": 4578.787446944847,
+    "measure": 258.5625,
+    "replacements": 0.0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "development_seeds": {"start": 310000, "count_per_problem": 40},
+  "holdout_seeds": {"start": 410000, "count_per_problem": 100},
+  "stress_seeds": {"start": 510000, "count_per_setting": 12},
+  "problems": [3, 4],
+  "acceptance": {"clearance_ratio": 1.0, "minimum_mean_improvement": 0.05, "maximum_p95_ratio": 1.05},
+  "note": "Seed sets fixed before tuning. Freeze release configuration and hashes before running holdout. Official logs cannot replay unobserved alternative paths."
+}

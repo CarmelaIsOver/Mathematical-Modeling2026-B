@@ -1,0 +1,20 @@
+[
+  {
+    "file": "client_q3_20260911_084558.jsonl",
+    "recorded_actions": 112,
+    "normal_exit": true,
+    "cleared": 15,
+    "virtual_time_s": 4941.707195,
+    "max_step_time_error_s": 4.945077307638712e-07,
+    "scope": "BASELINE_RECORDED_PROTOCOL_ONLY"
+  },
+  {
+    "file": "client_q4_20260911_085051.jsonl",
+    "recorded_actions": 307,
+    "normal_exit": true,
+    "cleared": 16,
+    "virtual_time_s": 9500.499624,
+    "max_step_time_error_s": 4.949449703417486e-07,
+    "scope": "BASELINE_RECORDED_PROTOCOL_ONLY"
+  }
+]

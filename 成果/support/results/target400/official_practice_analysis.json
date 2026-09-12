@@ -1,0 +1,408 @@
+{
+  "cases": [
+    {
+      "case_code": "6RVA-WV5Z-6S69-S6MT",
+      "platform_counts": {
+        "jammer_count": 10,
+        "omnidirectional_jammer_count": 2,
+        "directional_jammer_count": 8
+      },
+      "summary": {
+        "problem": 4,
+        "complete": true,
+        "cleared": 10,
+        "virtual_time_s": 6645.154286,
+        "mean_time_s": 664.5154286,
+        "stations_visited": 25,
+        "program_time_s": 1.2311471000139136,
+        "measure": 358,
+        "clear": 10,
+        "failed_clear": 0,
+        "fallback": 0,
+        "move_s": 4472.154285536414,
+        "switch_s": 333.0,
+        "measure_s": 1790.0,
+        "optical_s": 30.0,
+        "laser_s": 20.0,
+        "candidate_evaluations": 64,
+        "deferred_targets": 10,
+        "forced_targets": 0,
+        "opportunistic_measures": 0,
+        "safe_clear_points": 6,
+        "paper_measurements_selected": 0,
+        "route_replans": 35,
+        "skipped_known_measurements": 35,
+        "small_region_probes": 4,
+        "small_region_successes": 4,
+        "strategy": "integrated",
+        "coverage_layout": "radial",
+        "normal_exit": true,
+        "max_step_time_error_s": 4.956664270139299e-07,
+        "provenance": "Official HTTP interface; case code and module come from simulator UI"
+      },
+      "export_matches_platform": true,
+      "export_header_identity": {
+        "problem_no": 4,
+        "practice_run_no": 8173184233287136352,
+        "case_code": "6RVA-WV5Z-6S69-S6MT"
+      },
+      "accepted_records": 370,
+      "error_records": 0,
+      "replay_all_actions_match": true,
+      "replay_normal_exit": true,
+      "independent_parts": {
+        "move_s": 4472.154285536412,
+        "switch_s": 333,
+        "measure_s": 1790,
+        "optical_s": 30,
+        "laser_s": 20
+      },
+      "measure_outcomes": {
+        "no_signal": 330,
+        "direction": 28
+      },
+      "last_clear_time": 6645.154286,
+      "tail_time_s": 0.0,
+      "tail_parts": {
+        "move_s": 0,
+        "switch_s": 0,
+        "measure_s": 0,
+        "optical_s": 0,
+        "laser_s": 0
+      },
+      "tail_measures": 0,
+      "stations_seen_at_last_clear": 25,
+      "absent_channel_measures": 250,
+      "absent_channel_measure_and_switch_s": 1479,
+      "discovery": [
+        {
+          "channel": 8,
+          "time": 47,
+          "stations_seen": 1
+        },
+        {
+          "channel": 13,
+          "time": 77,
+          "stations_seen": 1
+        },
+        {
+          "channel": 15,
+          "time": 89,
+          "stations_seen": 1
+        },
+        {
+          "channel": 9,
+          "time": 368,
+          "stations_seen": 2
+        },
+        {
+          "channel": 18,
+          "time": 422,
+          "stations_seen": 2
+        },
+        {
+          "channel": 3,
+          "time": 1022.803163,
+          "stations_seen": 4
+        },
+        {
+          "channel": 17,
+          "time": 1840.546333,
+          "stations_seen": 7
+        },
+        {
+          "channel": 4,
+          "time": 2135.414168,
+          "stations_seen": 8
+        },
+        {
+          "channel": 12,
+          "time": 3840.23413,
+          "stations_seen": 14
+        },
+        {
+          "channel": 6,
+          "time": 4506.746819,
+          "stations_seen": 17
+        }
+      ],
+      "clearances": [
+        {
+          "channel": 18,
+          "time": 593.499378,
+          "stations_seen": 2
+        },
+        {
+          "channel": 13,
+          "time": 1659.489122,
+          "stations_seen": 6
+        },
+        {
+          "channel": 3,
+          "time": 1746.684726,
+          "stations_seen": 6
+        },
+        {
+          "channel": 17,
+          "time": 2051.122252,
+          "stations_seen": 7
+        },
+        {
+          "channel": 4,
+          "time": 3473.977951,
+          "stations_seen": 13
+        },
+        {
+          "channel": 15,
+          "time": 3895.121443,
+          "stations_seen": 14
+        },
+        {
+          "channel": 8,
+          "time": 3929.209796,
+          "stations_seen": 14
+        },
+        {
+          "channel": 9,
+          "time": 5961.564058,
+          "stations_seen": 23
+        },
+        {
+          "channel": 6,
+          "time": 6534.722433,
+          "stations_seen": 25
+        },
+        {
+          "channel": 12,
+          "time": 6645.154286,
+          "stations_seen": 25
+        }
+      ],
+      "required_saving_to_400": 2645.154286
+    },
+    {
+      "case_code": "PDXE-ETG4-6G3Z-M75T",
+      "platform_counts": {
+        "jammer_count": 14,
+        "omnidirectional_jammer_count": 7,
+        "directional_jammer_count": 7
+      },
+      "summary": {
+        "problem": 4,
+        "complete": true,
+        "cleared": 14,
+        "virtual_time_s": 6193.354369,
+        "mean_time_s": 442.3824549285714,
+        "stations_visited": 25,
+        "program_time_s": 1.1095444000093266,
+        "measure": 305,
+        "clear": 14,
+        "failed_clear": 0,
+        "fallback": 0,
+        "move_s": 4316.354368665567,
+        "switch_s": 282.0,
+        "measure_s": 1525.0,
+        "optical_s": 42.0,
+        "laser_s": 28.0,
+        "candidate_evaluations": 0,
+        "deferred_targets": 14,
+        "forced_targets": 0,
+        "opportunistic_measures": 0,
+        "safe_clear_points": 5,
+        "paper_measurements_selected": 0,
+        "route_replans": 39,
+        "skipped_known_measurements": 47,
+        "small_region_probes": 9,
+        "small_region_successes": 9,
+        "strategy": "integrated",
+        "coverage_layout": "radial",
+        "normal_exit": true,
+        "max_step_time_error_s": 4.819403329747729e-07,
+        "provenance": "Official HTTP interface; case code and module come from simulator UI"
+      },
+      "export_matches_platform": true,
+      "export_header_identity": {
+        "problem_no": 4,
+        "practice_run_no": 454795280629910601,
+        "case_code": "PDXE-ETG4-6G3Z-M75T"
+      },
+      "accepted_records": 321,
+      "error_records": 0,
+      "replay_all_actions_match": true,
+      "replay_normal_exit": true,
+      "independent_parts": {
+        "move_s": 4316.3543686655685,
+        "switch_s": 282,
+        "measure_s": 1525,
+        "optical_s": 42,
+        "laser_s": 28
+      },
+      "measure_outcomes": {
+        "no_signal": 273,
+        "direction": 32
+      },
+      "last_clear_time": 5967.570091,
+      "tail_time_s": 225.78427800000009,
+      "tail_parts": {
+        "move_s": 155.78427779134807,
+        "switch_s": 10,
+        "measure_s": 60,
+        "optical_s": 0,
+        "laser_s": 0
+      },
+      "tail_measures": 12,
+      "stations_seen_at_last_clear": 23,
+      "absent_channel_measures": 150,
+      "absent_channel_measure_and_switch_s": 895,
+      "discovery": [
+        {
+          "channel": 2,
+          "time": 11,
+          "stations_seen": 1
+        },
+        {
+          "channel": 18,
+          "time": 107,
+          "stations_seen": 1
+        },
+        {
+          "channel": 11,
+          "time": 380,
+          "stations_seen": 2
+        },
+        {
+          "channel": 13,
+          "time": 392,
+          "stations_seen": 2
+        },
+        {
+          "channel": 16,
+          "time": 410,
+          "stations_seen": 2
+        },
+        {
+          "channel": 19,
+          "time": 428,
+          "stations_seen": 2
+        },
+        {
+          "channel": 15,
+          "time": 713.728257,
+          "stations_seen": 3
+        },
+        {
+          "channel": 10,
+          "time": 2615.102829,
+          "stations_seen": 10
+        },
+        {
+          "channel": 17,
+          "time": 3856.260893,
+          "stations_seen": 15
+        },
+        {
+          "channel": 3,
+          "time": 3868.260893,
+          "stations_seen": 15
+        },
+        {
+          "channel": 1,
+          "time": 4135.260893,
+          "stations_seen": 16
+        },
+        {
+          "channel": 8,
+          "time": 4171.260893,
+          "stations_seen": 16
+        },
+        {
+          "channel": 9,
+          "time": 4177.260893,
+          "stations_seen": 16
+        },
+        {
+          "channel": 20,
+          "time": 4474.260893,
+          "stations_seen": 17
+        }
+      ],
+      "clearances": [
+        {
+          "channel": 2,
+          "time": 507.465133,
+          "stations_seen": 2
+        },
+        {
+          "channel": 13,
+          "time": 891.448113,
+          "stations_seen": 3
+        },
+        {
+          "channel": 11,
+          "time": 1322.938427,
+          "stations_seen": 4
+        },
+        {
+          "channel": 18,
+          "time": 2039.789905,
+          "stations_seen": 7
+        },
+        {
+          "channel": 15,
+          "time": 2122.931058,
+          "stations_seen": 7
+        },
+        {
+          "channel": 10,
+          "time": 3068.837838,
+          "stations_seen": 11
+        },
+        {
+          "channel": 16,
+          "time": 4574.821182,
+          "stations_seen": 17
+        },
+        {
+          "channel": 19,
+          "time": 5148.120666,
+          "stations_seen": 20
+        },
+        {
+          "channel": 20,
+          "time": 5242.584933,
+          "stations_seen": 20
+        },
+        {
+          "channel": 9,
+          "time": 5353.529394,
+          "stations_seen": 20
+        },
+        {
+          "channel": 8,
+          "time": 5632.861258,
+          "stations_seen": 22
+        },
+        {
+          "channel": 1,
+          "time": 5682.226714,
+          "stations_seen": 22
+        },
+        {
+          "channel": 3,
+          "time": 5908.380691,
+          "stations_seen": 23
+        },
+        {
+          "channel": 17,
+          "time": 5967.570091,
+          "stations_seen": 23
+        }
+      ],
+      "required_saving_to_400": 593.3543689999997
+    }
+  ],
+  "arithmetic_mean_s_per_source": 553.4489417642857,
+  "pooled_time_divided_by_total_sources": 534.937860625,
+  "both_complete": true,
+  "met_400_count": 0
+}

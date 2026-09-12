@@ -1,0 +1,65 @@
+{
+  "config": {
+    "start": 1300000,
+    "count": 20,
+    "layouts": [
+      "centered",
+      "shifted"
+    ],
+    "localization": "paper",
+    "scenario": "boundary_outward",
+    "tag": "stress_boundary_outward"
+  },
+  "comparisons": {
+    "shifted": {
+      "runs": 20,
+      "reference_mean": 998.9793529861774,
+      "candidate_mean": 874.7733447534143,
+      "improvement": 0.12433290824428256,
+      "p95_reference": 1181.9926415360496,
+      "p95_candidate": 1023.0738232545514,
+      "worst_ratio": 0.9678270444370385,
+      "slower_10pct": 0.0,
+      "win_fraction": 1.0,
+      "all_complete": true,
+      "worst_seed": 1300001,
+      "adopt": true,
+      "move_s": {
+        "centered": 8847.263419534916,
+        "shifted": 7729.5348740766685
+      },
+      "measure": {
+        "centered": 530.1,
+        "shifted": 463.6
+      },
+      "failed_clear": {
+        "centered": 135.4,
+        "shifted": 126.3
+      },
+      "fallback": {
+        "centered": 7.25,
+        "shifted": 7.5
+      },
+      "stations_visited": {
+        "centered": 31.0,
+        "shifted": 27.0
+      },
+      "tail_time_s": {
+        "centered": 168.1265526931382,
+        "shifted": 231.71009058074114
+      },
+      "wall_s": {
+        "centered": 0.5893245250008476,
+        "shifted": 0.7683633050008212
+      },
+      "n10-15": {
+        "runs": 20,
+        "improvement": 0.12433290824428256,
+        "worst_ratio": 0.9678270444370385,
+        "win_fraction": 1.0
+      }
+    }
+  },
+  "source_sha256": "6d316f540fbb894bd3558ef9bc535a8c36203f55964de9a7ca16071e5f686ad5",
+  "provenance": "LOCAL_SYNTHETIC_PAIRED"
+}

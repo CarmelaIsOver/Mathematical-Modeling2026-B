@@ -1,0 +1,13 @@
+{
+  "mean_gain": 0.029971107931720864,
+  "wins": 140,
+  "slow_over10": 5,
+  "worst_ratio": 1.1829460740273134,
+  "worst_seed": 2600188,
+  "saving_95ci": [
+    10.620806001154085,
+    19.296349025198936
+  ],
+  "adopt": false,
+  "target400_met": false
+}
