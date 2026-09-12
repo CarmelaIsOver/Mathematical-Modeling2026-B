@@ -38,7 +38,8 @@ def search_route(points,start):
 
 class JointSearchSolver(ActiveLocalizationSolver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
-                 reschedule_after_step=False,target_measure_budget=None,step_skip_known=False):
+                 reschedule_after_step=False,target_measure_budget=None,step_skip_known=False,
+                 close_discovery_on_upper_bound=True):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
@@ -46,7 +47,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
         self.diagnostics.update(route_replans=0,skipped_known_measurements=0,
                                 small_region_probes=0,small_region_successes=0,
                                 coverage_sites_cancelled=0,rescheduled_targets=0,
-                                reschedule_steps=0,reschedule_fallbacks=0)
+                                reschedule_steps=0,reschedule_fallbacks=0,discovery_closed=0)
         # Opt-in: end a scheduling turn after one region-updating measurement.
         # Measurement budget is per channel and never reset by re-planning.
         self.reschedule_after_step=bool(reschedule_after_step)
@@ -56,6 +57,11 @@ class JointSearchSolver(ActiveLocalizationSolver):
         # When stepping, a station pass must not duplicate a target's dedicated
         # measurements; open targets are resolved by their own turns instead.
         self.step_skip_known=bool(step_skip_known)
+        self.close_discovery_on_upper_bound=bool(close_discovery_on_upper_bound)
+        # Once the stated upper bound is reached from acknowledged observations,
+        # no unknown channel can still hold a source. Discovery obligations end;
+        # unvisited stations stay available only as optional localization points.
+        self.discovery_closed=False
 
     def locate(self,c):
         if not self.reschedule_after_step:
@@ -125,11 +131,19 @@ class JointSearchSolver(ActiveLocalizationSolver):
             self.deferred={c:age for c,age in self.deferred.items() if c not in self.cleared}
             if len(self.cleared)==16:break
             known=list(self.deferred)
-            if self.coverage_layout=='rings' and len(known)+len(self.cleared)==16:
+            if (self.close_discovery_on_upper_bound and not self.discovery_closed
+                    and len(known)+len(self.cleared)==16):
                 # The stated upper bound has been reached using observations.
-                # Unknown-channel discovery is finished, clearance is not.
+                # Unknown-channel discovery is finished, clearance is not; the
+                # remaining station obligations are cancelled. Re-using a station
+                # as an optional localization point is left to the per-channel
+                # certificate step, which can justify keeping specific sites.
+                self.discovery_closed=True
                 self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
+                self.diagnostics['discovery_closed']+=1
                 self.pending_stations=[]
+            if self.discovery_closed and not self.deferred:
+                break
             if self.reschedule_after_step and known and not self.pending_stations:
                 # Coverage is finished and every known target stays mandatory;
                 # resolve the nearest one directly instead of re-solving a
@@ -146,7 +160,12 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 self.locate(index)
                 continue
             self.pending_stations.remove(index);p=self.stations[index]
-            channels=[c for c in range(1,21) if c not in self.cleared]
+            if self.discovery_closed:
+                # Discovery is over: only known targets are worth re-measuring;
+                # an unresolved channel has no source and cannot answer.
+                channels=[c for c in self.deferred if c not in self.cleared]
+            else:
+                channels=[c for c in range(1,21) if c not in self.cleared]
             if self.channel in channels:
                 channels.remove(self.channel);channels.insert(0,self.channel)
             for c in channels:
