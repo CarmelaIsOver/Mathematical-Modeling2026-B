@@ -150,10 +150,18 @@ def distance_origin_triangle(t):
     return float(min(ds))
 
 def search_stations(problem, spacing=950., layout='original'):
-    if layout not in ('original','compact','radial','rings','tight'):
+    if layout not in ('original','compact','radial','rings','tight','hex'):
         raise ValueError('Unknown coverage layout')
-    if layout=='tight' and problem!=3:
-        raise ValueError('The tight eight-site layout is certified for Q3 only')
+    if layout in ('tight','hex') and problem!=3:
+        raise ValueError('Omni ring layouts are certified for Q3 only')
+    if layout=='hex':
+        # Origin covers radial distances p<=1000. For 1000<=p<=1800,
+        # the nearest of six ring sites has |angle|<=pi/6. Its squared
+        # distance is bounded by p^2+1125^2-2*p*1125*cos(pi/6).
+        # Convexity in p places the maximum at an endpoint: distances
+        # 563.088m and 999.111m, both strictly below the guaranteed 1000m.
+        angles=np.arange(6)*np.pi/3
+        return np.vstack([np.zeros((1,2)),1125.*np.column_stack([np.cos(angles),np.sin(angles)])])
     if layout=='rings':
         if problem!=4 or spacing!=950.:
             raise ValueError('Certified ring coverage requires Q4 and default spacing')

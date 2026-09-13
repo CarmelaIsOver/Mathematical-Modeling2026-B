@@ -1,0 +1,32 @@
+{
+  "baseline": {
+    "mean": 250.37805517088262,
+    "p95": 315.9859816426732,
+    "gain": 0.0,
+    "all_complete": true,
+    "wins": 0,
+    "slow_over10": 0,
+    "worst_ratio": 1.0,
+    "target_count": 107
+  },
+  "hex1125": {
+    "mean": 244.87451098455855,
+    "p95": 305.74123569054007,
+    "gain": 0.021980936718147714,
+    "all_complete": true,
+    "wins": 133,
+    "slow_over10": 2,
+    "worst_ratio": 1.1480154860377636,
+    "target_count": 114
+  },
+  "hex1125_scan30": {
+    "mean": 245.01952230404132,
+    "p95": 305.5513836317907,
+    "gain": 0.021401767272231975,
+    "all_complete": true,
+    "wins": 137,
+    "slow_over10": 3,
+    "worst_ratio": 1.127295401092194,
+    "target_count": 114
+  }
+}

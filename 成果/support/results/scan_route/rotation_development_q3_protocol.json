@@ -1,0 +1,11 @@
+{
+  "problem": 3,
+  "start": 4100000,
+  "count": 24,
+  "modes": [
+    "baseline",
+    "hex1125_rotate"
+  ],
+  "tag": "rotation_development",
+  "kind": "random"
+}

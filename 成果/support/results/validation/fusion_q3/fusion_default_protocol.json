@@ -1,0 +1,8 @@
+{
+  "arm": "fusion_default",
+  "count": 200,
+  "seed": 4600000,
+  "stress": false,
+  "kwargs": {},
+  "simulator": "shared current LocalBackend, observation-only AuditPort"
+}

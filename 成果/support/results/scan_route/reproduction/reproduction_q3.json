@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "mean": 311.1061463537529,
+    "p95": 311.1061463537529,
+    "gain": 0.0,
+    "all_complete": true,
+    "wins": 0,
+    "slow_over10": 0,
+    "worst_ratio": 1.0,
+    "target_count": 0
+  },
+  "hex1125": {
+    "mean": 279.84012777523765,
+    "p95": 279.84012777523765,
+    "gain": 0.10049952064580314,
+    "all_complete": true,
+    "wins": 1,
+    "slow_over10": 0,
+    "worst_ratio": 0.8995004793541969,
+    "target_count": 0
+  }
+}

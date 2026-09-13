@@ -1,0 +1,15 @@
+{
+  "problem": 3,
+  "start": 4100000,
+  "count": 24,
+  "modes": [
+    "baseline",
+    "hex1125",
+    "hex1200",
+    "scan30",
+    "scan90",
+    "hex1125_scan30"
+  ],
+  "tag": "development",
+  "kind": "random"
+}

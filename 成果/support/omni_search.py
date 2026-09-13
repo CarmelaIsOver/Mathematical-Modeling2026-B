@@ -1,42 +1,200 @@
-"""Q3 observation-only scheduling with certified omni coverage.
+"""Q3 observation-only scheduling with complete seven-site coverage.
 
 Known targets compete with remaining search sites in an estimated open route.
 Waiting for three sites is not a reason to force a long trip. Once no search
 sites remain, every known target is still mandatory and is cleared in turn.
 """
 import time
+import math
 import numpy as np
-from solver import Solver
+from geometry import optical_cover, feasible, enclosing_circle
+from solver import Solver, open_route
 from joint_search import search_route
-from localization_service import LocalizationService
+from negative_observations import apply_negative_halfplanes
+
+# Guarded seven-site shrink (research candidate). The ring radius must stay inside
+# [1800cos30 - sqrt((1800cos30)^2 - 2240000), 1800cos30 + sqrt(...)] so that the
+# centre plus six ring sites still cover every source of the 1800 m disk while
+# every site stays within 1000 m of its covered sources.
+RING_RADIUS=1123.
+RING_GUARDS=('off','aggressive','conservative')
 
 
 class OmniSearchSolver(Solver):
-    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original',service_policy='atomic'):
-        if problem!=3 or coverage_layout not in ('original','tight'):
-            raise ValueError('Omni joint scheduling requires Q3 and a certified omni coverage layout')
+    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original',
+                 negative_observations=False,certify_on_tight=False,negative_route=False,
+                 ring_guard='off',probe_radius=0.):
+        if problem!=3 or coverage_layout!='original':
+            raise ValueError('Omni joint scheduling requires Q3 and original seven-site coverage')
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
-        if service_policy not in ('atomic','adaptive'):raise ValueError('Unknown service policy')
-        self.service_policy=service_policy
-        self._localization_service=LocalizationService(self)
-        self.diagnostics.update(skipped_known_measurements=0,route_replans=0)
-        if service_policy=='adaptive':
-            self.diagnostics.update(service_steps=0,coverage_sites_cancelled=0,small_region_probes=0,small_region_successes=0)
+        # Optional Q3 positive/negative bisector constraints. Off by default so the
+        # team's joint scheduler stays the untouched production baseline.
+        self.use_negatives=bool(negative_observations)
+        self.certify_on_tight=bool(certify_on_tight) and self.use_negatives
+        # By default the tightened bound only ranks the next measurement; route
+        # centres, station-scan skips and clearance certificates stay on the
+        # positive-reception outer bound. negative_route=True also lets the
+        # tightened bound drive routing (pilot showed it adds tail regressions).
+        self.negative_route=bool(negative_route)
+        self.negatives={c:[] for c in self.obs}
+        self.outer_cache={}
+        self.region_updates=[]
+        self.diagnostics.update(skipped_known_measurements=0,route_replans=0,
+                                negative_observations=0,negative_region_fallbacks=0,
+                                negative_constraints=0)
+        # Optional guarded shrink of the Q3 seven-site ring. 'off' keeps the
+        # team layout untouched; the other modes only replace the station set
+        # after the centre scan itself observed real sources, and every variant
+        # stays a certified covering layout.
+        if ring_guard not in RING_GUARDS:
+            raise ValueError('Unknown ring guard mode')
+        self.ring_guard=ring_guard
+        self.probe_radius=float(probe_radius)
+        if self.probe_radius<0.:
+            raise ValueError('probe_radius must be non-negative')
+        self.diagnostics['extra_probe_attempts']=0
+        self.diagnostics['extra_probe_successes']=0
+        self.observed_channels=set()
+        self.ring_activated=False
+        self.min_origin_seen=1 if ring_guard=='aggressive' else 6
+        self.skip_known_radius=1200.
+        angles=np.arange(6)*math.pi/3
+        self.ring_points=np.vstack([np.zeros((1,2)),
+                                    RING_RADIUS*np.c_[np.cos(angles),np.sin(angles)]])
+        self.diagnostics.update(ring_activated=0,coverage_sites_cancelled=0)
+
+    def _install_ring(self):
+        """Replace the seven sites with the certified 1123 m ring."""
+        previous=len(self.stations)
+        self.stations=self.ring_points.copy()
+        if len(self.stations)!=previous:
+            # Different station count: rebuild pending indices, keeping every
+            # unvisited site but never re-queueing the centre currently being
+            # scanned (its index was already removed before the scan started).
+            self.pending_stations=[i for i in range(len(self.stations))
+                                   if i not in self.visited and i!=0]
+        self.ring_activated=True
+        self.diagnostics['ring_activated']=1
 
     def action(self,path,p,c):
-        r=super().action(path,p,c)
-        if self.service_policy=='adaptive':self._localization_service.record(path,p,c,r)
-        return r
+        response=super().action(path,p,c)
+        if (self.ring_guard!='off' and path=='/measure'
+                and response['measure_result'] in ('direction','near')):
+            self.observed_channels.add(c)
+            if (not self.ring_activated and not self.visited
+                    and len(self.observed_channels)>=self.min_origin_seen):
+                self._install_ring()
+            if len(self.observed_channels)==16 and self.pending_stations:
+                # The stated source upper bound is reached from observations:
+                # unknown-channel discovery is over, clearance is not.
+                self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
+                self.pending_stations=[]
+        if (self.use_negatives and path=='/measure'
+                and response['measure_result']=='no_signal' and c not in self.cleared):
+            # A not-received reading is retained even before the source is found.
+            self.negatives[c].append(self.pos.copy())
+            self.diagnostics['negative_observations']+=1
+        return response
+
+    def outer_region(self,c):
+        """Positive-reception outer bound; always a valid enclosing region."""
+        n=len(self.obs[c])
+        if c not in self.outer_cache or self.outer_cache[c][0]!=n:
+            poly=feasible(self.obs[c])
+            if not len(poly):
+                raise ValueError('Empty positive feasible region')
+            center,radius=enclosing_circle(poly)
+            self.outer_cache[c]=(n,poly,center,radius)
+        return self.outer_cache[c][1:]
 
     def region(self,c):
-        if self.service_policy=='adaptive':return self._localization_service.omni_region(c)
-        return super().region(c)
+        if not self.use_negatives:
+            return super().region(c)
+        return self.tight_region(c) if self.negative_route else self.outer_region(c)
+
+    def tight_region(self,c):
+        """Received/not-received tightened bound; planning use only by default."""
+        key=(len(self.obs[c]),len(self.negatives[c]))
+        if c not in self.cache or self.cache[c][0]!=key:
+            outer,_,_=self.outer_region(c)
+            poly,count=apply_negative_halfplanes(outer,self.obs[c],self.negatives[c])
+            if not len(poly) or not np.all(np.isfinite(poly)):
+                # Numerical fail-safe preserves the complete outer bound and completeness.
+                poly=outer
+                self.diagnostics['negative_region_fallbacks']+=1
+            center,radius=enclosing_circle(poly)
+            self.cache[c]=(key,poly,center,radius)
+            self.diagnostics['negative_constraints']+=count
+            self.region_updates.append({'channel':c,'positive_count':key[0],
+                'negative_count':key[1],'constraints':count,
+                'before_radius':self.outer_cache[c][3],'after_radius':radius,
+                'position':self.pos.tolist()})
+        return self.cache[c][1:]
+
+    def _certificate_region(self,c):
+        """Region whose clearance certificate must hold.
+
+        Default keeps the certificate on the positive-reception outer bound, so
+        a negative half-plane may guide planning but never authorise a clear.
+        """
+        if self.certify_on_tight:
+            return self.tight_region(c)
+        return self.outer_region(c)
 
     def locate(self,c):
-        if self.service_policy=='adaptive':return self._localization_service.advance_omni(c)
-        return super().locate(c)
+        if self.probe_radius>0:
+            # Optional small-region optical probe (opt-in, default off). A probe
+            # never certifies anything: a failed clear costs 3 s and leaves the
+            # feasible region untouched, so the certified path below still runs.
+            _,probe_center,probe_radius_=self.region(c)
+            if 19.99<probe_radius_<=self.probe_radius:
+                self.diagnostics['extra_probe_attempts']+=1
+                if self.clear(probe_center,c):
+                    self.diagnostics['extra_probe_successes']+=1
+                    return
+        if not self.use_negatives:
+            return super().locate(c)
+        dark=0
+        for _ in range(self.max_refine):
+            cert_poly,cert_center,cert_radius=self._certificate_region(c)
+            if cert_radius<=19.99:
+                self.certified_clear(c,cert_poly,cert_center,cert_radius)
+                return
+            # Only the tightened region ranks the next measurement.
+            poly,center,radius=self.tight_region(c)
+            q=self.next_measure(c,poly,center,radius)
+            if q is None:
+                break
+            r=self.action('/measure',q,c)
+            if r['measure_result']=='near':
+                if not self.clear(self.pos,c):
+                    raise RuntimeError('Near clear failed')
+                return
+            if r['measure_result']=='no_signal':
+                dark+=1
+                if dark>=2:
+                    break
+            else:
+                dark=0
+        cert_poly,cert_center,cert_radius=self._certificate_region(c)
+        if cert_radius<=19.99:
+            self.certified_clear(c,cert_poly,cert_center,cert_radius)
+            return
+        self.counts['fallback']+=1
+        points=optical_cover(cert_poly,self.obs[c][0][1])
+        points=points[open_route(points,self.pos)]
+        for p in points:
+            if self.clear(p,c):
+                return
+        raise RuntimeError('Exhausted optical cover')
 
     def skip_station_measurement(self,c,p):
+        if self.ring_guard!='off' and c in self.deferred:
+            # Known targets are cleared regardless; a station pass beyond this
+            # distance adds a scan without a reliable movement benefit.
+            _,center,radius=self.region(c)
+            if np.linalg.norm(np.asarray(center)-np.asarray(p))>self.skip_known_radius:
+                return True
         if c not in self.deferred:return False
         _,center,radius=self.region(c)
         # No claim that an unknown channel is absent is made here. Known
@@ -50,25 +208,19 @@ class OmniSearchSolver(Solver):
         while self.pending_stations or self.deferred:
             self.deferred={c:age for c,age in self.deferred.items() if c not in self.cleared}
             if len(self.cleared)==16:break
-            if self.service_policy=='adaptive' and len(self.cleared)+len(self.deferred)==16:
-                self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
-                self.pending_stations=[]
             if self.deferred:
                 keys=list(self.deferred)
                 if not self.pending_stations:
-                    c=(keys[search_route(np.array([self.region(k)[1] for k in keys]),self.pos)[0]]
-                       if self.service_policy=='adaptive' else min(keys,key=lambda c:np.linalg.norm(self.region(c)[1]-self.pos)))
+                    c=min(keys,key=lambda c:np.linalg.norm(self.region(c)[1]-self.pos))
                     self.diagnostics['forced_targets']+=1
-                    self.locate(c)
-                    if c in self.cleared:self.deferred.pop(c,None)
+                    self.locate(c);self.deferred.pop(c,None)
                     continue
                 nodes=[('target',c) for c in keys]+[('station',j) for j in self.pending_stations]
                 points=np.array([self.region(c)[1] for c in keys]+[self.stations[j] for j in self.pending_stations])
                 self.diagnostics['route_replans']+=1
                 kind,which=nodes[search_route(points,self.pos)[0]]
                 if kind=='target':
-                    self.locate(which)
-                    if which in self.cleared:self.deferred.pop(which,None)
+                    self.locate(which);self.deferred.pop(which,None)
                     continue
                 i=which
             elif self.pending_stations:

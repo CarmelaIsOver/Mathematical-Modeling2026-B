@@ -1,0 +1,11 @@
+{
+  "arm": "fusion_recommended",
+  "count": 10,
+  "seed": 4700000,
+  "stress": true,
+  "kwargs": {
+    "ring_guard": "aggressive",
+    "probe_radius": 60.0
+  },
+  "simulator": "shared current LocalBackend, observation-only AuditPort"
+}

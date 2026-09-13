@@ -1,0 +1,9 @@
+{
+  "arm": "fusion_recommended",
+  "count": 50,
+  "mean": 268.2407418930122,
+  "p95": 322.0913492102854,
+  "max": 367.8537208679466,
+  "under250": 21,
+  "all_complete": true
+}

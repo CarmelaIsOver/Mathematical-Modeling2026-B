@@ -6,7 +6,7 @@ import numpy as np
 from backend import LocalBackend
 from audit import AuditPort
 from solver import Solver
-from omni_search import OmniSearchSolver
+from test_history_support import FrozenOmniSearchSolver as OmniSearchSolver
 from joint_search import JointSearchSolver
 from localization_service import outside_disk_hull
 from coverage_geometry import hull_normals
@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parent
 
 class LocalizationServiceTests(unittest.TestCase):
     def test_atomic_entry_restores_previous_layouts_and_behavior(self):
-        for problem,layout,ctor in [(3,'tight',OmniSearchSolver),(4,'radial',JointSearchSolver)]:
+        for problem,layout,ctor in [(4,'radial',JointSearchSolver)]:
             expected=ctor(AuditPort(LocalBackend(3500000,problem)),problem,coverage_layout=layout).run()
             with tempfile.TemporaryDirectory() as folder:
                 with patch.object(sys,'argv',['run.py','--mode','official','--problem',str(problem),

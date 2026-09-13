@@ -1,0 +1,12 @@
+{
+  "problem": 3,
+  "start": 4200000,
+  "count": 200,
+  "modes": [
+    "baseline",
+    "hex1125",
+    "hex1125_scan30"
+  ],
+  "tag": "holdout",
+  "kind": "random"
+}

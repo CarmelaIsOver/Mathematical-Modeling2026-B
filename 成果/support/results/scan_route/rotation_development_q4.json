@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "mean": 488.36128524776035,
+    "p95": 617.6759383510563,
+    "gain": 0.0,
+    "all_complete": true,
+    "wins": 0,
+    "slow_over10": 0,
+    "worst_ratio": 1.0,
+    "target_count": 8
+  },
+  "rotate": {
+    "mean": 492.2986337442398,
+    "p95": 599.04496448223,
+    "gain": -0.00806236820038242,
+    "all_complete": true,
+    "wins": 8,
+    "slow_over10": 0,
+    "worst_ratio": 1.08475557312948,
+    "target_count": 7
+  }
+}

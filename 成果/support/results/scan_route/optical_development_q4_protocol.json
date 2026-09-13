@@ -1,0 +1,11 @@
+{
+  "problem": 4,
+  "start": 4100000,
+  "count": 24,
+  "modes": [
+    "baseline",
+    "bands"
+  ],
+  "tag": "optical_development",
+  "kind": "random"
+}

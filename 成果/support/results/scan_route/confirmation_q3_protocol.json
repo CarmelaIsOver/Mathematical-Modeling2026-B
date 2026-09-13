@@ -1,0 +1,11 @@
+{
+  "problem": 3,
+  "start": 4400000,
+  "count": 200,
+  "modes": [
+    "baseline",
+    "hex1125"
+  ],
+  "tag": "confirmation",
+  "kind": "random"
+}

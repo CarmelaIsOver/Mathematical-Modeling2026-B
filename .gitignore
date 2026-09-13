@@ -8,7 +8,21 @@
 # 忽略临时目录和日志
 **/tmp/
 **/practice_logs/
+**/paper_practice_logs/
+**/official_logs/
+/成果/演练记录/
 *.jlog
+
+# Python缓存、本地环境和编辑器临时文件
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+~$*
+
+# 本机保留的完整参考仓库；采用的Q3代码已合入成果/support
+/Mathematical-Modeling2026-B-codex-q3-q4-v3-fusion/
 
 # 如果你还有其他压缩包，可以加
 *.7z

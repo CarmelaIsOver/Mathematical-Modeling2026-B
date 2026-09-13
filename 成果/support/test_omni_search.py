@@ -66,8 +66,10 @@ class OmniSearchTests(unittest.TestCase):
                  contextlib.redirect_stdout(io.StringIO()) as output:
                 entry.main()
             r=json.loads(next(Path(folder).glob('client_*.json')).read_text())
-            self.assertEqual((r['strategy'],r['coverage_layout']),('integrated','tight'))
-            self.assertEqual(r['service_policy'],'adaptive')
+            self.assertEqual((r['strategy'],r['coverage_layout']),('integrated','original'))
+            self.assertEqual(r['service_policy'],'atomic')
+            self.assertEqual(r['q3_ring_guard'],'aggressive')
+            self.assertEqual(r['q3_probe_radius'],60.)
             self.assertEqual(r['scheduling_policy'],'joint_route')
             self.assertTrue(r['complete'] and r['normal_exit'])
         with self.assertRaises(ValueError):OmniSearchSolver(None,4)

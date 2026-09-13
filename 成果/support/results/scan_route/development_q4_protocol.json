@@ -1,0 +1,13 @@
+{
+  "problem": 4,
+  "start": 4100000,
+  "count": 24,
+  "modes": [
+    "baseline",
+    "scan30",
+    "scan90",
+    "scan180"
+  ],
+  "tag": "development",
+  "kind": "random"
+}

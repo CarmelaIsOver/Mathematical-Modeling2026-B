@@ -1,0 +1,42 @@
+{
+  "baseline": {
+    "mean": 488.36128524776035,
+    "p95": 617.6759383510563,
+    "gain": 0.0,
+    "all_complete": true,
+    "wins": 0,
+    "slow_over10": 0,
+    "worst_ratio": 1.0,
+    "target_count": 8
+  },
+  "scan30": {
+    "mean": 489.48798383740115,
+    "p95": 608.4030689571098,
+    "gain": -0.002307100549686636,
+    "all_complete": true,
+    "wins": 10,
+    "slow_over10": 1,
+    "worst_ratio": 1.1272948937262586,
+    "target_count": 6
+  },
+  "scan90": {
+    "mean": 493.9156260096304,
+    "p95": 616.6183922342495,
+    "gain": -0.011373425637235313,
+    "all_complete": true,
+    "wins": 13,
+    "slow_over10": 2,
+    "worst_ratio": 1.332209750750325,
+    "target_count": 7
+  },
+  "scan180": {
+    "mean": 503.41651468396634,
+    "p95": 598.2491279961939,
+    "gain": -0.030828056791127434,
+    "all_complete": true,
+    "wins": 9,
+    "slow_over10": 3,
+    "worst_ratio": 1.3717348278810166,
+    "target_count": 3
+  }
+}

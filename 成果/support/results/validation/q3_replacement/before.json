@@ -1,0 +1,258 @@
+{
+  "fixtures": [
+    {
+      "problem": 3,
+      "seed": 4800000,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 264.7025837967896,
+      "trace_sha256": "c5b5f7a8d22d7ccbc8b76bfce06a70c57cbb82eab2e8b393cb9aba16c086fbb4"
+    },
+    {
+      "problem": 3,
+      "seed": 4800001,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 248.3800614862031,
+      "trace_sha256": "e2f31c715e6be2478f098a0d175928336cda256bcfd4017de85cb44043835312"
+    },
+    {
+      "problem": 3,
+      "seed": 4800002,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 244.41051692921903,
+      "trace_sha256": "806bd5cdc1995260f4c98775405865f4454b988ee41a76f9ccac505297c1c94e"
+    },
+    {
+      "problem": 3,
+      "seed": 4800003,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 407.82367271825444,
+      "trace_sha256": "97854860be31ac573cfcbbe5a287aedf296ec0d9fd1f48e0e9dd5dd6345260b8"
+    },
+    {
+      "problem": 3,
+      "seed": 4800004,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 236.45841639369652,
+      "trace_sha256": "a8265693f0635f808c3aa50d8d884c6a8cb8b657c03befb7914ace7c2aa2fcfb"
+    },
+    {
+      "problem": 3,
+      "seed": 4800005,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 193.8288340630319,
+      "trace_sha256": "876480d9bbec27e47da921e675d11903ec77ff29909b653407de1e034b86f469"
+    },
+    {
+      "problem": 3,
+      "seed": 4800006,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 320.867390999089,
+      "trace_sha256": "2055b9151a705cde70eed43666f1914b88dbb489926c833e0e682c788f63f777"
+    },
+    {
+      "problem": 3,
+      "seed": 4800007,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 202.5998986563946,
+      "trace_sha256": "dc696c69a7f8470351e849894fc3bc15bf9c9fbe98d5dcd1833b6d98df765c0f"
+    },
+    {
+      "problem": 3,
+      "seed": 4800008,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 238.4423458677065,
+      "trace_sha256": "0ba1490be2addf502c1ce54df88d6528ffb291c934df9b0239a1a039fd9558fe"
+    },
+    {
+      "problem": 3,
+      "seed": 4800009,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 299.14966007145614,
+      "trace_sha256": "d4d86c783def3b23cf8e02d5103887a662df4943892aa2182ecf0e2f306fd00f"
+    },
+    {
+      "problem": 3,
+      "seed": 4800010,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 216.48521235917755,
+      "trace_sha256": "84ad9b2fa68b664b71a14d3fbf15ab43758cb1c8053e7905afd3cc0cdf863a5b"
+    },
+    {
+      "problem": 3,
+      "seed": 4800011,
+      "kwargs": {
+        "ring_guard": "aggressive",
+        "probe_radius": 60.0
+      },
+      "mean_time_s": 266.6169482227812,
+      "trace_sha256": "343e18ca3c3596475d866830698cdf1e851e931c85b4afd89e5ce0f236862485"
+    },
+    {
+      "problem": 4,
+      "seed": 4800000,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 388.1866326344087,
+      "trace_sha256": "5cfac4cf370b9bf77d468e05db84b1069a8b2e4aa52ab40248452a558759a97a"
+    },
+    {
+      "problem": 4,
+      "seed": 4800001,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 544.1875828994939,
+      "trace_sha256": "77ce737bbcf46177bc402a243a3e59cd07c025cbe485255e16a8307f136dd655"
+    },
+    {
+      "problem": 4,
+      "seed": 4800002,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 467.7672057978039,
+      "trace_sha256": "526676e2a97b6847cfc2e1d210def4d937c5da3c3ff499de9bd7416554f3a703"
+    },
+    {
+      "problem": 4,
+      "seed": 4800003,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 641.1450613515926,
+      "trace_sha256": "1d56bed275f997ccb6b50f9db2ff6c82068d076e7dd67cd126df4b36bfb4758d"
+    },
+    {
+      "problem": 4,
+      "seed": 4800004,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 362.5575126752106,
+      "trace_sha256": "6fc6425f914c3e6b1dc1b7aa6559f1cdb4365252f98520dc94a50c8136cc0c71"
+    },
+    {
+      "problem": 4,
+      "seed": 4800005,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 297.102755211952,
+      "trace_sha256": "7086ff135c0078feacfb61b40a99331ada9471e357bff9faafeabe42c4ff5d22"
+    },
+    {
+      "problem": 4,
+      "seed": 4800006,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 491.41334930991104,
+      "trace_sha256": "99af366cb98fe2cfa24b341ab95e0e3194f2b5bef1b38697579d7a2b5c4805d6"
+    },
+    {
+      "problem": 4,
+      "seed": 4800007,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 406.85026407162877,
+      "trace_sha256": "e1c66ab0f70ea073ab5fff68501136bfa20f020d5efdb1a9427904718ba3e4a8"
+    },
+    {
+      "problem": 4,
+      "seed": 4800008,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 449.371191666888,
+      "trace_sha256": "94ec1414ea530a8502c208e869e1f61d0faf356e19889bcebece74d0a4135869"
+    },
+    {
+      "problem": 4,
+      "seed": 4800009,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 524.3825329491062,
+      "trace_sha256": "b0001a72829713f33b10a441bc0e7f66d16e8f75a033af622ebf5cedb33557fb"
+    },
+    {
+      "problem": 4,
+      "seed": 4800010,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 525.2236884508649,
+      "trace_sha256": "2edaa391e816e64bf506e1d37963ac4dc08d3d1451fc726aed9b31345c777b89"
+    },
+    {
+      "problem": 4,
+      "seed": 4800011,
+      "kwargs": {
+        "coverage_layout": "rings",
+        "service_policy": "adaptive"
+      },
+      "mean_time_s": 550.7344852624451,
+      "trace_sha256": "b8cd88db70ccf625c2d62f80d8025221e86a4191ed57e07ac29ee992f2839633"
+    }
+  ],
+  "unchanged_q4_dependencies": {
+    "joint_search.py": "41998669d22b8954e69f214ceb4c7ceddaa847f6bb96afd0f53b1b220c2432e3",
+    "localization_service.py": "fbcc553a4d125f329e1bcf8591b5b0d9530e9610406c838a1af98de91398992d",
+    "solver.py": "9eb88249675990e9b51d7e4909bc7451a87afbc61a79056f637fbfc664de30d3",
+    "active_localization.py": "1a06628837f92cdd21694fe60b12dc0832940153f83177fb9d08b4d790ab0cab",
+    "geometry.py": "714f185f41e51716ae0aa33dc0a04e6a904e1f710b9bd9ea97a290ec026e18a9",
+    "coverage_geometry.py": "a7018254b73cf2f7ad2c51822753d77e127cefe8925f2364f568a4ad0594317a",
+    "backend.py": "021bed9d9c060fb56ddb6370f05ead8277dc4cee8c1ce0ccd22a85f33267d902",
+    "audit.py": "2cacc01aeb9a13201c254954d2f82b2de413596043791ff3f24b61c401361623"
+  },
+  "fusion_source": {
+    "omni_search.py": "34466bc54807b4812c34274211623acf7e836aff25206f664c6101ef8f996e92",
+    "negative_observations.py": "a4714889f8f0de974e3569c9d35514f8fa2fbac9fc11e3a9428f2db9e796526a"
+  }
+}

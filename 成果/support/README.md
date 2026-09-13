@@ -1,12 +1,14 @@
 # 运行与复现说明
 
-日常入口统一为本目录 `run.py`。当前两问默认使用 `integrated` 联合调度和 `service_policy=adaptive`：**Q3为八站 `tight`，Q4为22站 `rings`**。在原目录更新，没有新增版本目录。
+日常入口统一为本目录 `run.py`。按用户要求，**Q3已替换为Fusion推荐方案：`aggressive + probe60`、原子定位**；**Q4保留原有22站 `rings + adaptive`**。Q3在原点收到至少一个源时使用1123米六点环，否则保留1558.85米大环。直接用原来的两条命令即可，无需另加参数。
 
-当前目标为多场场均 `virtual_time_s / cleared`：Q3低于250秒/源、Q4低于440秒/源，全部清除、正常退出。Q3最新300场本地独立配对为256.56→249.13秒/源，达到样本目标；Q4最新200场为510.29→478.93秒/源，仍未达到440，但与此前另一组200场一致具有约6%的平均收益。按用户允许保留明显进展的要求，两问均已采用。压力场景的效率退化见[本轮验证与采用说明](results/target_pair/README.md)，这些本地结果不等同于官方成绩。
+目标仍为多场场均 `virtual_time_s / cleared`：Q3低于250秒/源、Q4低于440秒/源，全部清除、正常退出。替换依据为用户明确选择Fusion Q3，不宣称本次替换带来额外平均提速：此前同场200场当前旧Q3为247.33、Fusion推荐为247.38，整体持平，详见[方案对比](results/validation/fusion_q3/README.md)。替换后Q3与Fusion动作一致、Q4与替换前动作及依赖源码一致的核查见[替换验证](results/validation/q3_replacement/README.md)。
 
-Q3新增全向无信号距离约束、小区域光学尝试、分步定位和搜索后的联合清除顺序；Q4采用分步定位及大可行区域的测量点评分。任何未完成源仍保留在任务队列，部分定位最多四轮后进入原有完整定位和后备流程。Q3无信号距离约束不会用于定向源可能存在的Q4。
+之前hex/adaptive的400场本地均值243.32、9场官方均值254.36属于已替换的旧Q3，不能算作Fusion Q3的成绩。历史见[布局验证](results/scan_route/README.md)和[九场官方核查](results/validation/q3_hex_official_batch.md)。Q4最近两场官方均值436.64，对应仍然保留的Q4策略。
 
-加 `--service-policy atomic` 可以运行优化前的组合：Q3八站、Q4二十五站，用于对照。下方历史记录只说明此前决策，不代表当前默认。
+Q3默认使用Fusion原子定位、60米小区域试探和条件缩环；推荐配置不启用负观测，可选 `--negative-observations` 使用Fusion的正负观测中垂线半平面进行测点规划。Q4继续分步定位及大可行区域的测量点评分，部分定位最多四轮后进入原有完整定位和后备流程。
+
+Q3可用 `--q3-ring-guard off --q3-probe-radius 0` 对照Fusion原始默认；旧Q3 tight/hex/adaptive从生产入口退役，历史策略仅通过冻结源码复现。Q4的 `--service-policy atomic` 仍保留原有语义与radial默认布局。下方历史记录只说明此前决策，不代表当前默认。
 
 ## 历史布局复核（当前默认以上方说明为准）
 
@@ -63,7 +65,7 @@ python run.py --mode official --problem 4 --robot-id $teamId --output practice_l
 python run.py --mode official --problem 3 --robot-id $teamId --output practice_logs
 ```
 
-问题三启动行应显示 `strategy=integrated`、`layout=tight`、`service_policy=adaptive`，结果还包含 `scheduling_policy=joint_route`。`service_steps`表示分步定位次数；`forced_targets`统计搜索结束后处理剩余目标的调用次数，同一源可能有多次定位调用。
+问题三启动行应显示 `strategy=integrated, layout=original, service_policy=atomic, ring_guard=aggressive, probe_radius=60`。`layout=original` 是起始布局标签；结果中的 `ring_activated=1` 表示已切换1123米环，0表示保留大环。另有 `extra_probe_attempts`、`extra_probe_successes` 记录光学尝试。旧命令中的 `--layout hex/tight` 或 `--service-policy adaptive` 不再用于Q3。
 
 此前策略可显式指定 `--strategy standard` 或 `--strategy paper` 用于对照；它们**不会启用本轮联合路线优化**。测试新优化请直接使用上面的默认命令。
 
@@ -89,7 +91,7 @@ python verify_q4_coverage.py --runs 200
 
 复现脚本校验冻结源码SHA256，在临时目录运行原始对照实验，不连接官方平台。本轮复现输出至 `results/target_pair/reproduction`，历史脚本输出到各自实验目录。可用 `--runs 1` 检查入口。已使用的开发集及留出集不能在未来调参后再次宣称为独立验证。
 
-显式对照参数保留在同一入口：`--service-policy atomic` 恢复本轮之前的完整定位流程及默认布局（Q3 tight、Q4 radial）；`--service-policy atomic --layout rings` 对照仅换22站的效果。`--strategy paper --layout original` 为原31站论文定位对照，`--strategy paper --layout compact` 为31站内收对照。`service-policy` 只适用于integrated。当前默认Q3 tight、Q4 rings，均使用adaptive服务策略。
+Q3对照参数为 `--q3-ring-guard {off,aggressive,conservative}`、`--q3-probe-radius` 和 `--negative-observations`，默认aggressive、60、关闭。Q4对照参数保持：`--service-policy atomic` 使用radial原子定位，`--service-policy atomic --layout rings` 使用22站原子定位；Q4默认rings/adaptive。`--strategy paper --layout original/compact` 的历史对照能力保留。
 
 历史研究记录见[论文定位研究](results/paper_localization/README.md)、[覆盖布局研究](results/coverage_optimization/README.md)及 `results/optimization`，用于追溯，不代表当前默认策略。
 
@@ -99,7 +101,7 @@ python verify_q4_coverage.py --runs 200
 |---|---|
 | run.py | 统一入口、日志与参数检查 |
 | joint_search.py | 问题四联合路线、选择性测量、小区域光学尝试 |
-| omni_search.py | 问题三联合路线、选择性测量与覆盖后收尾 |
+| omni_search.py / negative_observations.py | 从Fusion原样复制的Q3控制器及可选负观测依赖 |
 | localization_service.py | 有限分步定位、Q3无信号区域约束与小区域光学尝试 |
 | active_localization.py | 论文启发的有界误差主动定位 |
 | solver.py | 通用动作、定位后备及对照策略 |
@@ -111,4 +113,7 @@ python verify_q4_coverage.py --runs 200
 | verify_q4_coverage.py | 最新问题四覆盖候选的冻结复现 |
 | verify_target_pair_experiments.py | 本轮Q3/Q4采用候选的冻结复现 |
 | test_coverage_tight.py | 问题三八站布局的三条独立覆盖验证 |
+| test_hex_coverage.py / test_history_support.py | 退役Q3的几何与冻结动作回归，仅测试使用 |
+| test_q3_replacement.py | Fusion Q3动作一致性、原Q4源码与动作不变检查 |
+| verify_scan_route_experiments.py | 使用冻结源码复现本轮Q3布局同场对照 |
 | test_*.py | 几何、协议、覆盖及入口检查 |

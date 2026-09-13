@@ -1,0 +1,11 @@
+{
+  "arm": "current",
+  "count": 200,
+  "seed": 4600000,
+  "stress": false,
+  "kwargs": {
+    "coverage_layout": "hex",
+    "service_policy": "adaptive"
+  },
+  "simulator": "shared current LocalBackend, observation-only AuditPort"
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "seed": 4100000,
+    "mean_time_s": 212.24202481331938,
+    "trace_sha256": "a52afeb6e91dc84c7ddcca78ca4e10820214582005ead4200971536e4729deb7"
+  },
+  {
+    "seed": 4100007,
+    "mean_time_s": 233.63151969334268,
+    "trace_sha256": "409d7d90762d8c1fc1515bafe129a63346702b7196ba7f0e5b1b5b3af5efe593"
+  },
+  {
+    "seed": 4100015,
+    "mean_time_s": 220.33916715160453,
+    "trace_sha256": "491fe46143e19a453f846fd3aaeea5839f003f855d77c73e6165e124bd069ddd"
+  },
+  {
+    "seed": 4200000,
+    "mean_time_s": 215.3250106874901,
+    "trace_sha256": "e88ed34aaa3e7b67fb921d1c73349bbee6add137f8edcf64acbe4c97c8ccd6e2"
+  },
+  {
+    "seed": 4200001,
+    "mean_time_s": 230.09125773856363,
+    "trace_sha256": "c501cd53abdb0fc32afa1ac042b9be7d07b563f86614d4b8a35c58c452b57cfd"
+  },
+  {
+    "seed": 4200002,
+    "mean_time_s": 241.8873490936563,
+    "trace_sha256": "92cb5a6d99ebf811e048eee4f424ee7471e1796485b4c0f6695d689559d0bdce"
+  }
+]
