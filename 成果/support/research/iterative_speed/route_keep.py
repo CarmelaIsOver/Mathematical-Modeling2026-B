@@ -24,13 +24,17 @@ import numpy as np
 from omni_search import OmniSearchSolver
 
 
-def plan_reuse(saved_ids, current_ids):
+def plan_reuse(saved_ids, current_ids, defer_age=None, max_defer_age=None):
     """Pure planner step: (ordered current indices, reason).
 
-    ``saved_ids``   sequence of task ids in the previously planned order
-    ``current_ids`` sequence of the task ids for the current call (same order as points)
-    Returns the indices into ``current_ids`` in the order to execute, plus a reason
-    string: 'initial' | 'reused' | 'new_task' | 'invalid'.
+    ``saved_ids``     sequence of task ids in the previously planned order
+    ``current_ids``   sequence of the task ids for the current call (same order as points)
+    ``defer_age``     callable tid -> age in visited stations (None when not applicable)
+    ``max_defer_age`` when set, a live target waiting >= this many visited stations forces
+                      a refresh, so a kept plan can never starve a discovered target
+
+    Returns the indices into ``current_ids`` in the order to execute, plus the reason:
+    'initial' | 'new_task' | 'invalid' | 'overdue' | 'reused'.
     """
     if not current_ids:
         return [], 'invalid'
@@ -45,6 +49,10 @@ def plan_reuse(saved_ids, current_ids):
     for tid in current_ids:
         if tid not in saved_ids:
             return list(range(len(current_ids))), 'new_task'
+    if max_defer_age is not None and defer_age is not None:
+        for tid in current_ids:
+            if int(defer_age(tid)) >= int(max_defer_age):
+                return list(range(len(current_ids))), 'overdue'
     order = [index_of[tid] for tid in saved_ids if tid in index_of]
     if sorted(order) != list(range(len(current_ids))):
         return list(range(len(current_ids))), 'invalid'
@@ -124,8 +132,17 @@ class RouteKeepMixin:
         def patched(points, start):
             self._rk_points = points
             current = self._current_task_ids()
-            order, reason = plan_reuse(state['ids'], current) if self.route_keep \
-                else (list(range(len(current))), 'initial')
+            age_now = len(self.visited)
+            deferred_now = getattr(self, 'deferred', {}) or {}
+
+            def _defer_age(tid):
+                if not (isinstance(tid, tuple) and len(tid) == 2 and tid[0] == 't'):
+                    return -1
+                return age_now - int(deferred_now.get(tid[1], age_now))
+
+            order, reason = plan_reuse(state['ids'], current, defer_age=_defer_age,
+                                       max_defer_age=self.route_keep_max_defer) \
+                if self.route_keep else (list(range(len(current))), 'initial')
             if reason == 'reused':
                 fresh = list(original(points, start))
                 if len(fresh) and len(order) and fresh[0] != order[0]:

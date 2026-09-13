@@ -29,6 +29,31 @@ class PlanReuseTests(unittest.TestCase):
         self.assertEqual(reason, 'reused')
         self.assertEqual([['C', 'A', 'B'][i] for i in order], ['A', 'B', 'C'])
 
+    def test_overdue_target_forces_a_refresh(self):
+        """A live target waiting >= max_defer_age must break the kept plan."""
+        ages = {'A': 0, 'B': 5, 'C': 1}
+        order, reason = plan_reuse(['A', 'B', 'C'], ['A', 'B', 'C'],
+                                   defer_age=lambda tid: ages[tid], max_defer_age=3)
+        self.assertEqual(reason, 'overdue')
+        self.assertEqual(order, [0, 1, 2])
+
+    def test_no_target_overdue_keeps_reusing(self):
+        ages = {'A': 0, 'B': 2, 'C': 1}
+        order, reason = plan_reuse(['A', 'B', 'C'], ['A', 'B', 'C'],
+                                   defer_age=lambda tid: ages[tid], max_defer_age=3)
+        self.assertEqual(reason, 'reused')
+
+    def test_stations_never_trigger_overdue(self):
+        order, reason = plan_reuse([('t', 5), ('s', 1, 0)], [('t', 5), ('s', 1, 0)],
+                                   defer_age=lambda tid: -1, max_defer_age=1)
+        self.assertEqual(reason, 'reused')
+
+    def test_new_task_takes_priority_over_overdue(self):
+        ages = {'A': 9}
+        order, reason = plan_reuse(['A'], ['A', 'B'], defer_age=lambda tid: ages.get(tid, 0),
+                                   max_defer_age=1)
+        self.assertEqual(reason, 'new_task')
+
     def test_new_task_forces_a_replan(self):
         order, reason = plan_reuse(['A', 'B'], ['A', 'B', 'C'])
         self.assertEqual(reason, 'new_task')
@@ -89,6 +114,15 @@ class IntegrationTests(unittest.TestCase):
         self.assertGreater(result.get('route_reuses', 0), 0,
                            'a real completion must reuse the plan at least once')
         self.assertGreater(result.get('route_replans', 0), 0)
+        # the overdue counter must be live: with an aggressive age bound the refresh
+        # path has to fire in a normal scene
+        backend2 = LocalBackend(3499000, 3)
+        port2 = AuditPort(backend2)
+        solver2 = cls(port2, 3, **dict(kwargs, max_defer_age=1))
+        result2 = solver2.run()
+        self.assertEqual(result2['cleared'], len(backend2.sources))
+        self.assertGreater(result2.get('route_replan_overdue', 0), 0,
+                           'the overdue refresh must be reachable, not dead code')
         self.assertLessEqual(result.get('plan_reversals', 0), result.get('route_reuses', 0))
 
 
