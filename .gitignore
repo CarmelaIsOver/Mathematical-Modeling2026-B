@@ -19,3 +19,6 @@
 # Python bytecode: keep the working tree clean (tests rewrite .pyc constantly)
 __pycache__/
 *.pyc
+
+# 离线备份 bundle（不推送大二进制；本地文件保留）
+*.bundle
