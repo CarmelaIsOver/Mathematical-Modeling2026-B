@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_reorder",
+    "q4_fb_force"
+  ],
+  "start": 3499600,
+  "count": 3,
+  "workers": 4,
+  "round": "r105_smoke_q4fb",
+  "hypothesis": "Q4 fallback smoke (capture + reorder + forced order)",
+  "mode": "normal",
+  "traces": true,
+  "control": "baseline"
+}

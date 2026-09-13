@@ -122,20 +122,25 @@ class FallbackProbeMixin:
     """Capture fallback entry states and (optionally) reorder the optical sweep."""
 
     def _setup_fallback(self, capture=True, reorder=False, samples=24, budget=24,
-                        margin_s=3.0, margin_frac=0.0):
+                        margin_s=3.0, margin_frac=0.0, force_order=False):
         self.fb_capture = bool(capture)
         self.fb_reorder = bool(reorder)
         self.fb_samples = int(samples)
         self.fb_budget = int(budget)
         self.fb_margin_s = float(margin_s)
         self.fb_margin_frac = float(margin_frac)
+        # force_order: always adopt the best neighbour (even if the incumbent scores
+        # better). This guarantees a *differing* order so the same-state comparison
+        # measures realised effects instead of repeating the incumbent.
+        self.fb_force_order = force_order if isinstance(force_order, str) else bool(force_order)
         self.diagnostics['fallback_rows'] = []
         self.diagnostics.update(fallback_events=0, fallback_captured=0,
                                 fallback_attempts=0, fallback_movement_m=0.,
                                 fallback_sweep_s=0., fallback_incumbent_s=0.,
                                 fb_order_evaluated=0, fb_order_adopted=0,
                                 fb_order_predicted_gain_s=0., fallback_exit_m=0.,
-                                fallback_clears=0, fallback_cert_clears=0)
+                                fallback_clears=0, fallback_cert_clears=0,
+                                fb_order_forced_loss_s=0.)
         self._fb_in_sweep = False
 
     # -- real cost accounting during a sweep ------------------------------
@@ -215,6 +220,7 @@ class FallbackProbeMixin:
         exit_point = self._fallback_exit_point(c)
         base = sweep_cost(samples, pts, incumbent, self.pos, exit_point)
         best_order, best_stats = incumbent, base
+        worst_order, worst_stats = incumbent, None
         margin = self.fb_margin_s
         if base is not None:
             margin = max(margin, self.fb_margin_frac * abs(base[0]))
@@ -227,12 +233,33 @@ class FallbackProbeMixin:
                 continue
             if best_stats is None or stats[0] < best_stats[0] - 1e-9:
                 best_order, best_stats = cand, stats
-        if base is not None and best_stats is not None and (base[0] - best_stats[0]) > margin:
+            if worst_stats is None or stats[0] > worst_stats[0] + 1e-9:
+                worst_order, worst_stats = cand, stats
+        predicted = None if (base is None or best_stats is None) else float(base[0] - best_stats[0])
+        if self.fb_force_order == 'worst':
+            # deliberately take the *worst* neighbour: guarantees a differing order and
+            # measures whether the model's ranking direction is real
+            if worst_order != incumbent:
+                self.diagnostics['fb_order_adopted'] += 1
+                if worst_stats is not None and base is not None:
+                    self.diagnostics['fb_order_forced_loss_s'] += float(worst_stats[0] - base[0])
+                return self._run_order(c, pts, worst_order)
+            adopt = False
+        elif self.fb_force_order:
+            adopt = best_order != incumbent
+        else:
+            adopt = predicted is not None and predicted > margin
+        if adopt:
             self.diagnostics['fb_order_adopted'] += 1
-            self.diagnostics['fb_order_predicted_gain_s'] += float(base[0] - best_stats[0])
+            self.diagnostics['fb_order_predicted_gain_s'] += 0. if predicted is None else predicted
+            if predicted is not None and predicted < 0:
+                self.diagnostics['fb_order_forced_loss_s'] =                     self.diagnostics.get('fb_order_forced_loss_s', 0.) - predicted
             order = best_order
         else:
             order = incumbent
+        return self._run_order(c, pts, order)
+
+    def _run_order(self, c, pts, order):
         self.counts['fallback'] += 1
         t0 = float(getattr(self.api, 'virtual_time', 0.))
         for j in order:

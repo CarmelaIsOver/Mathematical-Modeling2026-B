@@ -246,11 +246,12 @@ class Q4FallbackProbe(FallbackProbeMixin, JointSearchSolver):
 class Q4FallbackReorder(FallbackProbeMixin, JointSearchSolver):
     """Q4: finite-neighbourhood reordering of the optical sweep (all points kept)."""
 
-    def __init__(self, *args, samples=24, budget=24, margin_s=3.0, margin_frac=0.0, **kwargs):
+    def __init__(self, *args, samples=24, budget=24, margin_s=3.0, margin_frac=0.0,
+                 force_order=False, **kwargs):
         JointSearchSolver.__init__(self, *args, **kwargs)
         FallbackProbeMixin._setup_fallback(self, capture=True, reorder=True, samples=samples,
                                            budget=budget, margin_s=margin_s,
-                                           margin_frac=margin_frac)
+                                           margin_frac=margin_frac, force_order=force_order)
 
     def directional_fallback(self, c):
         return FallbackProbeMixin.directional_fallback(self, c)
@@ -513,6 +514,8 @@ VARIANTS={
  4:{
     'q4_fb_probe':(Q4FallbackProbe,{}),
     'q4_fb_reorder':(Q4FallbackReorder,{}),
+    'q4_fb_force':(Q4FallbackReorder,{'force_order':True}),
+    'q4_fb_worst':(Q4FallbackReorder,{'force_order':'worst'}),
     'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
     'ins_q4':(JointInsertion,{}),
     'sp_c1':(JointStatePrediction,{'mode':'c1'}),

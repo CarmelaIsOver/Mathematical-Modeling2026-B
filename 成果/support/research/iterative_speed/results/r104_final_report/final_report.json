@@ -15,14 +15,15 @@
       "r99": "+1.98% (median +0.35%, worst +18.34%, CVaRΔ +15.59%)"
     },
     "mechanism_fired": "route_reuses 11.8–12.3/scene (previously 0), re-plan only on new task (3.7/scene)",
-    "revision": "max_defer_age=3 (public deferred age): never fired (overdue=0) — targets were not starved",
+    "revision": "max_defer_age=3 implemented and re-measured (r106, 24 fresh seeds): q3_keep == q3_keep_m1 (+1.42% mean, median 0.00%, worst +16.46%, reuses 12.2/scene, overdue=0, 10/24 scenes bit-identical to the control) -> known targets never waited >=3 stations; the degradation is stale station ordering, not target starvation",
     "stress_3_each": {
-      "cluster": "-1.43%",
-      "cluster_wide": "0.00%",
-      "boundary": "0.00%",
-      "plus": "-2.95%",
-      "minus": "-5.97%",
-      "failures": 0
+      "cluster": "0.00% (3/3 bit-identical; mechanism never engaged: new task every routing call)",
+      "cluster_wide": "0.00% (3/3 bit-identical; mechanism never engaged)",
+      "boundary": "0.00% (3/3 bit-identical; reuses 8-14/scene but time-neutral)",
+      "plus": "0.00% (3/3 bit-identical; reuses 9-14/scene)",
+      "minus": "0.00% (3/3 bit-identical; reuses 7-14/scene)",
+      "failures": 0,
+      "correction": "the first report quoted -1.43/-2.95/-5.97 computed against the old off arm; voided"
     },
     "worst_trace": {
       "seed": 3499211,
@@ -84,13 +85,49 @@
       "failures": 0
     },
     "complexity": "368 sweep-cost evaluations over 16 events in 24 scenes; wall time unchanged within noise",
-    "verdict": "stopped with evidence: bounded opportunity (1.42% ceiling) and 0/16 adopted orders; the incumbent optical order is already optimal under the specified cost model in these states"
+    "verdict": "stopped with evidence: bounded opportunity (1.42% ceiling) and 0/16 adopted orders; the incumbent optical order is already optimal under the specified cost model in these states",
+    "forced_order_comparison": {
+      "offline_sensitivity": "points 98-114, span <=1500m; cand_min == incumbent among 24 neighbours; worst neighbour +15-20%; random permutations 4-6x worse (3755-6443s vs 1014s)",
+      "q4_fb_worst_24_scenes": {
+        "events": 16,
+        "adopted": 16,
+        "predicted_penalty_s": 2432,
+        "realised_sweep_s": 3421,
+        "probe_sweep_s": 2619,
+        "sweep_delta_s": 802,
+        "scene_mean_delta_pct": 0.59,
+        "scene_worst_delta_pct": 5.63,
+        "failures": 0,
+        "changed_order_scenes": {
+          "n": 11,
+          "mean_delta_pct": 1.29,
+          "worst_delta_pct": 5.63,
+          "fallback_sweep_delta_s_per_scene": 73
+        }
+      },
+      "q4_fb_force_best": "0 adoptions -> no neighbour beats the incumbent",
+      "implementation_fix": "bool('worst') == True had degenerated the arm into the best-neighbour arm; fixed",
+      "conclusion": "ordering matters and the cost model direction is validated by real execution; the incumbent is the neighbourhood minimum; even a deliberately worst order costs only ~1.3% in changed-order scenes, consistent with the 1.42% fallback budget ceiling"
+    },
+    "smoke": "r105_smoke_q4fb: 3 scenes x 4 arms with traces, 0 errors, 3/3 cleared, 5 fallback events"
   },
   "final": {
     "adoption": "none — keep student-opt-v2 as the production configuration",
     "freeze": "no new candidate frozen for final testing",
     "production_unchanged": true,
     "pushed": false,
-    "tests": "161 tests OK (140 previous + 10 route-keep + 11 fallback)"
+    "tests": "161 tests OK (140 previous + 10 route-keep + 11 fallback); one vacuous assertion replaced"
+  },
+  "corrections": {
+    "voided": [
+      "Q3 stress row (-1.43/-2.95/-5.97 computed vs the old off arm)",
+      "the claim that the overdue revision was measured with a working counter"
+    ],
+    "authoritative_rounds": [
+      "r102 (Q3 stress, vs skip12_probe60)",
+      "r106 (Q3 revision)",
+      "r109 (Q4 forced worst order)",
+      "r105 (Q4 smoke)"
+    ]
   }
 }

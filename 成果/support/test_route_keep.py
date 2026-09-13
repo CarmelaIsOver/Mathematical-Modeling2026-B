@@ -58,7 +58,8 @@ class StationIdentityTests(unittest.TestCase):
         solver.pending_stations = [0, 1, 2]
         before = solver._current_task_ids()
         self.assertEqual(before, solver._current_task_ids(), 'identical state -> identical ids')
-        self.assertNotIn(0, [t[0] for t in before if isinstance(t, tuple) and t[0] == 's' and False])
+        self.assertTrue(all(t[0] in ('t', 's') for t in before), 'ids must be typed')
+        self.assertEqual(len(before), len(set(before)), 'ids must be unique')
         solver.stations = np.array([[0., 0.], [9999., 9999.], [5555., 5555.]])
         after = solver._current_task_ids()
         self.assertNotEqual([t[1] for t in before], [t[1] for t in after],

@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_worst"
+  ],
+  "start": 3499800,
+  "count": 24,
+  "workers": 8,
+  "round": "r108_q4worst_24",
+  "hypothesis": "Q4 forced worst-neighbour order: realised effect of a deliberately changed sweep order",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

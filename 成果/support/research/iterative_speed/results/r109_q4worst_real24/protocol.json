@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_worst"
+  ],
+  "start": 3499900,
+  "count": 24,
+  "workers": 8,
+  "round": "r109_q4worst_real24",
+  "hypothesis": "Q4 forced worst-neighbour order (string flag fixed): realised effect of a changed order",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}
