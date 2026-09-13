@@ -15,7 +15,7 @@
       "r99": "+1.98% (median +0.35%, worst +18.34%, CVaRΔ +15.59%)"
     },
     "mechanism_fired": "route_reuses 11.8–12.3/scene (previously 0), re-plan only on new task (3.7/scene)",
-    "revision": "max_defer_age=3 implemented and re-measured (r106, 24 fresh seeds): q3_keep == q3_keep_m1 (+1.42% mean, median 0.00%, worst +16.46%, reuses 12.2/scene, overdue=0, 10/24 scenes bit-identical to the control) -> known targets never waited >=3 stations; the degradation is stale station ordering, not target starvation",
+    "revision": "max_defer_age=3 is now genuinely wired (pure plan_reuse reads it; four unit tests cover the overdue path; an integration test with max_defer_age=1 asserts route_replan_overdue>0). r110 (24 fresh seeds): q3_keep +0.69% (reuses 13.1/scene, 3 scenes >5%, worst +8.03%) vs q3_keep_m1 +0.64% (reuses 6.4/scene, overdue fired 160 times, 2 scenes >5%, worst +8.03%, 19/24 bit-identical to control). The revision fires and moves behaviour toward the baseline, but both variants remain slower than the strong baseline. The earlier r106 statement (q3_keep == q3_keep_m1, overdue=0) came from the un-wired dead counter and is void.",
     "stress_3_each": {
       "cluster": "0.00% (3/3 bit-identical; mechanism never engaged: new task every routing call)",
       "cluster_wide": "0.00% (3/3 bit-identical; mechanism never engaged)",
@@ -39,7 +39,7 @@
       "coverage": "2339 vs 2447 m"
     },
     "complexity": "wall 0.34 s/scene vs 0.34 s/scene (no measurable overhead)",
-    "verdict": "rejected for production; class-dependent (helps stress classes, hurts normal scenes with a heavy tail). Does not prove route keeping is globally bad — the strict no-replan variant is what was tested here."
+    "verdict": "rejected for production: +0.41%/+0.69%/+1.42%/+1.98% across four independent 24-seed batches with heavy tails (worst +8%~+18%), and 0.00% (bit-identical) in all five stress classes; the overdue revision fires (160 times in 24 scenes) and slightly reduces the harm but does not change the conclusion. This does not prove route keeping is globally bad - only the strict keep-plan form tested here."
   },
   "q4": {
     "capture_fixed": "collector attached to directional_fallback entry of the Q4 default strategy (not an action-time counter diff, not the Q3 arm); validated by a constructed forced-fallback state test",
@@ -120,12 +120,12 @@
   },
   "corrections": {
     "voided": [
-      "Q3 stress row (-1.43/-2.95/-5.97 computed vs the old off arm)",
-      "the claim that the overdue revision was measured with a working counter"
+      "Q3 stress row (-1.43/-2.95/-5.97 computed against the old off arm)",
+      "r106 claim that the overdue revision was measured with a live counter (it was dead code; the wired measurement is r110)"
     ],
     "authoritative_rounds": [
       "r102 (Q3 stress, vs skip12_probe60)",
-      "r106 (Q3 revision)",
+      "r110 (Q3 overdue revision, wired)",
       "r109 (Q4 forced worst order)",
       "r105 (Q4 smoke)"
     ]
