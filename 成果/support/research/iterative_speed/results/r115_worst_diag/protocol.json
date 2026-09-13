@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusD_rings_adaptive",
+    "fusE_rings_adaptive_rev1"
+  ],
+  "start": 3502044,
+  "count": 1,
+  "workers": 3,
+  "round": "r115_worst_diag",
+  "hypothesis": "worst-scene diagnosis: rev1 vs original adaptive",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

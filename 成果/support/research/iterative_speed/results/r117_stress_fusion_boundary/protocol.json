@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusB_radial_adaptive",
+    "fusC_rings_atomic",
+    "fusD_rings_adaptive"
+  ],
+  "start": 3503080,
+  "count": 3,
+  "workers": 4,
+  "round": "r117_stress_fusion_boundary",
+  "hypothesis": "fusion stress boundary",
+  "mode": "boundary",
+  "traces": false,
+  "control": "baseline"
+}

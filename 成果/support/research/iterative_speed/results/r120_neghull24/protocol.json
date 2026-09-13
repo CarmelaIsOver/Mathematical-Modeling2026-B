@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "neg_hull"
+  ],
+  "start": 3501000,
+  "count": 24,
+  "workers": 8,
+  "round": "r120_neghull24",
+  "hypothesis": "Q3 negative range relaxation vs strong baseline (24 frozen dev seeds)",
+  "mode": "normal",
+  "traces": false,
+  "control": "skip12_probe60"
+}

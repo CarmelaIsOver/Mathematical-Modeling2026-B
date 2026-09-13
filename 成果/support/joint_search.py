@@ -7,6 +7,7 @@ heuristics, not promises of optimality or of a 400-second per-source score.
 import time
 import numpy as np
 from active_localization import ActiveLocalizationSolver
+from localization_service import LocalizationService
 from coverage_geometry import layout_cells, cell_is_covered
 
 
@@ -41,7 +42,8 @@ class JointSearchSolver(ActiveLocalizationSolver):
     def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',
                  reschedule_after_step=False,target_measure_budget=None,step_skip_known=False,
                  close_discovery_on_upper_bound=True,certify_channel_absence=False,
-                 reschedule_switches=None,probe_radius=40.,skip_tight_radius=40.):
+                 reschedule_switches=None,probe_radius=40.,skip_tight_radius=40.,
+                 service_policy='atomic',service_class=None):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
@@ -74,6 +76,19 @@ class JointSearchSolver(ActiveLocalizationSolver):
         # measurements; open targets are resolved by their own turns instead.
         self.step_skip_known=bool(step_skip_known)
         self.close_discovery_on_upper_bound=bool(close_discovery_on_upper_bound)
+        # Opt-in adaptive localization service (ported from teammate commit 66faa29).
+        # 'atomic' keeps the local behaviour bit-for-bit; 'adaptive' performs bounded
+        # partial advances and always falls back to the local full locator.
+        if service_policy not in ('atomic','adaptive'):
+            raise ValueError('Unknown service policy')
+        self.service_policy=service_policy
+        self._service_ns_flag=False
+        self.diagnostics.update(service_visits=0,service_returns=0,
+                                service_nosignal_move_m=0.,discovery_closed_at_s=0.)
+        if service_policy=='adaptive':
+            self.diagnostics.update(service_steps=0,service_resumes=0)
+            factory=service_class or LocalizationService
+            self._localization_service=factory(self)
         # Once the stated upper bound is reached from acknowledged observations,
         # no unknown channel can still hold a source. Discovery obligations end;
         # unvisited stations stay available only as optional localization points.
@@ -206,6 +221,7 @@ class JointSearchSolver(ActiveLocalizationSolver):
                 # as an optional localization point is left to the per-channel
                 # certificate step, which can justify keeping specific sites.
                 self.discovery_closed=True
+                self.diagnostics['discovery_closed_at_s']=float(self.api.virtual_time)
                 self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
                 self.diagnostics['discovery_closed']+=1
                 if discovered<16:self.diagnostics['discovery_closed_by_absence']+=1
@@ -225,7 +241,20 @@ class JointSearchSolver(ActiveLocalizationSolver):
             self.diagnostics['route_replans']+=1
             kind,index=nodes[search_route(points,self.pos)[0]]
             if kind=='target':
-                self.locate(index)
+                if self.service_policy=='adaptive':
+                    m0=float(self.parts.get('move_s',0.))
+                    before_cleared=len(self.cleared)
+                    self._service_ns_flag=False
+                    self._localization_service.advance_directional(index)
+                    self.diagnostics['service_visits']+=1
+                    if len(self.cleared)==before_cleared:
+                        self.diagnostics['service_returns']+=1
+                    if self._service_ns_flag:
+                        self.diagnostics['service_nosignal_move_m']+=\
+                            (float(self.parts.get('move_s',0.))-m0)*5
+                    self._service_ns_flag=False
+                else:
+                    self.locate(index)
                 continue
             self.pending_stations.remove(index);p=self.stations[index]
             if self.discovery_closed:

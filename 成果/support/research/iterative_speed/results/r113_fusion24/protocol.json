@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusB_radial_adaptive",
+    "fusC_rings_atomic",
+    "fusD_rings_adaptive"
+  ],
+  "start": 3501000,
+  "count": 24,
+  "workers": 8,
+  "round": "r113_fusion24",
+  "hypothesis": "Q4 2x2 ablation: {radial,rings} x {atomic,adaptive} on 24 frozen dev seeds",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

@@ -11,6 +11,8 @@ from world_rollout import WorldRolloutMixin
 from event_route import EventRouteMixin
 from route_keep import RouteKeepMixin
 from fallback_neighborhood import FallbackProbeMixin
+from service_rev1 import LocalizationServiceRev1
+from neg_hull import NegativeHullMixin
 from n6_analytic import JointAnalyticState
 from joint_search import JointSearchSolver,search_route
 from geometry import search_stations
@@ -257,6 +259,19 @@ class Q4FallbackReorder(FallbackProbeMixin, JointSearchSolver):
         return FallbackProbeMixin.directional_fallback(self, c)
 
 
+class OmniNegHull(NegativeHullMixin, OmniVariant):
+    """Q3: 7-site guarded ring + probe60 with the teammate negative-range relaxation."""
+
+    def __init__(self, *args, negative_hull=True, **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_neg_hull(negative_hull=negative_hull)
+
+    def action(self, path, p, c):
+        r = super().action(path, p, c)
+        self._record_negative(path, p, c, r)
+        return r
+
+
 class OmniRouteKeep(RouteKeepMixin, OmniVariant):
     """Q3: keep the remaining task order with stable ids (completion only removes)."""
 
@@ -473,6 +488,7 @@ VARIANTS={
     'n1_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n2_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01,'coord_search':True}),
     'q3_keep_m1':(OmniRouteKeep,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'max_defer_age':3}),
+    'neg_hull':(OmniNegHull,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'q3_keep':(OmniRouteKeep,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n3_q3':(OmniEventRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n1_q3_m1':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01}),
@@ -516,6 +532,12 @@ VARIANTS={
     'q4_fb_reorder':(Q4FallbackReorder,{}),
     'q4_fb_force':(Q4FallbackReorder,{'force_order':True}),
     'q4_fb_worst':(Q4FallbackReorder,{'force_order':'worst'}),
+    'fusA_radial_atomic':(JointSearchSolver,{'coverage_layout':'radial','service_policy':'atomic'}),
+    'fusB_radial_adaptive':(JointSearchSolver,{'coverage_layout':'radial','service_policy':'adaptive'}),
+    'fusC_rings_atomic':(JointSearchSolver,{'coverage_layout':'rings','service_policy':'atomic'}),
+    'fusD_rings_adaptive':(JointSearchSolver,{'coverage_layout':'rings','service_policy':'adaptive'}),
+    'fusE_rings_adaptive_rev1':(JointSearchSolver,{'coverage_layout':'rings','service_policy':'adaptive','service_class':LocalizationServiceRev1}),
+    'fusF_radial_adaptive_rev1':(JointSearchSolver,{'coverage_layout':'radial','service_policy':'adaptive','service_class':LocalizationServiceRev1}),
     'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
     'ins_q4':(JointInsertion,{}),
     'sp_c1':(JointStatePrediction,{'mode':'c1'}),

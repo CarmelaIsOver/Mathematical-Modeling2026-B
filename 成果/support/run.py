@@ -27,6 +27,9 @@ def main():
                     help='Q3 integrated only: received/not-received bisector constraints (opt-in, default off)')
     ap.add_argument('--q3-ring-guard',choices=['off','aggressive','conservative'],default='off',
                     help='Q3 integrated only: guarded 1123m seven-site ring shrink (opt-in, default off)')
+    ap.add_argument('--q4-service-policy',choices=['atomic','adaptive'],default='atomic',
+                    help='Q4 integrated only: atomic (default, unchanged) or the ported adaptive '
+                         'localization service (one bounded partial advance per scheduler visit)')
     ap.add_argument('--q4-probe-radius',type=float,default=40.,
                     help='Q4 integrated only: optical probe window upper bound in metres '
                          '(default 40; <=19.99 disables the probe; opt-in)')
@@ -47,6 +50,8 @@ def main():
         ap.error('--q3-probe-radius must exceed the certified radius 19.99')
     if a.q4_probe_radius!=40. and not (a.strategy=='integrated' and a.problem==4):
         ap.error('--q4-probe-radius requires --strategy integrated --problem 4')
+    if a.q4_service_policy!='atomic' and not (a.strategy=='integrated' and a.problem==4):
+        ap.error('--q4-service-policy adaptive requires --strategy integrated --problem 4')
     if a.strategy=='integrated':
         required_layouts=('radial','rings') if a.problem==4 else ('original',)
         if a.layout not in required_layouts or a.spacing!=950.:
@@ -86,6 +91,7 @@ def main():
             if a.q3_ring_guard!='off':kwargs['ring_guard']=a.q3_ring_guard
             if a.q3_probe_radius>0:kwargs['probe_radius']=a.q3_probe_radius
             if a.problem==4 and a.q4_probe_radius!=40.:kwargs['probe_radius']=a.q4_probe_radius
+            if a.problem==4 and a.q4_service_policy!='atomic':kwargs['service_policy']=a.q4_service_policy
             r=controller(port,a.problem,a.spacing,a.refine,**kwargs).run()
             r['strategy']=a.strategy
             r['coverage_layout']=a.layout
@@ -93,6 +99,7 @@ def main():
             r['q3_ring_guard']=a.q3_ring_guard
             r['q3_probe_radius']=a.q3_probe_radius
             r['q4_probe_radius']=a.q4_probe_radius
+            r['q4_service_policy']=a.q4_service_policy
             r.update(normal_exit=port.exited,max_step_time_error_s=port.max_step_error_s,**port.parts)
             r['provenance']='Official HTTP interface; case code and module come from simulator UI'
             if a.mode=='offline':

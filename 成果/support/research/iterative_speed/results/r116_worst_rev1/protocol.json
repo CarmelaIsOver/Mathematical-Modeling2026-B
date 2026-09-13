@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusD_rings_adaptive",
+    "fusE_rings_adaptive_rev1"
+  ],
+  "start": 3502044,
+  "count": 1,
+  "workers": 3,
+  "round": "r116_worst_rev1",
+  "hypothesis": "rev1 on the worst scene",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

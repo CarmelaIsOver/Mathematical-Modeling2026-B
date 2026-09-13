@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusB_radial_adaptive",
+    "fusC_rings_atomic",
+    "fusD_rings_adaptive"
+  ],
+  "start": 3502000,
+  "count": 64,
+  "workers": 8,
+  "round": "r114_fusion64",
+  "hypothesis": "Q4 fusion: 64 fresh seeds re-screen (D rings+adaptive vs components)",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

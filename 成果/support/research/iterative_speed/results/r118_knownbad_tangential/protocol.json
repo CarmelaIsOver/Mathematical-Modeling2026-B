@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusB_radial_adaptive",
+    "fusC_rings_atomic",
+    "fusD_rings_adaptive"
+  ],
+  "start": 3400001,
+  "count": 3,
+  "workers": 4,
+  "round": "r118_knownbad_tangential",
+  "hypothesis": "teammate known-bad tangential seeds (dev diagnostic)",
+  "mode": "boundary",
+  "traces": false,
+  "control": "baseline"
+}

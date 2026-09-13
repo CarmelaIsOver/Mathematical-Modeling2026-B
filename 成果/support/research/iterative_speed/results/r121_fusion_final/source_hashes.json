@@ -1,0 +1,16 @@
+{
+  "base_head": "1820f63075d9cc96b99c5cc1e092ab5fd90e9368",
+  "pertinent": {
+    "joint_search.py": "639645165cf4ccdff506d1cc139942be73a7cc0942d364f81dd21fba5a15fd70",
+    "localization_service.py": "4f807b162d98ae587c8e19992bb1423b67cb55188cc34711a701fe45c3d1a47c",
+    "omni_search.py": "60a028faa5ac3983ab0785520f0643928f25d1e5a34f0974bcf66b53ee717436",
+    "run.py": "c6aff93df08696bdad9f0da852e6405f5d4a6e00d2f2c9c470b74c6ba9005f87",
+    "test_joint_search.py": "0926b61d388945dd1599964245167192e9970bd5af54b79ebdde850bbc67874d",
+    "test_localization_service.py": "1bd34521ae2c455155f6f59cd45c67d2b71c63846931fdbece592eed2184f61a",
+    "test_neg_hull.py": "0e8227c6223e0274ed0ddd9def97a63de59b84d3515272f5593ca538759e5b59",
+    "test_omni_search.py": "b7e58ec14917f82cc48e211c084abdffdc799ab80b9863127377b8e5902613f5",
+    "research\\iterative_speed\\neg_hull.py": "9957f5fdb98efeedd88c84b8ec93089fe510b845ee60059f4fbcca1165d44073",
+    "research\\iterative_speed\\service_rev1.py": "c18fe495a8b697b62a724a723935a52f01d931e17864fc24ea810ac86558189b"
+  },
+  "note": "hashes of the files touched by the fusion round; base_head is the commit before the fusion commit"
+}

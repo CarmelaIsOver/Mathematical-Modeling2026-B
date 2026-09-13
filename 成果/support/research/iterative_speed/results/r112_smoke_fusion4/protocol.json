@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "fusB_radial_adaptive",
+    "fusC_rings_atomic",
+    "fusD_rings_adaptive"
+  ],
+  "start": 3501100,
+  "count": 3,
+  "workers": 4,
+  "round": "r112_smoke_fusion4",
+  "hypothesis": "fusion smoke: 2x2 layout x service",
+  "mode": "normal",
+  "traces": true,
+  "control": "baseline"
+}
