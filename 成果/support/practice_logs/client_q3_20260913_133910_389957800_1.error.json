@@ -1,0 +1,10 @@
+{
+  "complete": false,
+  "normal_exit": false,
+  "problem": 3,
+  "strategy": "integrated",
+  "coverage_layout": "hex",
+  "service_policy": "adaptive",
+  "last_acknowledged_virtual_time_s": 0.0,
+  "error": "ConnectionResetError: [WinError 10054] \u8fdc\u7a0b\u4e3b\u673a\u5f3a\u8feb\u5173\u95ed\u4e86\u4e00\u4e2a\u73b0\u6709\u7684\u8fde\u63a5\u3002"
+}
