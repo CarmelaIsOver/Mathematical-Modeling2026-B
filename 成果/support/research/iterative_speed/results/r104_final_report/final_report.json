@@ -9,7 +9,7 @@
   "q3": {
     "change": "route_keep.py: stable ids (channel / (layout_generation, station_index)); completion only removes its own task; re-plan only on a new task or (revision) target overdue",
     "guarantees_kept": "only the visit order changes; coverage sites, certificates, 19.99 m rule, final coverage obligation and the optical fallback are untouched",
-    "invariants_tested": 10,
+    "invariants_tested": 14,
     "dev_24_seed_batches": {
       "r98": "+0.41% mean-of-ratios (median 0.00%, worst +10.05%, CVaRΔ +5.45%)",
       "r99": "+1.98% (median +0.35%, worst +18.34%, CVaRΔ +15.59%)"
@@ -109,25 +109,28 @@
       "implementation_fix": "bool('worst') == True had degenerated the arm into the best-neighbour arm; fixed",
       "conclusion": "ordering matters and the cost model direction is validated by real execution; the incumbent is the neighbourhood minimum; even a deliberately worst order costs only ~1.3% in changed-order scenes, consistent with the 1.42% fallback budget ceiling"
     },
-    "smoke": "r105_smoke_q4fb: 3 scenes x 4 arms with traces, 0 errors, 3/3 cleared, 5 fallback events"
+    "smoke": "r105_smoke_q4fb: 3 scenes x 4 arms with traces, 0 errors, 3/3 cleared, 5 fallback events",
+    "gate": "mean advantage over a pre-registered margin AND the design-sample upper tail (p95 must not worsen by more than tail_slack, default 0); unit-tested"
   },
   "final": {
     "adoption": "none — keep student-opt-v2 as the production configuration",
     "freeze": "no new candidate frozen for final testing",
     "production_unchanged": true,
     "pushed": false,
-    "tests": "161 tests OK (140 previous + 10 route-keep + 11 fallback); one vacuous assertion replaced"
+    "tests": "169 tests OK (140 previous + 14 route-keep + 15 fallback incl. 4 gate-tail tests)"
   },
   "corrections": {
     "voided": [
       "Q3 stress row (-1.43/-2.95/-5.97 computed against the old off arm)",
-      "r106 claim that the overdue revision was measured with a live counter (it was dead code; the wired measurement is r110)"
+      "r106 claim that the overdue revision was measured with a live counter (it was dead code; the wired measurement is r110)",
+      "§7.9 legacy r5_reporting.py n7_offline claim (invalid collector: action-time counter diff + Q4 hook on Q3 arms); the module now marks it VOID"
     ],
     "authoritative_rounds": [
       "r102 (Q3 stress, vs skip12_probe60)",
       "r110 (Q3 overdue revision, wired)",
       "r109 (Q4 forced worst order)",
-      "r105 (Q4 smoke)"
+      "r105 (Q4 smoke)",
+      "r111 (Q4 reorder screen with the tail-aware gate)"
     ]
   }
 }

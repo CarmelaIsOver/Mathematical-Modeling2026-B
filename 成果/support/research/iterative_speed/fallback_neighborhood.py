@@ -94,6 +94,23 @@ def sweep_cost(samples, points, order, start, exit_point=None, movement_only=Fal
     return float(hit.mean()), float(np.percentile(hit, 95))
 
 
+def gate_adopt(base_stats, best_stats, margin, tail_slack):
+    """Pre-registered adoption gate: mean advantage over the margin AND no tail worsening.
+
+    The design sample's upper tail (p95) is part of the gate, not a post-hoc note:
+    a candidate is only adopted when its p95 first-success cost does not exceed the
+    incumbent's by more than ``tail_slack`` (default 0, i.e. no worsening at all).
+    """
+    if base_stats is None or best_stats is None:
+        return False
+    gain = float(base_stats[0] - best_stats[0])
+    if gain <= margin:
+        return False
+    if tail_slack is not None and best_stats[1] > base_stats[1] + float(tail_slack):
+        return False
+    return True
+
+
 def neighbourhood_orders(incumbent, budget=24):
     """Incumbent plus single moves and pair swaps, capped by a fixed budget."""
     n = len(incumbent)
@@ -122,7 +139,7 @@ class FallbackProbeMixin:
     """Capture fallback entry states and (optionally) reorder the optical sweep."""
 
     def _setup_fallback(self, capture=True, reorder=False, samples=24, budget=24,
-                        margin_s=3.0, margin_frac=0.0, force_order=False):
+                        margin_s=3.0, margin_frac=0.0, force_order=False, tail_slack=0.0):
         self.fb_capture = bool(capture)
         self.fb_reorder = bool(reorder)
         self.fb_samples = int(samples)
@@ -133,6 +150,8 @@ class FallbackProbeMixin:
         # better). This guarantees a *differing* order so the same-state comparison
         # measures realised effects instead of repeating the incumbent.
         self.fb_force_order = force_order if isinstance(force_order, str) else bool(force_order)
+        # fixed, pre-registered tail allowance of the adoption gate (0 = never worsen p95)
+        self.fb_tail_slack = float(tail_slack)
         self.diagnostics['fallback_rows'] = []
         self.diagnostics.update(fallback_events=0, fallback_captured=0,
                                 fallback_attempts=0, fallback_movement_m=0.,
@@ -140,7 +159,7 @@ class FallbackProbeMixin:
                                 fb_order_evaluated=0, fb_order_adopted=0,
                                 fb_order_predicted_gain_s=0., fallback_exit_m=0.,
                                 fallback_clears=0, fallback_cert_clears=0,
-                                fb_order_forced_loss_s=0.)
+                                fb_order_forced_loss_s=0., fb_gate_rejected_tail=0.)
         self._fb_in_sweep = False
 
     # -- real cost accounting during a sweep ------------------------------
@@ -248,7 +267,11 @@ class FallbackProbeMixin:
         elif self.fb_force_order:
             adopt = best_order != incumbent
         else:
-            adopt = predicted is not None and predicted > margin
+            adopt = gate_adopt(base, best_stats, margin, self.fb_tail_slack)
+            if (not adopt and predicted is not None and predicted > margin
+                    and best_stats is not None and base is not None
+                    and best_stats[1] > base[1] + self.fb_tail_slack):
+                self.diagnostics['fb_gate_rejected_tail'] += 1
         if adopt:
             self.diagnostics['fb_order_adopted'] += 1
             self.diagnostics['fb_order_predicted_gain_s'] += 0. if predicted is None else predicted

@@ -692,9 +692,9 @@ N1 的完整世界延续时间分与 N4 的决策区域代理分（pairwise-conf
 ### 8.4 产物
 
 - 源码：`research/iterative_speed/route_keep.py`、`research/iterative_speed/fallback_neighborhood.py`；
-  测试：`test_route_keep.py`（10 项）、`test_fallback_neighborhood.py`（11 项）；轮内产物：
+  测试：`test_route_keep.py`（**14 项**）、`test_fallback_neighborhood.py`（11 项）；轮内产物：
   `results/r97/r98/r99/r102/r102b/r103/r103b/r100/r101/r104_final_report/final_report.json`。
-- 单测总计 **161 项通过**（140 + 10 + 11）；生产默认、发布标签、研究外代码未改；未推送。
+- 单测总计 **169 项通过**（140 + 14 + 11 + 4 门上尾单测，见 8.7）；生产默认、发布标签、研究外代码未改；未推送。
 
 ### 8.5 补充实验：Q4 顺序敏感性（回答“顺序真的换了会怎样”）
 
@@ -717,8 +717,8 @@ N1 的完整世界延续时间分与 N4 的决策区域代理分（pairwise-conf
 ### 8.6 交付清单修正
 
 - Q4 冒烟：`r105_smoke_q4fb`（3 场，`baseline`/`q4_fb_probe`/`q4_fb_reorder`/`q4_fb_force` 各 3 条轨迹，0 异常、3/3 完整清除、共 5 次后备事件）。
-- 单测：`test_route_keep.py` 10 项（其中一条原本含 `and False` 的空断言已替换为“id 类型 + 唯一性”两条实断言）、
-  `test_fallback_neighborhood.py` 11 项；全量 **161 项通过**。
+- 单测：`test_route_keep.py` **14 项**（含 4 项 overdue 单测与 `max_defer_age=1` 的集成断言）、
+  `test_fallback_neighborhood.py` 15 项（含 4 项门上尾单测）；全量 **169 项通过**。
 - 更正记录：本次更正的数字（Q3 压力行、修订状态、Q4 换序证据）来自 `r102`、`r106`、`r109` 与离线敏感性脚本，
   首版报告中的对应错误数字（−1.43%/−2.95%/−5.97%、“修订触发 0 因此目标未被饿死”的措辞）已明确作废。
 
@@ -736,4 +736,8 @@ N1 的完整世界延续时间分与 N4 的决策区域代理分（pairwise-conf
   `q3_keep_m1` **+0.64%**（复用 6.4/场、**overdue 160 次**、2 场 >5%、最坏 +8.03%、19/24 与对照逐位相同）。
   修订生效并把行为推向基线，但两版仍劣于强基线 → Q3 结论不变（不采用）。
 - 作废清单（本文档内已更正）：r106 关于“修订未触发”的段落、8.3 第 2 项残留的“压力类更好”表述、
-  `final_report.json` 中 `q3.verdict` 的 class-dependent 表述与 `corrections.voided` 里关于计数器的那一条。
+  §7.9 中旧 `r5_reporting.py::n7_offline` 的“0 个 fallback 状态 → N7 机会不足”结论（采集器本身无效，
+  已在 `r5_reporting.py` 内标注 VOID 并指向 `fallback_neighborhood.py`）、`final_report.json` 中 `q3.verdict` 的
+  class-dependent 表述与 `corrections.voided` 里关于计数器的那一条。
+- 门补全：Q4 采用门现同时检查**设计样本上尾**（`gate_adopt(base, best, margin, tail_slack)`：均值优势须超裕度
+  且 p95 不得比 incumbent 恶化超过 `tail_slack`，默认 0），并有单测覆盖（上尾恶化→拒绝）。

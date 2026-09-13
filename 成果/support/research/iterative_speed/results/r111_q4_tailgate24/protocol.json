@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_reorder"
+  ],
+  "start": 3500100,
+  "count": 24,
+  "workers": 8,
+  "round": "r111_q4_tailgate24",
+  "hypothesis": "Q4 reorder with the tail-aware pre-registered gate",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

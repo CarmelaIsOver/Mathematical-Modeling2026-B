@@ -86,89 +86,17 @@ def prediction_diagnostics():
 
 
 def n7_offline():
-    """Q3 fallback states: incumbent optical order vs all single swaps (offline).
+    """VOID (kept for the record): the old fallback probe is invalid.
 
-    The Q3 fallback is the terminal optical sweep inside Solver.locate, so it is
-    detected through the public ``fallback`` counter when the first clear of that
-    sweep is issued. The evaluation uses the N1 world model (uniform posterior
-    samples) with first-hit + departure cost, exactly like C1 v2, and the same
-    incumbent order the controller uses (open_route).
+    It diffed the public ``fallback`` counter around ``action`` calls - the solver
+    increments that counter *before* the first fallback action - and the Q4 hook was
+    executed on Q3 arms, so it could never observe an event. Its earlier conclusion
+    ("0 fallback states -> opportunity too small") is void; the corrected collector and
+    measurement live in ``fallback_neighborhood.py`` (see ledger 8.2 / 8.5).
     """
-    from audit import AuditPort
-    from backend import LocalBackend
-    from geometry import optical_cover
-    from solver import open_route
-    from variants import VARIANTS
-    from state_prediction import JointStatePrediction
-    cls, kwargs = VARIANTS[3]['skip12_probe60']
-    rows = []
-    scenes_with_fallback = 0
-    for seed in range(3497400, 3497440):
-        backend = LocalBackend(seed, 3)
-        port = AuditPort(backend)
-        solver = cls(port, 3, **kwargs)
-
-        class Probe(cls):
-            def action(self, path, p, c):
-                before = self.counts['fallback']
-                r = super().action(path, p, c)
-                if path == '/clear' and self.counts['fallback'] > before:
-                    self.n7_capture(c, p)
-                return r
-
-        probe = Probe(port, 3, **kwargs)
-        probe.n7_rows = []
-        probe._n7_seen = set()
-
-        def _capture(c, p):
-            key = (int(c), round(float(np.asarray(p, float)[0]), 1))
-            if key in self_seen:
-                return
-            self_seen.add(key)
-            try:
-                poly, center, radius = probe.region(c)
-                pts = optical_cover(poly, probe.obs[c][0][1])
-                inc = list(open_route(pts, probe.pos))
-                rng = np.random.default_rng(11 + c)
-                samples = np.asarray([np.asarray(center, float)
-                                      + rng.uniform(-1, 1, 2) * max(1., radius) for _ in range(24)], float)
-                sp = JointStatePrediction(None, 4, mode='c1')
-                sp.pos = probe.pos
-                z = None
-                pend = [probe.stations[i] for i in probe.pending_stations]
-                if pend:
-                    z = min(pend, key=lambda q: float(np.linalg.norm(np.asarray(q) - probe.pos)))
-                base = sp._first_hit_stats(samples, pts, inc, exit_point=z)[0]
-                best = base
-                for i in range(len(inc)):
-                    for j in range(i + 1, len(inc)):
-                        cand = list(inc)
-                        cand[i], cand[j] = cand[j], cand[i]
-                        best = min(best, sp._first_hit_stats(samples, pts, cand, exit_point=z)[0])
-                probe.n7_rows.append({'seed': seed, 'channel': int(c), 'fallback_pts': len(inc),
-                                      'incumbent_s': round(float(base), 2),
-                                      'best_swap_s': round(float(best), 2),
-                                      'gain_s': round(float(base - best), 2)})
-            except Exception as exc:                       # noqa: BLE001
-                probe.n7_rows.append({'seed': seed, 'error': type(exc).__name__})
-
-        self_seen = probe._n7_seen
-        probe.n7_capture = _capture
-        probe.run()
-        if probe.n7_rows:
-            scenes_with_fallback += 1
-        rows.extend(probe.n7_rows)
-    ok = [r for r in rows if 'gain_s' in r]
-    if not ok:
-        return {'events': 0, 'scenes_scanned': 40, 'scenes_with_fallback': scenes_with_fallback,
-                'note': 'the strong Q3 baseline issues no fallback in these scenes, so the '
-                        'incumbent-vs-neighbour evaluation has no state to act on'}
-    gains = np.array([r['gain_s'] for r in ok], float)
-    return {'events': len(ok), 'scenes_scanned': 40, 'scenes_with_fallback': scenes_with_fallback,
-            'mean_incumbent_s': round(float(np.mean([r['incumbent_s'] for r in ok])), 2),
-            'mean_best_gain_s': round(float(gains.mean()), 2),
-            'events_with_gain_over_1s': int((gains > 1.).sum()),
-            'rows': ok}
+    return {'void': True,
+            'reason': 'action-time counter diff + Q4 hook on Q3 arms => events could never be observed',
+            'replacement': 'fallback_neighborhood.py (directional_fallback entry capture)'}
 
 
 def n8_accounting():

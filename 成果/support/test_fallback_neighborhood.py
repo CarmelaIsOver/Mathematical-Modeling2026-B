@@ -9,7 +9,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent / 'research' / 'iterative_speed'))
 
 from fallback_neighborhood import (FAILED_CLEAR_S, SUCCESS_CLEAR_S, design_positions,  # noqa: E402
-                                   neighbourhood_orders, sweep_cost)
+                                   gate_adopt, neighbourhood_orders, sweep_cost)
 from variants import VARIANTS  # noqa: E402
 
 
@@ -62,6 +62,22 @@ class SweepCostTests(unittest.TestCase):
         near_first = sweep_cost(samples, points, [0, 1], start=np.array([0., 0.]))[0]
         far_first = sweep_cost(samples, points, [1, 0], start=np.array([0., 0.]))[0]
         self.assertLess(near_first, far_first)
+
+
+class GateTests(unittest.TestCase):
+    def test_mean_gain_must_exceed_the_margin(self):
+        self.assertFalse(gate_adopt((100., 120.), (98., 118.), margin=3., tail_slack=0.))
+
+    def test_tail_worsening_blocks_adoption(self):
+        """A mean win with a worse p95 must be rejected by the pre-registered gate."""
+        self.assertFalse(gate_adopt((100., 120.), (90., 121.), margin=3., tail_slack=0.))
+
+    def test_adopt_when_mean_and_tail_both_pass(self):
+        self.assertTrue(gate_adopt((100., 120.), (90., 119.), margin=3., tail_slack=0.))
+
+    def test_missing_stats_never_adopt(self):
+        self.assertFalse(gate_adopt(None, (90., 100.), margin=0., tail_slack=0.))
+        self.assertFalse(gate_adopt((100., 110.), None, margin=0., tail_slack=0.))
 
 
 class NeighbourhoodTests(unittest.TestCase):
