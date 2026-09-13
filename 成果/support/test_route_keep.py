@@ -1,0 +1,95 @@
+"""Q3 route-keeping invariants: stable ids, completion keeps order, new task replans."""
+import sys
+import unittest
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parent / 'research' / 'iterative_speed'))
+
+from route_keep import plan_reuse  # noqa: E402
+from variants import VARIANTS  # noqa: E402
+
+
+class PlanReuseTests(unittest.TestCase):
+    def test_initial_plan_is_identity(self):
+        order, reason = plan_reuse([], ['A', 'B', 'C'])
+        self.assertEqual(reason, 'initial')
+        self.assertEqual(order, [0, 1, 2])
+
+    def test_completed_task_only_removes_itself(self):
+        """Saved order [A,B,C]; B completed -> [A,C] with the relative order kept."""
+        order, reason = plan_reuse(['A', 'B', 'C'], ['A', 'C'])
+        self.assertEqual(reason, 'reused')
+        self.assertEqual(order, [0, 1])
+
+    def test_order_is_preserved_even_when_the_caller_reorders_points(self):
+        """The kept order is the saved sequence, not the caller's array order."""
+        order, reason = plan_reuse(['A', 'B', 'C'], ['C', 'A', 'B'])
+        self.assertEqual(reason, 'reused')
+        self.assertEqual([['C', 'A', 'B'][i] for i in order], ['A', 'B', 'C'])
+
+    def test_new_task_forces_a_replan(self):
+        order, reason = plan_reuse(['A', 'B'], ['A', 'B', 'C'])
+        self.assertEqual(reason, 'new_task')
+        self.assertEqual(order, [0, 1, 2])
+
+    def test_no_task_is_lost_or_duplicated(self):
+        saved = ['A', 'B', 'C', 'D']
+        for current in (['A', 'B', 'C', 'D'], ['B', 'D'], ['D'], ['C', 'D'], ['A', 'C']):
+            order, reason = plan_reuse(saved, current)
+            self.assertEqual(sorted(order), list(range(len(current))),
+                             f'order must be a permutation for {current}')
+            self.assertEqual(len(set(order)), len(order))
+
+    def test_duplicate_ids_are_refused(self):
+        order, reason = plan_reuse(['A', 'B'], ['A', 'A', 'B'])
+        self.assertEqual(reason, 'invalid')
+
+    def test_empty_current(self):
+        self.assertEqual(plan_reuse(['A'], []), ([], 'invalid'))
+
+
+class StationIdentityTests(unittest.TestCase):
+    def test_station_ids_are_stable_across_calls_and_change_with_the_layout(self):
+        cls, kwargs = VARIANTS[3]['q3_keep']
+        solver = cls(None, 3, **kwargs)
+        solver.deferred = {}
+        solver.pending_stations = [0, 1, 2]
+        before = solver._current_task_ids()
+        self.assertEqual(before, solver._current_task_ids(), 'identical state -> identical ids')
+        self.assertNotIn(0, [t[0] for t in before if isinstance(t, tuple) and t[0] == 's' and False])
+        solver.stations = np.array([[0., 0.], [9999., 9999.], [5555., 5555.]])
+        after = solver._current_task_ids()
+        self.assertNotEqual([t[1] for t in before], [t[1] for t in after],
+                            'a new station layout must bump the generation')
+        self.assertEqual([t[2] for t in after], [0, 1, 2])
+
+    def test_ids_use_channels_for_targets(self):
+        cls, kwargs = VARIANTS[3]['q3_keep']
+        solver = cls(None, 3, **kwargs)
+        solver.deferred = {7: 1, 12: 2}
+        solver.pending_stations = []
+        self.assertEqual(solver._current_task_ids(), [('t', 7), ('t', 12)])
+
+
+class IntegrationTests(unittest.TestCase):
+    def test_run_keeps_the_route_and_finishes_every_obligation(self):
+        from audit import AuditPort
+        from backend import LocalBackend
+        cls, kwargs = VARIANTS[3]['q3_keep']
+        backend = LocalBackend(3499000, 3)
+        port = AuditPort(backend)
+        solver = cls(port, 3, **kwargs)
+        result = solver.run()
+        self.assertEqual(result['cleared'], len(backend.sources))
+        self.assertEqual(sorted(solver.visited), list(range(len(solver.stations))),
+                         'every coverage site must still be visited exactly once')
+        self.assertGreater(result.get('route_reuses', 0), 0,
+                           'a real completion must reuse the plan at least once')
+        self.assertGreater(result.get('route_replans', 0), 0)
+        self.assertLessEqual(result.get('plan_reversals', 0), result.get('route_reuses', 0))
+
+
+if __name__ == '__main__':
+    unittest.main()

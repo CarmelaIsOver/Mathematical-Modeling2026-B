@@ -1,0 +1,96 @@
+{
+  "round": "Q3 真正路线保持 + Q4 后备有限邻域（≤150 分钟）",
+  "baseline": {
+    "q3": "integrated + --q3-ring-guard aggressive --q3-probe-radius 60 (arm skip12_probe60)",
+    "q4": "integrated/radial default (arm baseline)",
+    "head": "a78d520",
+    "tag": "student-opt-v2 = 7e9e73a"
+  },
+  "q3": {
+    "change": "route_keep.py: stable ids (channel / (layout_generation, station_index)); completion only removes its own task; re-plan only on a new task or (revision) target overdue",
+    "guarantees_kept": "only the visit order changes; coverage sites, certificates, 19.99 m rule, final coverage obligation and the optical fallback are untouched",
+    "invariants_tested": 10,
+    "dev_24_seed_batches": {
+      "r98": "+0.41% mean-of-ratios (median 0.00%, worst +10.05%, CVaRΔ +5.45%)",
+      "r99": "+1.98% (median +0.35%, worst +18.34%, CVaRΔ +15.59%)"
+    },
+    "mechanism_fired": "route_reuses 11.8–12.3/scene (previously 0), re-plan only on new task (3.7/scene)",
+    "revision": "max_defer_age=3 (public deferred age): never fired (overdue=0) — targets were not starved",
+    "stress_3_each": {
+      "cluster": "-1.43%",
+      "cluster_wide": "0.00%",
+      "boundary": "0.00%",
+      "plus": "-2.95%",
+      "minus": "-5.97%",
+      "failures": 0
+    },
+    "worst_trace": {
+      "seed": 3499211,
+      "delta": "+18.34%",
+      "coverage": "4996 vs 3946 m",
+      "localization": "3803 vs 3409 m",
+      "clear": "3690 vs 2636 m",
+      "reuses": 8
+    },
+    "typical_trace": {
+      "seed": 3499218,
+      "delta": "+0.57%",
+      "coverage": "2339 vs 2447 m"
+    },
+    "complexity": "wall 0.34 s/scene vs 0.34 s/scene (no measurable overhead)",
+    "verdict": "rejected for production; class-dependent (helps stress classes, hurts normal scenes with a heavy tail). Does not prove route keeping is globally bad — the strict no-replan variant is what was tested here."
+  },
+  "q4": {
+    "capture_fixed": "collector attached to directional_fallback entry of the Q4 default strategy (not an action-time counter diff, not the Q3 arm); validated by a constructed forced-fallback state test",
+    "incidence": {
+      "scenes": 24,
+      "events": 17,
+      "scenes_with_event": 13,
+      "capture_success_rate": 1.0
+    },
+    "fallback_cost": {
+      "sweep_s_total": 2172,
+      "scene_s_total": 152523,
+      "share_pct": 1.42,
+      "share_in_affected_scenes_pct": [
+        2.1,
+        2.2,
+        4.5,
+        4.8,
+        4.9,
+        6.8
+      ],
+      "movement_m": 7373,
+      "attempts": 221,
+      "successes": 17,
+      "mean_scene_time_per_event_s": 127.7
+    },
+    "ceiling_statement": "even if the whole fallback sweep became free, the mean gain is bounded by 1.42% of scene time — below the 2% adoption gate; the gate is therefore unreachable by this mechanism alone (this is a bound, not a claim about Q4 optimality)",
+    "reorder": {
+      "candidates_per_event_budget": 24,
+      "events": 16,
+      "orders_evaluated": 368,
+      "orders_adopted": 0,
+      "predicted_gain_s": 0.0,
+      "realised_delta": "0.000% (bit-identical to the unchanged default in dev and stress)"
+    },
+    "prediction_note": "design-sample mean first-success cost over-estimates the single realised sweep by ~5x (783 s vs 140 s) because the design distribution averages over the feasible set; only the relative ranking is used, and no neighbour beat the incumbent by the margin",
+    "stress_3_each": {
+      "cluster": "0.00% (7 events)",
+      "cluster_wide": "0.00%",
+      "boundary": "0.00% (8 events)",
+      "plus": "0.00% (9 events)",
+      "minus": "0.00% (7 events)",
+      "failures": 0
+    },
+    "complexity": "368 sweep-cost evaluations over 16 events in 24 scenes; wall time unchanged within noise",
+    "verdict": "stopped with evidence: bounded opportunity (1.42% ceiling) and 0/16 adopted orders; the incumbent optical order is already optimal under the specified cost model in these states"
+  },
+  "final": {
+    "adoption": "none — keep student-opt-v2 as the production configuration",
+    "freeze": "no new candidate frozen for final testing",
+    "production_unchanged": true,
+    "pushed": false,
+    "tests": "161 tests OK (140 previous + 10 route-keep + 11 fallback)"
+  }
+}

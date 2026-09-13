@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "q3_keep",
+    "q3_keep_m1"
+  ],
+  "start": 3499620,
+  "count": 3,
+  "workers": 3,
+  "round": "r102_stress_q3keep_cluster_wide",
+  "hypothesis": "Q3 keep-route stress cluster_wide",
+  "mode": "cluster_wide",
+  "traces": false,
+  "control": "skip12_probe60"
+}

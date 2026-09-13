@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_reorder"
+  ],
+  "start": 3499400,
+  "count": 24,
+  "workers": 8,
+  "round": "r101_q4_fb_reorder24",
+  "hypothesis": "Q4 fallback finite-neighbourhood reorder vs unchanged default (same state, order-only difference)",
+  "mode": "normal",
+  "traces": false,
+  "control": "baseline"
+}

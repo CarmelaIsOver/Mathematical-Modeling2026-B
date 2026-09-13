@@ -9,6 +9,8 @@ from insertion import InsertionMixin, joint_module, omni_module
 from state_prediction import JointStatePrediction
 from world_rollout import WorldRolloutMixin
 from event_route import EventRouteMixin
+from route_keep import RouteKeepMixin
+from fallback_neighborhood import FallbackProbeMixin
 from n6_analytic import JointAnalyticState
 from joint_search import JointSearchSolver,search_route
 from geometry import search_stations
@@ -230,6 +232,44 @@ class OmniLookahead(OmniVariant, LookaheadMixin):
         return LookaheadMixin.next_measure(self, c, poly, center, radius)
 
 
+class Q4FallbackProbe(FallbackProbeMixin, JointSearchSolver):
+    """Q4: capture true fallback entry states (behaviour unchanged)."""
+
+    def __init__(self, *args, **kwargs):
+        JointSearchSolver.__init__(self, *args, **kwargs)
+        FallbackProbeMixin._setup_fallback(self, capture=True, reorder=False)
+
+    def directional_fallback(self, c):
+        return FallbackProbeMixin.directional_fallback(self, c)
+
+
+class Q4FallbackReorder(FallbackProbeMixin, JointSearchSolver):
+    """Q4: finite-neighbourhood reordering of the optical sweep (all points kept)."""
+
+    def __init__(self, *args, samples=24, budget=24, margin_s=3.0, margin_frac=0.0, **kwargs):
+        JointSearchSolver.__init__(self, *args, **kwargs)
+        FallbackProbeMixin._setup_fallback(self, capture=True, reorder=True, samples=samples,
+                                           budget=budget, margin_s=margin_s,
+                                           margin_frac=margin_frac)
+
+    def directional_fallback(self, c):
+        return FallbackProbeMixin.directional_fallback(self, c)
+
+
+class OmniRouteKeep(RouteKeepMixin, OmniVariant):
+    """Q3: keep the remaining task order with stable ids (completion only removes)."""
+
+    def __init__(self, *args, keep_plan=True, max_defer_age=None, **kwargs):
+        OmniVariant.__init__(self, *args, **kwargs)
+        self._setup_route_keep(keep_plan=keep_plan, max_defer_age=max_defer_age)
+
+    def run(self):
+        return RouteKeepMixin.run(self)
+
+    def certified_clear(self, c, poly, center, radius):
+        RouteKeepMixin.certified_clear(self, c, poly, center, radius)
+
+
 class OmniEventRoute(EventRouteMixin, OmniVariant):
     """N3: keep the open route; re-plan only on task-set events."""
 
@@ -431,6 +471,8 @@ VARIANTS={
     'ins_q3':(OmniInsertion,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n1_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n2_q3':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01,'coord_search':True}),
+    'q3_keep_m1':(OmniRouteKeep,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'max_defer_age':3}),
+    'q3_keep':(OmniRouteKeep,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n3_q3':(OmniEventRoute,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.}),
     'n1_q3_m1':(OmniWorldRollout,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'margin_s':5.,'margin_frac':.01}),
     'la_q3_base':(OmniLookahead,{'ring_radius':1123.,'guard_initial':True,'close_known':True,'skip_known_radius':1200.,'probe_radius':60.,'mode':'base'}),
@@ -468,7 +510,10 @@ VARIANTS={
     'guard_ring9_close':(OmniVariant,{'ring_radius':903.5,'ring_count':9,'guard_initial':True,'close_known':True}),
     'ring1123_close_unguarded':(OmniVariant,{'ring_radius':1123.,'close_known':True}),
     'closure':(OmniVariant,{'close_known':True})},
- 4:{'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
+ 4:{
+    'q4_fb_probe':(Q4FallbackProbe,{}),
+    'q4_fb_reorder':(Q4FallbackReorder,{}),
+    'baseline':(JointSearchSolver,{}), 'rings22':(JointSearchSolver,{'coverage_layout':'rings'}),
     'ins_q4':(JointInsertion,{}),
     'sp_c1':(JointStatePrediction,{'mode':'c1'}),
     'sp_c2':(JointStatePrediction,{'mode':'c2'}),

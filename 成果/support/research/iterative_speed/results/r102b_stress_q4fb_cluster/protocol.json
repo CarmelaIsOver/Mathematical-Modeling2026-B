@@ -1,0 +1,16 @@
+{
+  "problem": 4,
+  "variants": [
+    "baseline",
+    "q4_fb_probe",
+    "q4_fb_reorder"
+  ],
+  "start": 3499570,
+  "count": 3,
+  "workers": 3,
+  "round": "r102b_stress_q4fb_cluster",
+  "hypothesis": "Q4 fallback stress cluster",
+  "mode": "cluster",
+  "traces": false,
+  "control": "baseline"
+}

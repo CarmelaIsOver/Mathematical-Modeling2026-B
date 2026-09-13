@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "q3_keep",
+    "q3_keep_m1"
+  ],
+  "start": 3499200,
+  "count": 24,
+  "workers": 8,
+  "round": "r99_q3keep_rev24",
+  "hypothesis": "Q3 keep-route revision r1: refresh when a known target has waited max_defer_age stations",
+  "mode": "normal",
+  "traces": false,
+  "control": "skip12_probe60"
+}

@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "variants": [
+    "baseline",
+    "skip12_probe60",
+    "q3_keep"
+  ],
+  "start": 3499218,
+  "count": 1,
+  "workers": 2,
+  "round": "r103b_trace_q3keep_typical",
+  "hypothesis": "Q3 keep typical-seed trajectory",
+  "mode": "normal",
+  "traces": true,
+  "control": "skip12_probe60"
+}
