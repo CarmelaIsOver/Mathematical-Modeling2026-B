@@ -1,0 +1,17 @@
+{
+  "problem": 3,
+  "start": 3500000,
+  "count": 32,
+  "modes": [
+    "baseline",
+    "step_probe",
+    "step_probe_tour"
+  ],
+  "kind": "random",
+  "tag": "tail_development",
+  "targets": {
+    "3": 250,
+    "4": 440
+  },
+  "adoption": "All complete; target reached with material gain, or >=5% mean gain; P95 no worse; <=5% cases slower by >10%; report stress tails separately."
+}

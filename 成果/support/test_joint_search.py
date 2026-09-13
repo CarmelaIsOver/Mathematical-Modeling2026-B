@@ -85,7 +85,8 @@ class JointSearchTests(unittest.TestCase):
                  contextlib.redirect_stdout(io.StringIO()) as output:
                 entry.main()
             r=json.loads(next(Path(folder).glob('client_*.json')).read_text())
-            self.assertEqual((r['strategy'],r['coverage_layout']),('integrated','radial'))
+            self.assertEqual((r['strategy'],r['coverage_layout']),('integrated','rings'))
+            self.assertEqual(r['service_policy'],'adaptive')
             self.assertTrue(r['complete'] and r['normal_exit'])
             self.assertIn('strategy=integrated',output.getvalue())
         with self.assertRaises(ValueError):JointSearchSolver(None,3)

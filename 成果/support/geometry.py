@@ -150,8 +150,10 @@ def distance_origin_triangle(t):
     return float(min(ds))
 
 def search_stations(problem, spacing=950., layout='original'):
-    if layout not in ('original','compact','radial','rings'):
+    if layout not in ('original','compact','radial','rings','tight'):
         raise ValueError('Unknown coverage layout')
+    if layout=='tight' and problem!=3:
+        raise ValueError('The tight eight-site layout is certified for Q3 only')
     if layout=='rings':
         if problem!=4 or spacing!=950.:
             raise ValueError('Certified ring coverage requires Q4 and default spacing')
@@ -175,6 +177,24 @@ def search_stations(problem, spacing=950., layout='original'):
                             1900*math.sin(math.radians(30+60*k))] for k in range(6)])
         return np.vstack([inner,boundary])
     if problem==3:
+        if layout=='tight':
+            # 8 sites: origin plus a radius-1000m ring of 7.
+            #
+            # Coverage proof. Reception is guaranteed only to 1000m, so it is
+            # enough that every point of the task disk lies within 1000m of a
+            # site. Take a point at polar radius p and angle phi to the nearest
+            # spoke, so |phi| <= pi/7. The origin covers it when p <= 1000. Its
+            # distance to that spoke's site obeys, by the cosine rule,
+            #     d^2 = p^2 + 1000^2 - 2000 p cos(phi),
+            # and d <= 1000 is therefore equivalent to p <= 2000 cos(phi).
+            # That bound is weakest at |phi| = pi/7, where
+            #     2000 cos(pi/7) = 1801.94m > 1800m,
+            # so the whole disk is covered, the tightest point being the rim at
+            # pi/7 with d = 998.25m. This is exact, not a sampled certificate.
+            #
+            # The open tour from the origin is 6207m against 9353m for the
+            # radius-1558.85m hexagon below, which only carries more slack.
+            return np.array([[0.,0.]]+[list(1000.*unit(360*k/7)) for k in range(7)])
         radius=1800*math.cos(math.pi/6)
         return np.array([[0.,0.]]+[list(radius*unit(60*k)) for k in range(6)])
     if not 0<spacing<=1000:

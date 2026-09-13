@@ -1,0 +1,22 @@
+{
+  "start": 3400000,
+  "count": 10,
+  "modes": [
+    "baseline",
+    "rings",
+    "rank_rings",
+    "step_rank",
+    "step_rank_rings"
+  ],
+  "tag": "tangent_ablation",
+  "kind": "tangent",
+  "criteria": {
+    "all_complete": true,
+    "minimum_mean_gain": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "maximum_fraction_slower_over10": 0.05,
+    "maximum_paired_ratio": 1.2
+  },
+  "target_mean_seconds_per_source": 400.0,
+  "selected_candidate": "step_rank_rings"
+}

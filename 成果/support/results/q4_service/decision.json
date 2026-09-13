@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "all_complete": true,
+    "mean_gain_at_least5pct": true,
+    "p95_not_worse": true,
+    "slower_over10_fraction_at_most5pct": true,
+    "max_paired_ratio_at_most1p20": true
+  },
+  "holdout_gate_passed": true,
+  "paired_saving_95ci_s_per_source": [
+    26.973556688498178,
+    35.97700826759266
+  ],
+  "holdout_worst_ratio": 1.17705486210153,
+  "holdout_worst_seed": 3300181,
+  "stress_all_complete": true,
+  "stress_worst_ratio": 1.4689608927175875,
+  "adopted": false,
+  "reason": "Reject material tail regressions; preserve accepted default pending a robust candidate.",
+  "target400_met": false,
+  "runtime_unchanged": {
+    "run.py": true,
+    "joint_search.py": true,
+    "omni_search.py": true,
+    "solver.py": true,
+    "active_localization.py": true,
+    "geometry.py": true,
+    "backend.py": true,
+    "audit.py": true
+  },
+  "frozen_one_case_reproduction_matches": true,
+  "default_q3": "integrated/tight",
+  "default_q4": "integrated/radial"
+}

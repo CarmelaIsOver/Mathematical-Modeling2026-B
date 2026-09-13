@@ -1,0 +1,53 @@
+{
+  "baseline": {
+    "mean": 249.48352019132284,
+    "p95": 304.5460134516752,
+    "max": 317.6745625624766,
+    "runs": 32,
+    "all_complete": true,
+    "target_met_count": 17,
+    "move_s": 2358.7104291909245,
+    "measure": 123.0,
+    "failed_clear": 0.0,
+    "fallback": 0.0,
+    "program_time_s": 0.1883379437504118,
+    "gain": 0.0,
+    "worst_ratio": 1.0,
+    "slow_over10": 0,
+    "wins": 0
+  },
+  "step_probe": {
+    "mean": 245.24716182000918,
+    "p95": 298.6673732738647,
+    "max": 312.3461101234237,
+    "runs": 32,
+    "all_complete": true,
+    "target_met_count": 19,
+    "move_s": 2320.5943232226587,
+    "measure": 119.9375,
+    "failed_clear": 0.4375,
+    "fallback": 0.0,
+    "program_time_s": 0.16811144062739913,
+    "gain": 0.016980513855443857,
+    "worst_ratio": 1.008090266563721,
+    "slow_over10": 0,
+    "wins": 29
+  },
+  "step_probe_tour": {
+    "mean": 245.0389343636877,
+    "p95": 298.6673732738647,
+    "max": 312.3461101234237,
+    "runs": 32,
+    "all_complete": true,
+    "target_met_count": 19,
+    "move_s": 2317.274589704154,
+    "measure": 119.9375,
+    "failed_clear": 0.4375,
+    "fallback": 0.0,
+    "program_time_s": 0.16847005624913436,
+    "gain": 0.017815147967395584,
+    "worst_ratio": 1.008090266563721,
+    "slow_over10": 0,
+    "wins": 29
+  }
+}

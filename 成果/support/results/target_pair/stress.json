@@ -1,0 +1,101 @@
+{
+  "q3_ten": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 312.2968885100962,
+    "new_mean": 315.5168636077277,
+    "old_max": 353.1068067213394,
+    "new_max": 351.24172507053106,
+    "worst_ratio": 1.0870070475050664
+  },
+  "q3_sixteen": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 219.04000321225766,
+    "new_mean": 216.62506301520406,
+    "old_max": 235.20539250210157,
+    "new_max": 228.6415898120913,
+    "worst_ratio": 1.027768130443313
+  },
+  "q3_plus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 265.19165593364283,
+    "new_mean": 264.90226503820224,
+    "old_max": 315.3810220589149,
+    "new_max": 343.58110680816714,
+    "worst_ratio": 1.0894159216212582
+  },
+  "q3_minus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 264.80091233329756,
+    "new_mean": 264.3472625663667,
+    "old_max": 314.2470488438198,
+    "new_max": 340.53901350506436,
+    "worst_ratio": 1.08366654438913
+  },
+  "q3_outward": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 393.2581527378805,
+    "new_mean": 393.0144680601937,
+    "old_max": 465.8848364848162,
+    "new_max": 470.80172115356015,
+    "worst_ratio": 1.0155599888334423
+  },
+  "q4_ten": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 715.6767850490745,
+    "new_mean": 683.0451993269368,
+    "old_max": 803.6342881279659,
+    "new_max": 724.0176271306337,
+    "worst_ratio": 1.0194015418028746
+  },
+  "q4_sixteen": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 444.58481931191807,
+    "new_mean": 424.2729818725532,
+    "old_max": 480.2396925061796,
+    "new_max": 487.18647810436863,
+    "worst_ratio": 1.2639650718819024
+  },
+  "q4_plus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 589.2224429042468,
+    "new_mean": 538.4893104739816,
+    "old_max": 717.2172745635246,
+    "new_max": 625.7777514594444,
+    "worst_ratio": 1.008371936398122
+  },
+  "q4_minus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 594.8716642471575,
+    "new_mean": 554.7439004999582,
+    "old_max": 705.9367245102574,
+    "new_max": 666.7300350953324,
+    "worst_ratio": 1.1090633751518513
+  },
+  "q4_outward": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 742.1274879599875,
+    "new_mean": 745.6131832543408,
+    "old_max": 910.0937966196507,
+    "new_max": 832.5804223082487,
+    "worst_ratio": 1.3421981886480558
+  },
+  "q4_tangent": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 536.7398954733115,
+    "new_mean": 509.94381664609926,
+    "old_max": 688.6497678113548,
+    "new_max": 675.7316942062694,
+    "worst_ratio": 1.1625225170065057
+  }
+}

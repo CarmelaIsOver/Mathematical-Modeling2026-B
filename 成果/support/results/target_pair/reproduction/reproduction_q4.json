@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "mean": 471.357615329907,
+    "p95": 471.357615329907,
+    "max": 471.357615329907,
+    "runs": 1,
+    "all_complete": true,
+    "target_met_count": 0,
+    "move_s": 4450.648999288791,
+    "measure": 271.0,
+    "failed_clear": 2.0,
+    "fallback": 0.0,
+    "program_time_s": 0.2630463000095915,
+    "gain": 0.0,
+    "worst_ratio": 1.0,
+    "slow_over10": 0,
+    "wins": 0
+  },
+  "service": {
+    "mean": 477.04848099491335,
+    "p95": 477.04848099491335,
+    "max": 477.04848099491335,
+    "runs": 1,
+    "all_complete": true,
+    "target_met_count": 0,
+    "move_s": 4446.630252933873,
+    "measure": 263.0,
+    "failed_clear": 46.0,
+    "fallback": 2.0,
+    "program_time_s": 0.6044744999962859,
+    "gain": -0.012073350424227858,
+    "worst_ratio": 1.0120733504242279,
+    "slow_over10": 0,
+    "wins": 0
+  }
+}

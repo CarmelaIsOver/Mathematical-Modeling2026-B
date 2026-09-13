@@ -1,4 +1,4 @@
-"""Q3 observation-only scheduling with complete seven-site coverage.
+"""Q3 observation-only scheduling with certified omni coverage.
 
 Known targets compete with remaining search sites in an estimated open route.
 Waiting for three sites is not a reason to force a long trip. Once no search
@@ -8,14 +8,33 @@ import time
 import numpy as np
 from solver import Solver
 from joint_search import search_route
+from localization_service import LocalizationService
 
 
 class OmniSearchSolver(Solver):
-    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original'):
-        if problem!=3 or coverage_layout!='original':
-            raise ValueError('Omni joint scheduling requires Q3 and original seven-site coverage')
+    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='original',service_policy='atomic'):
+        if problem!=3 or coverage_layout not in ('original','tight'):
+            raise ValueError('Omni joint scheduling requires Q3 and a certified omni coverage layout')
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
+        if service_policy not in ('atomic','adaptive'):raise ValueError('Unknown service policy')
+        self.service_policy=service_policy
+        self._localization_service=LocalizationService(self)
         self.diagnostics.update(skipped_known_measurements=0,route_replans=0)
+        if service_policy=='adaptive':
+            self.diagnostics.update(service_steps=0,coverage_sites_cancelled=0,small_region_probes=0,small_region_successes=0)
+
+    def action(self,path,p,c):
+        r=super().action(path,p,c)
+        if self.service_policy=='adaptive':self._localization_service.record(path,p,c,r)
+        return r
+
+    def region(self,c):
+        if self.service_policy=='adaptive':return self._localization_service.omni_region(c)
+        return super().region(c)
+
+    def locate(self,c):
+        if self.service_policy=='adaptive':return self._localization_service.advance_omni(c)
+        return super().locate(c)
 
     def skip_station_measurement(self,c,p):
         if c not in self.deferred:return False
@@ -31,19 +50,25 @@ class OmniSearchSolver(Solver):
         while self.pending_stations or self.deferred:
             self.deferred={c:age for c,age in self.deferred.items() if c not in self.cleared}
             if len(self.cleared)==16:break
+            if self.service_policy=='adaptive' and len(self.cleared)+len(self.deferred)==16:
+                self.diagnostics['coverage_sites_cancelled']+=len(self.pending_stations)
+                self.pending_stations=[]
             if self.deferred:
                 keys=list(self.deferred)
                 if not self.pending_stations:
-                    c=min(keys,key=lambda c:np.linalg.norm(self.region(c)[1]-self.pos))
+                    c=(keys[search_route(np.array([self.region(k)[1] for k in keys]),self.pos)[0]]
+                       if self.service_policy=='adaptive' else min(keys,key=lambda c:np.linalg.norm(self.region(c)[1]-self.pos)))
                     self.diagnostics['forced_targets']+=1
-                    self.locate(c);self.deferred.pop(c,None)
+                    self.locate(c)
+                    if c in self.cleared:self.deferred.pop(c,None)
                     continue
                 nodes=[('target',c) for c in keys]+[('station',j) for j in self.pending_stations]
                 points=np.array([self.region(c)[1] for c in keys]+[self.stations[j] for j in self.pending_stations])
                 self.diagnostics['route_replans']+=1
                 kind,which=nodes[search_route(points,self.pos)[0]]
                 if kind=='target':
-                    self.locate(which);self.deferred.pop(which,None)
+                    self.locate(which)
+                    if which in self.cleared:self.deferred.pop(which,None)
                     continue
                 i=which
             elif self.pending_stations:

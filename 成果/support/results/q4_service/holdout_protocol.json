@@ -1,0 +1,20 @@
+{
+  "start": 3300000,
+  "count": 200,
+  "modes": [
+    "baseline",
+    "rings",
+    "step_rank_rings"
+  ],
+  "tag": "holdout",
+  "kind": "random",
+  "criteria": {
+    "all_complete": true,
+    "minimum_mean_gain": 0.05,
+    "maximum_p95_ratio": 1.0,
+    "maximum_fraction_slower_over10": 0.05,
+    "maximum_paired_ratio": 1.2
+  },
+  "target_mean_seconds_per_source": 400.0,
+  "selected_candidate": "step_rank_rings"
+}

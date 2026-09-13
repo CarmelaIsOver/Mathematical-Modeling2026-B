@@ -1,0 +1,56 @@
+{
+  "ten": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 716.6188761216672,
+    "new_mean": 653.9388058762263,
+    "worst_ratio": 0.9903062646315599,
+    "old_max": 761.3580542935748,
+    "new_max": 717.4018554317589
+  },
+  "sixteen": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 445.92136171402154,
+    "new_mean": 417.2193231422415,
+    "worst_ratio": 1.065864045438922,
+    "old_max": 499.3984859521641,
+    "new_max": 489.89519842392576
+  },
+  "plus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 514.7578466609103,
+    "new_mean": 489.7829171228415,
+    "worst_ratio": 1.1069021271097284,
+    "old_max": 615.9402109035863,
+    "new_max": 585.0473647404574
+  },
+  "minus": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 516.2219544287145,
+    "new_mean": 487.64714950597397,
+    "worst_ratio": 1.098060093700728,
+    "old_max": 627.2792104583688,
+    "new_max": 590.8228021783627
+  },
+  "outward": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 680.5365131055909,
+    "new_mean": 652.4125758451307,
+    "worst_ratio": 1.1709982441273676,
+    "old_max": 805.55855039193,
+    "new_max": 787.3019698094486
+  },
+  "tangent": {
+    "runs": 10,
+    "all_complete": true,
+    "old_mean": 526.4041055407796,
+    "new_mean": 476.18702064729916,
+    "worst_ratio": 1.2553081654759477,
+    "old_max": 710.5067953227733,
+    "new_max": 694.4474455327257
+  }
+}

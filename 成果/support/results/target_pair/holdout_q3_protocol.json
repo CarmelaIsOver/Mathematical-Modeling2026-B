@@ -1,0 +1,16 @@
+{
+  "problem": 3,
+  "start": 3600000,
+  "count": 200,
+  "modes": [
+    "baseline",
+    "step_probe_tour"
+  ],
+  "kind": "random",
+  "tag": "holdout",
+  "targets": {
+    "3": 250,
+    "4": 440
+  },
+  "adoption": "All complete; target reached with material gain, or >=5% mean gain; P95 no worse; <=5% cases slower by >10%; report stress tails separately."
+}

@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "mean": 256.5551773170141,
+    "p95": 315.4258672588858,
+    "max": 367.249442778893,
+    "runs": 300,
+    "all_complete": true,
+    "target_met_count": 145,
+    "move_s": 2431.916689201067,
+    "measure": 125.84,
+    "failed_clear": 0.0,
+    "fallback": 0.0,
+    "program_time_s": 0.21255155200041675,
+    "gain": 0.0,
+    "worst_ratio": 1.0,
+    "slow_over10": 0,
+    "wins": 0
+  },
+  "step_probe_tour_negative": {
+    "mean": 249.13224606967773,
+    "p95": 309.97865458752676,
+    "max": 362.467247423733,
+    "runs": 300,
+    "all_complete": true,
+    "target_met_count": 166,
+    "move_s": 2354.941905799601,
+    "measure": 121.66666666666667,
+    "failed_clear": 0.47,
+    "fallback": 0.0,
+    "program_time_s": 0.2243717113332241,
+    "gain": 0.028933079133165118,
+    "worst_ratio": 1.0564347069592253,
+    "slow_over10": 0,
+    "wins": 268
+  }
+}

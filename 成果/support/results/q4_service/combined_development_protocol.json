@@ -1,0 +1,12 @@
+{
+  "start": 3200000,
+  "count": 32,
+  "modes": [
+    "baseline",
+    "rings",
+    "rank_rings",
+    "step_rank_rings"
+  ],
+  "tag": "combined_development",
+  "kind": "random"
+}

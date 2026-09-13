@@ -1,0 +1,17 @@
+{
+  "problem": 4,
+  "start": 3400000,
+  "count": 10,
+  "modes": [
+    "baseline",
+    "service",
+    "entry0.5"
+  ],
+  "kind": "tangent",
+  "tag": "tangent_diagnostic",
+  "targets": {
+    "3": 250,
+    "4": 440
+  },
+  "adoption": "All complete; target reached with material gain, or >=5% mean gain; P95 no worse; <=5% cases slower by >10%; report stress tails separately."
+}

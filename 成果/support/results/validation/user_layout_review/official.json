@@ -1,0 +1,648 @@
+[
+  {
+    "case_code": "977Z-39DM-ERDW-A9S6",
+    "summary": {
+      "problem": 3,
+      "complete": true,
+      "cleared": 14,
+      "virtual_time_s": 3409.049247,
+      "mean_time_s": 243.50351764285713,
+      "program_time_s": 0.696001400006935,
+      "stations_visited": 8,
+      "scheduling_policy": "joint_route",
+      "measure": 117,
+      "clear": 14,
+      "failed_clear": 0,
+      "fallback": 0,
+      "move_s": 2648.0492461559675,
+      "switch_s": 106.0,
+      "measure_s": 585.0,
+      "optical_s": 42.0,
+      "laser_s": 28.0,
+      "candidate_evaluations": 229,
+      "deferred_targets": 14,
+      "forced_targets": 1,
+      "opportunistic_measures": 22,
+      "safe_clear_points": 14,
+      "skipped_known_measurements": 3,
+      "route_replans": 20,
+      "strategy": "integrated",
+      "coverage_layout": "tight",
+      "normal_exit": true,
+      "max_step_time_error_s": 4.805738456070685e-07,
+      "provenance": "Official HTTP interface; case code and module come from simulator UI"
+    },
+    "counts": {
+      "jammer_count": 14,
+      "omnidirectional_jammer_count": 14,
+      "directional_jammer_count": 0
+    },
+    "export_matches_platform": true,
+    "replay_matches": true,
+    "accepted_records": 133,
+    "error_records": 0,
+    "last_clear_time_s": 3409.049247,
+    "tail_s": 0.0,
+    "tail_measures": 0,
+    "measure_outcomes": {
+      "no_signal": 77,
+      "direction": 40
+    },
+    "localization_phases": [
+      {
+        "channel": 16,
+        "duration_s": 167.987981,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 20,
+        "duration_s": 210.65419100000003,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 18,
+        "duration_s": 178.63644399999998,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 11,
+        "duration_s": 46.51744199999996,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 17,
+        "duration_s": 259.87364300000013,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 12,
+        "duration_s": 33.78276899999992,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 8,
+        "duration_s": 178.07643299999995,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 7,
+        "duration_s": 77.30518299999994,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 19,
+        "duration_s": 48.89918200000011,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 6,
+        "duration_s": 118.03960000000006,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 13,
+        "duration_s": 242.54237699999976,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 4,
+        "duration_s": 263.4377920000002,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 2,
+        "duration_s": 122.26137100000005,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 14,
+        "duration_s": 92.20238399999971,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      }
+    ]
+  },
+  {
+    "case_code": "URMQ-P7N9-SUHC-XJQ3",
+    "summary": {
+      "problem": 3,
+      "complete": true,
+      "cleared": 13,
+      "virtual_time_s": 2891.904046,
+      "mean_time_s": 222.4541573846154,
+      "program_time_s": 0.5344844000064768,
+      "stations_visited": 8,
+      "scheduling_policy": "joint_route",
+      "measure": 117,
+      "clear": 13,
+      "failed_clear": 0,
+      "fallback": 0,
+      "move_s": 2131.904045043371,
+      "switch_s": 110.0,
+      "measure_s": 585.0,
+      "optical_s": 39.0,
+      "laser_s": 26.0,
+      "candidate_evaluations": 184,
+      "deferred_targets": 13,
+      "forced_targets": 0,
+      "opportunistic_measures": 29,
+      "safe_clear_points": 13,
+      "skipped_known_measurements": 1,
+      "route_replans": 18,
+      "strategy": "integrated",
+      "coverage_layout": "tight",
+      "normal_exit": true,
+      "max_step_time_error_s": 4.7019619842103566e-07,
+      "provenance": "Official HTTP interface; case code and module come from simulator UI"
+    },
+    "counts": {
+      "jammer_count": 13,
+      "omnidirectional_jammer_count": 13,
+      "directional_jammer_count": 0
+    },
+    "export_matches_platform": true,
+    "replay_matches": true,
+    "accepted_records": 132,
+    "error_records": 0,
+    "last_clear_time_s": 2566.915463,
+    "tail_s": 324.9885830000003,
+    "tail_measures": 14,
+    "measure_outcomes": {
+      "direction": 40,
+      "no_signal": 77
+    },
+    "localization_phases": [
+      {
+        "channel": 19,
+        "duration_s": 199.27696600000002,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 14,
+        "duration_s": 262.15337900000003,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 7,
+        "duration_s": 155.205822,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 15,
+        "duration_s": 75.8509939999999,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 8,
+        "duration_s": 70.48605300000008,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 5,
+        "duration_s": 137.26650900000004,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 12,
+        "duration_s": 208.87895099999992,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 16,
+        "duration_s": 41.2353320000002,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 10,
+        "duration_s": 137.7666009999998,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 1,
+        "duration_s": 94.86694699999998,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 6,
+        "duration_s": 90.03760000000011,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 13,
+        "duration_s": 55.57091500000024,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 11,
+        "duration_s": 95.08276499999965,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      }
+    ]
+  },
+  {
+    "case_code": "BM99-493F-D2JJ-BGV3",
+    "summary": {
+      "problem": 4,
+      "complete": true,
+      "cleared": 15,
+      "virtual_time_s": 7046.52758,
+      "mean_time_s": 469.76850533333334,
+      "stations_visited": 22,
+      "program_time_s": 1.1565339000080712,
+      "measure": 283,
+      "clear": 24,
+      "failed_clear": 9,
+      "fallback": 1,
+      "move_s": 5278.527572762281,
+      "switch_s": 251.0,
+      "measure_s": 1415.0,
+      "optical_s": 72.0,
+      "laser_s": 30.0,
+      "candidate_evaluations": 113,
+      "deferred_targets": 15,
+      "forced_targets": 0,
+      "opportunistic_measures": 0,
+      "safe_clear_points": 11,
+      "paper_measurements_selected": 0,
+      "route_replans": 37,
+      "skipped_known_measurements": 34,
+      "small_region_probes": 3,
+      "small_region_successes": 3,
+      "coverage_sites_cancelled": 0,
+      "strategy": "integrated",
+      "coverage_layout": "rings",
+      "normal_exit": true,
+      "max_step_time_error_s": 4.909802555630449e-07,
+      "provenance": "Official HTTP interface; case code and module come from simulator UI"
+    },
+    "counts": {
+      "jammer_count": 15,
+      "omnidirectional_jammer_count": 2,
+      "directional_jammer_count": 13
+    },
+    "export_matches_platform": true,
+    "replay_matches": true,
+    "accepted_records": 309,
+    "error_records": 0,
+    "last_clear_time_s": 6675.775174,
+    "tail_s": 370.7524059999996,
+    "tail_measures": 10,
+    "measure_outcomes": {
+      "direction": 44,
+      "no_signal": 239
+    },
+    "localization_phases": [
+      {
+        "channel": 1,
+        "duration_s": 278.077704,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 2,
+        "duration_s": 107.10883100000001,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 15,
+        "duration_s": 164.96003599999995,
+        "measure": 4,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 20,
+        "duration_s": 141.86925199999996,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 10,
+        "duration_s": 111.7703349999997,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 17,
+        "duration_s": 315.1562319999998,
+        "measure": 4,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 4,
+        "duration_s": 160.011751,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 11,
+        "duration_s": 313.95755299999973,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 5,
+        "duration_s": 245.03556899999967,
+        "measure": 3,
+        "clear": 10,
+        "failed_clear": 9,
+        "fallback": 1
+      },
+      {
+        "channel": 19,
+        "duration_s": 47.65300599999955,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 7,
+        "duration_s": 140.30052299999988,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 12,
+        "duration_s": 185.72116900000037,
+        "measure": 4,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 3,
+        "duration_s": 151.46593100000064,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 14,
+        "duration_s": 243.5142310000001,
+        "measure": 4,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 13,
+        "duration_s": 68.08274000000074,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      }
+    ]
+  },
+  {
+    "case_code": "Q2FU-XHJB-AHY4-KKZ4",
+    "summary": {
+      "problem": 4,
+      "complete": true,
+      "cleared": 12,
+      "virtual_time_s": 6007.604422,
+      "mean_time_s": 500.63370183333336,
+      "stations_visited": 22,
+      "program_time_s": 0.8540707999782171,
+      "measure": 295,
+      "clear": 13,
+      "failed_clear": 1,
+      "fallback": 1,
+      "move_s": 4197.6044186477775,
+      "switch_s": 272.0,
+      "measure_s": 1475.0,
+      "optical_s": 39.0,
+      "laser_s": 24.0,
+      "candidate_evaluations": 15,
+      "deferred_targets": 12,
+      "forced_targets": 0,
+      "opportunistic_measures": 0,
+      "safe_clear_points": 5,
+      "paper_measurements_selected": 1,
+      "route_replans": 34,
+      "skipped_known_measurements": 36,
+      "small_region_probes": 7,
+      "small_region_successes": 6,
+      "coverage_sites_cancelled": 0,
+      "strategy": "integrated",
+      "coverage_layout": "rings",
+      "normal_exit": true,
+      "max_step_time_error_s": 4.939890914101852e-07,
+      "provenance": "Official HTTP interface; case code and module come from simulator UI"
+    },
+    "counts": {
+      "jammer_count": 12,
+      "omnidirectional_jammer_count": 3,
+      "directional_jammer_count": 9
+    },
+    "export_matches_platform": true,
+    "replay_matches": true,
+    "accepted_records": 310,
+    "error_records": 0,
+    "last_clear_time_s": 6007.604422,
+    "tail_s": 0.0,
+    "tail_measures": 0,
+    "measure_outcomes": {
+      "no_signal": 263,
+      "direction": 32
+    },
+    "localization_phases": [
+      {
+        "channel": 18,
+        "duration_s": 150.73285800000002,
+        "measure": 1,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 5,
+        "duration_s": 193.477349,
+        "measure": 3,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 19,
+        "duration_s": 99.82035599999995,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 20,
+        "duration_s": 137.96626199999992,
+        "measure": 3,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 2,
+        "duration_s": 199.33282599999984,
+        "measure": 2,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 1
+      },
+      {
+        "channel": 6,
+        "duration_s": 39.22685700000011,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 8,
+        "duration_s": 61.57494100000031,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 3,
+        "duration_s": 25.258068999999523,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 16,
+        "duration_s": 125.12562100000014,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 13,
+        "duration_s": 59.343314000000646,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 7,
+        "duration_s": 106.36632299999928,
+        "measure": 0,
+        "clear": 1,
+        "failed_clear": 0,
+        "fallback": 0
+      },
+      {
+        "channel": 4,
+        "duration_s": 153.59807200000068,
+        "measure": 1,
+        "clear": 2,
+        "failed_clear": 1,
+        "fallback": 0
+      }
+    ]
+  }
+]

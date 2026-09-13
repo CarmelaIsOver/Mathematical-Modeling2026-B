@@ -1,0 +1,18 @@
+{
+  "problem": 4,
+  "start": 3500000,
+  "count": 32,
+  "modes": [
+    "baseline",
+    "service",
+    "entry0.5",
+    "entry1.0"
+  ],
+  "kind": "random",
+  "tag": "development",
+  "targets": {
+    "3": 250,
+    "4": 440
+  },
+  "adoption": "All complete; target reached with material gain, or >=5% mean gain; P95 no worse; <=5% cases slower by >10%; report stress tails separately."
+}

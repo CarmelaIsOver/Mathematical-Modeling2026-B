@@ -1,0 +1,56 @@
+{
+  "ten": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 691.0659633356621,
+    "new_mean": 662.2629144342326,
+    "worst_ratio": 1.0547778671044283,
+    "old_max": 729.7892048562233,
+    "new_max": 721.2946645555339
+  },
+  "sixteen": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 442.37976277480414,
+    "new_mean": 420.95504802236144,
+    "worst_ratio": 1.2296488549572202,
+    "old_max": 516.9714904545327,
+    "new_max": 512.1757241913534
+  },
+  "plus": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 562.1061528557888,
+    "new_mean": 538.2322179096631,
+    "worst_ratio": 1.029383257363522,
+    "old_max": 714.3599102971564,
+    "new_max": 692.0831145003117
+  },
+  "minus": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 562.7109222223986,
+    "new_mean": 544.2195579277601,
+    "worst_ratio": 1.0495708895070321,
+    "old_max": 730.886499730492,
+    "new_max": 713.6655865419089
+  },
+  "outward": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 719.0265761959561,
+    "new_mean": 728.0547768269146,
+    "worst_ratio": 1.2410000118199016,
+    "old_max": 851.1009071684466,
+    "new_max": 965.4127909224231
+  },
+  "tangent": {
+    "runs_per_policy": 10,
+    "all_complete": true,
+    "old_mean": 500.59495577790585,
+    "new_mean": 554.8249516062157,
+    "worst_ratio": 1.4689608927175875,
+    "old_max": 649.3346701304722,
+    "new_max": 762.6652078438003
+  }
+}

@@ -7,6 +7,7 @@ heuristics, not promises of optimality or of a 400-second per-source score.
 import time
 import numpy as np
 from active_localization import ActiveLocalizationSolver
+from localization_service import LocalizationService
 
 
 def search_route(points,start):
@@ -37,14 +38,18 @@ def search_route(points,start):
 
 
 class JointSearchSolver(ActiveLocalizationSolver):
-    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial'):
+    def __init__(self,backend,problem,spacing=950.,max_refine=8,coverage_layout='radial',service_policy='atomic'):
         if problem!=4 or spacing!=950. or coverage_layout not in ('radial','rings'):
             raise ValueError('Joint search requires Q4 and a verified directional coverage layout')
         self.coverage_layout=coverage_layout
         super().__init__(backend,problem,spacing,max_refine,coverage_layout=coverage_layout)
+        if service_policy not in ('atomic','adaptive'):raise ValueError('Unknown service policy')
+        self.service_policy=service_policy
+        self._localization_service=LocalizationService(self)
         self.diagnostics.update(route_replans=0,skipped_known_measurements=0,
                                 small_region_probes=0,small_region_successes=0,
                                 coverage_sites_cancelled=0)
+        if service_policy=='adaptive':self.diagnostics.update(service_steps=0,service_resumes=0)
 
     def locate(self,c):
         _,center,radius=self.region(c)
@@ -82,7 +87,8 @@ class JointSearchSolver(ActiveLocalizationSolver):
             self.diagnostics['route_replans']+=1
             kind,index=nodes[search_route(points,self.pos)[0]]
             if kind=='target':
-                self.locate(index)
+                if self.service_policy=='adaptive':self._localization_service.advance_directional(index)
+                else:self.locate(index)
                 continue
             self.pending_stations.remove(index);p=self.stations[index]
             channels=[c for c in range(1,21) if c not in self.cleared]

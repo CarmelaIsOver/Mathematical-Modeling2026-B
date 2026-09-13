@@ -1,0 +1,12 @@
+{
+  "start": 3200000,
+  "count": 32,
+  "modes": [
+    "baseline",
+    "step",
+    "rank",
+    "step_rank"
+  ],
+  "tag": "development",
+  "kind": "random"
+}
