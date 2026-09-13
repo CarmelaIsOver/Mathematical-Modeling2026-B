@@ -103,3 +103,5 @@ cd 成果/support/research/iterative_speed
 - 本报告的 rings 臂 = 本地 22 站 rings（1+7+14，与队友 rings 同源 `search_stations`）；队友 `tight` 八站布局未移植，故 Q3 不构成对其路线评估。
 - 压力类（boundary/切向）为本轮合成样本，用于机制诊断；其最坏值不代表总体分布。
 - 未达门版本只作为研究开关保留，**不得**当作最佳版本对外表述。
+
+> 推送说明：按用户指示本轮**不做远端推送**（此前一次推送尝试因缺少凭据被终止，未对远端产生任何改动；`origin/main` 仍为 `66faa29`）。需要时执行 `git push origin codex/q3-q4-v3-fusion`。
